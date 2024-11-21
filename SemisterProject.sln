@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{4312263F-D4F4-4769-9E6A-CE933204E8C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{4312263F-D4F4-4769-9E6A-CE933204E8C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryDal", "ClassLibraryDal\ClassLibraryDal.csproj", "{96D58633-5DA5-49F0-AEA9-FD2EC5C3DBE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibraryDal", "ClassLibraryDal\ClassLibraryDal.csproj", "{96D58633-5DA5-49F0-AEA9-FD2EC5C3DBE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryModel", "ClassLibraryModel\ClassLibraryModel.csproj", "{2D67FB41-5910-4A77-BC13-F3E5E14AE8BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibraryModel", "ClassLibraryModel\ClassLibraryModel.csproj", "{2D67FB41-5910-4A77-BC13-F3E5E14AE8BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,14 +1,22 @@
 ﻿@inherits LayoutComponentBase
-
-<PageTitle>WebApp</PageTitle>
+@using Microsoft.AspNetCore.Components.Routing
+@inject NavigationManager NavigationManager
 
 <div class="page">
-   
+    @if (ShowSidebar)
+    {
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+    }
 
     <main>
-       
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+
+@code {
+    private bool ShowSidebar => NavigationManager.Uri.Contains("/dashboard", StringComparison.OrdinalIgnoreCase);
+}
