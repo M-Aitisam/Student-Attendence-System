@@ -98,11 +98,13 @@ a, .btn-link {
     transition: background-color 0.2s ease;
 }
 
-    .nav-link:hover {
-        background-color: #495057;
-        color: white !important;
+.nav-link:hover {
+   background-color: #495057;
+   color: white !important;
     }
 
 /*Dashboard SideBar Styling */
+
+
 
 
