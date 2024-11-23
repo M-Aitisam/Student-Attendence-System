@@ -5,10 +5,7 @@
         <!-- Sidebar -->
         <div class="col-md-3 p-0 @SidebarClass" id="sidebar">
             <div class="sidebar-header d-flex align-items-center justify-content-between p-3 bg-primary text-white">
-                <h5 class="mb-0">My App</h5>
-                <button class="btn btn-light btn-sm" @onclick="ToggleSidebar">
-                    <i class="fas fa-angle-left"></i>
-                </button>
+                <img src="Images/SMS-Logo.png" alt="Logo" class="me-2" style="height: 40px;" />
             </div>
             <ul class="nav flex-column p-3">
                 <li class="nav-item">
@@ -40,12 +37,9 @@
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">
-                        <i class="fas fa-bars" @onclick="ToggleSidebar"></i>
-                        Dashboard
-                    </a>
                     <div class="collapse navbar-collapse">
                         <ul class="navbar-nav ms-auto">
+                            <i class="fas fa-bars" @onclick="ToggleSidebar"> </i>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">Home</a>
                             </li>
@@ -75,7 +69,7 @@
         if (SidebarClass == "sidebar-visible")
         {
             SidebarClass = "sidebar-hidden";
-            SidebarMargin = "30px";
+            SidebarMargin = "0px";
         }
         else
         {
@@ -91,7 +85,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        background-color: #f8f9fa;
+        background-color: #343A40;
         transition: all 0.3s ease;
         z-index: 1040;
     }
@@ -101,7 +95,7 @@
     }
 
     .sidebar-hidden {
-        width: 100px;
+        width: 0px;
         overflow: hidden;
     }
 
