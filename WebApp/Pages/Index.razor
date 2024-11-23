@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject NavigationManager nm
+@inject UserService userService
 
 <div class="fixed-top">
     <BrandTitleBar></BrandTitleBar>
@@ -51,6 +52,9 @@
     {
         if (loginModel.Email == "aitisam11@gmail.com" && loginModel.Password == "Aitisam@1234")
         {
+            // Store the logged-in user's email
+            userService.SetLoggedInUser(loginModel.Email);
+            
             // Redirect to dashboard
             nm.NavigateTo("/dashboard");
         }

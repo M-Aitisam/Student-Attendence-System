@@ -15,4 +15,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.18" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibraryDal\ClassLibraryDal.csproj" />
+    <ProjectReference Include="..\ClassLibraryModel\ClassLibraryModel.csproj" />
+  </ItemGroup>
+
 </Project>

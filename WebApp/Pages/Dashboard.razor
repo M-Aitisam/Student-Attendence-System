@@ -1,4 +1,5 @@
 ﻿@page "/dashboard"
+@inject UserService UserService
 
 <div class="container-fluid">
     <div class="row">
@@ -37,23 +38,28 @@
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top" style="padding-left: @NavbarPadding;">
                 <div class="container-fluid">
+                    <!-- Sidebar Toggle Icon -->
                     <i class="fas fa-bars me-3" @onclick="ToggleSidebar"></i>
-                    <a class="navbar-brand" href="#">Dashboard</a>
-                    <div class="collapse navbar-collapse">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">Contact</a>
-                            </li>
-                        </ul>
+
+                    <!-- Navbar Links -->
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Contact</a>
+                        </li>
+                    </ul>
+
+                    <!-- Spacer to push LoginDisplay to the end -->
+                    <div class="ms-auto">
+                        <LoginDisplay />
                     </div>
                 </div>
             </nav>
 
+            <!-- Page Content -->
             <div class="content mt-5 p-3">
-                <!-- Main page content goes here -->
                 <h2>Welcome to the Student Attendance System</h2>
                 <p>Manage attendance efficiently.</p>
             </div>
@@ -82,6 +88,7 @@
         }
     }
 }
+
 
 <style>
     #sidebar {
