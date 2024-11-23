@@ -2,6 +2,15 @@
 @inject NavigationManager nm
 @inject UserService userService
 
+<style>
+        /* Add  styles for input focus */
+    .form-control:focus {
+
+        border: 2px solid black !important; /* Light 2px black border */
+        box-shadow: none; /* Remove the default box-shadow */
+        outline: none; /* Remove the outline */
+    }
+</style>
 <div class="fixed-top">
     <BrandTitleBar></BrandTitleBar>
 </div>
@@ -48,22 +57,28 @@
     private LoginModel loginModel = new LoginModel();
     private string ErrorMessage = string.Empty;
 
-    private Task HandleLogin()
+    private async Task HandleLogin()
     {
-        if (loginModel.Email == "aitisam11@gmail.com" && loginModel.Password == "Aitisam@1234")
+        if (string.IsNullOrWhiteSpace(loginModel.Email) || string.IsNullOrWhiteSpace(loginModel.Password))
+        {
+            ErrorMessage = "Email and Password cannot be empty.";
+            return;
+        }
+
+        // Simplified user validation for demo purposes.
+        bool isValidUser = await userService.ValidateUserAsync(loginModel.Email, loginModel.Password);
+        if (isValidUser)
         {
             // Store the logged-in user's email
             userService.SetLoggedInUser(loginModel.Email);
-            
-            // Redirect to dashboard
+
+            // Redirect to the dashboard
             nm.NavigateTo("/dashboard");
         }
         else
         {
-            ErrorMessage = "Invalid login attempt. Please try again.";
+            ErrorMessage = "Invalid email or password. Please try again.";
         }
-
-        return Task.CompletedTask;
     }
 
     public class LoginModel

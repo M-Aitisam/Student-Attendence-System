@@ -1,33 +1,21 @@
-﻿@inject UserService UserService
+﻿<style>
+    a{
+        color:black;
+        padding-right:1rem;
+        text-decoration:none;
+        padding-top:7px;
+    }
 
+</style>
 <AuthorizeView>
     <Authorized>
-        @if (!string.IsNullOrEmpty(UserEmail))
-        {
-            <span class="me-3">Logged in as: <b>@UserEmail</b></span>
-        }
-        else
-        {
-            <span class="me-3">Fetching user info...</span>
-        }
+        <a href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
         <form method="post" action="Identity/Account/Logout">
-            <button type="submit" class="nav-link btn btn-link">Log out</button>
+            <button type="submit" class="    btn btn-light text-black">Log out</button>
         </form>
     </Authorized>
     <NotAuthorized>
-     
-        <a href="Identity/Account/Register">Register</a>
-        <a href="Identity/Account/Login">Log in</a>
-       
+        <a class=" px-3" href="Identity/Account/Register">Register</a>
+        <a class="" href="Identity/Account/Login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
-
-@code {
-    private string? UserEmail;
-
-    protected override void OnInitialized()
-    {
-        // Get the logged-in user's email from the UserService
-        UserEmail = UserService.GetLoggedInUser();
-    }
-}
