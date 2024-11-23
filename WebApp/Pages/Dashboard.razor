@@ -1,6 +1,115 @@
 ﻿@page "/dashboard"
-<h3>Dashboard</h3>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 p-0 @SidebarClass" id="sidebar">
+            <div class="sidebar-header d-flex align-items-center justify-content-between p-3 bg-primary text-white">
+                <h5 class="mb-0">My App</h5>
+                <button class="btn btn-light btn-sm" @onclick="ToggleSidebar">
+                    <i class="fas fa-angle-left"></i>
+                </button>
+            </div>
+            <ul class="nav flex-column p-3">
+                <li class="nav-item">
+                    <a class="nav-link active text-dark" href="#">
+                        <i class="fas fa-home me-2"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fas fa-user me-2"></i> Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fas fa-cogs me-2"></i> Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">
+                        <i class="fas fa-question-circle me-2"></i> Help
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+
+        <!-- Main Content -->
+        <div class="col" id="main-content" style="margin-left: @SidebarMargin;">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">
+                        <i class="fas fa-bars" @onclick="ToggleSidebar"></i>
+                        Dashboard
+                    </a>
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="content mt-5 p-3">
+                <!-- Main page content goes here -->
+                <h2>Welcome to the Student Attendance System</h2>
+                <p>Manage attendance efficiently.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
+    private string SidebarClass { get; set; } = "sidebar-visible";
+    private string SidebarMargin { get; set; } = "250px"; // Sidebar default width
 
+    private void ToggleSidebar()
+    {
+        if (SidebarClass == "sidebar-visible")
+        {
+            SidebarClass = "sidebar-hidden";
+            SidebarMargin = "30px";
+        }
+        else
+        {
+            SidebarClass = "sidebar-visible";
+            SidebarMargin = "250px";
+        }
+    }
 }
+
+<style>
+    #sidebar {
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+        z-index: 1040;
+    }
+
+    .sidebar-visible {
+        width: 250px;
+    }
+
+    .sidebar-hidden {
+        width: 100px;
+        overflow: hidden;
+    }
+
+    #main-content {
+        transition: margin-left 0.3s ease;
+    }
+
+    .content {
+        margin-top: 60px; /* Adjust for fixed navbar height */
+    }
+</style>
