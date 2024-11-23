@@ -1,0 +1,158 @@
+﻿@attribute [Authorize]
+
+<div class="wrapper " style="margin-top:-90px">
+    <!-- Main content -->
+    <section class="content ">
+        <div class="container-fluid">
+            <!-- Attendance Overview -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="small-box bg-info shadow-lg rounded-3">
+                        <div class="inner">
+                            <h3>90%</h3>
+                            <p>Average Attendance</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="small-box bg-success shadow-lg rounded-3">
+                        <div class="inner">
+                            <h3>120</h3>
+                            <p>Students Attending</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="small-box bg-warning shadow-lg rounded-3">
+                        <div class="inner">
+                            <h3>15</h3>
+                            <p>Absent Students</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-user-times"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="small-box bg-danger shadow-lg rounded-3">
+                        <div class="inner">
+                            <h3>5</h3>
+                            <p>Students with Low Attendance</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main row (charts and attendance overview) -->
+            <div class="row">
+                <section class="col-lg-7 connectedSortable">
+                    <!-- Attendance Trends -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-line mr-1"></i>
+                                Attendance Trends
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="attendance-trends" height="300"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Attendance Records -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h3 class="card-title">Recent Attendance</h3>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Attendance</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>John Doe</td>
+                                        <td>Present</td>
+                                        <td>2024-11-22</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jane Smith</td>
+                                        <td>Absent</td>
+                                        <td>2024-11-22</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tom Lee</td>
+                                        <td>Present</td>
+                                        <td>2024-11-22</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="col-lg-5 connectedSortable">
+                    <!-- Student Performance -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-pie mr-1"></i>
+                                Performance
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="performance-chart" height="300"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Announcements/Events -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <h3 class="card-title">
+                                <i class="fas fa-bell mr-1"></i>
+                                Announcements
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li><strong>Parent-Teacher Meeting</strong> - 25th Nov</li>
+                                <li><strong>Mid-Term Exam</strong> - 1st Dec</li>
+                                <li><strong>Holiday Notice</strong> - Christmas Break</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+   
+
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        // Logic to initialize charts or fetch data can go here
+    }
+}

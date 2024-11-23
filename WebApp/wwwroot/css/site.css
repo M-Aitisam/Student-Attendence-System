@@ -66,3 +66,43 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+
+/*Dashboard SideBar Styling */
+#sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #343A40;
+    transition: all 0.3s ease;
+    z-index: 1040;
+}
+
+.sidebar-visible {
+    width: 250px;
+}
+
+.sidebar-hidden {
+    width: 0px;
+    overflow: hidden;
+}
+
+#main-content {
+    transition: margin-left 0.3s ease;
+}
+
+
+.nav-link {
+    transition: background-color 0.2s ease;
+}
+
+    .nav-link:hover {
+        background-color: #495057;
+        color: white !important;
+    }
+
+/*Dashboard SideBar Styling */
+
+
