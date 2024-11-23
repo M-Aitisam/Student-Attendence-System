@@ -4,42 +4,43 @@
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3 p-0 @SidebarClass" id="sidebar">
-            <div class="sidebar-header d-flex align-items-center justify-content-between p-3 bg-primary text-white">
+            <div class="sidebar-header d-flex align-items-center justify-content-start p-3 bg-dark text-white">
                 <img src="Images/SMS-Logo.png" alt="Logo" class="me-2" style="height: 40px;" />
+                <span>Student Attendance System</span>
             </div>
             <ul class="nav flex-column p-3">
                 <li class="nav-item">
-                    <a class="nav-link active text-dark" href="#">
+                    <a class="nav-link active text-white" href="#">
                         <i class="fas fa-home me-2"></i> Home
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">
+                    <a class="nav-link text-white" href="#">
                         <i class="fas fa-user me-2"></i> Profile
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">
+                    <a class="nav-link text-white" href="#">
                         <i class="fas fa-cogs me-2"></i> Settings
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">
+                    <a class="nav-link text-white" href="#">
                         <i class="fas fa-question-circle me-2"></i> Help
                     </a>
                 </li>
             </ul>
-
         </div>
 
         <!-- Main Content -->
         <div class="col" id="main-content" style="margin-left: @SidebarMargin;">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top" style="padding-left: @NavbarPadding;">
                 <div class="container-fluid">
+                    <i class="fas fa-bars me-3" @onclick="ToggleSidebar"></i>
+                    <a class="navbar-brand" href="#">Dashboard</a>
                     <div class="collapse navbar-collapse">
                         <ul class="navbar-nav ms-auto">
-                            <i class="fas fa-bars" @onclick="ToggleSidebar"> </i>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">Home</a>
                             </li>
@@ -63,6 +64,7 @@
 @code {
     private string SidebarClass { get; set; } = "sidebar-visible";
     private string SidebarMargin { get; set; } = "250px"; // Sidebar default width
+    private string NavbarPadding { get; set; } = "250px"; // Match Sidebar width
 
     private void ToggleSidebar()
     {
@@ -70,11 +72,13 @@
         {
             SidebarClass = "sidebar-hidden";
             SidebarMargin = "0px";
+            NavbarPadding = "0px";
         }
         else
         {
             SidebarClass = "sidebar-visible";
             SidebarMargin = "250px";
+            NavbarPadding = "250px";
         }
     }
 }
@@ -104,6 +108,15 @@
     }
 
     .content {
-        margin-top: 60px; /* Adjust for fixed navbar height */
+        margin-top: 70px; /* Adjust for fixed navbar height */
     }
+
+    .nav-link {
+        transition: background-color 0.2s ease;
+    }
+
+        .nav-link:hover {
+            background-color: #495057;
+            color: white !important;
+        }
 </style>
