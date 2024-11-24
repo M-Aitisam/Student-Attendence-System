@@ -1,37 +1,38 @@
 ﻿@page "/MainSetting"
 
 <div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <Sidebar SidebarClass="@SidebarClass" />
-
-        <!-- Main Content -->
-        <div class="col" id="main-content" style="margin-left: @SidebarMargin;">
+   
+       
             <!-- Navbar -->
             <DashboardNav />
 
             <!-- Page Content -->
+    <div class="content" style="margin-top:2rem;">
             <ConfigureSystemSettings />
-        </div>
+       
     </div>
-</div>
+    </div>
+
 
 @code {
-    private string SidebarClass { get; set; } = "sidebar-visible";
-    private string SidebarMargin { get; set; } = "250px"; // Sidebar default width
+    private string SidebarClass { get; set; } = "sidebar-visible";  // Initially visible
+    private string SidebarMargin { get; set; } = "250px";          // Sidebar default width
+    private string NavbarPadding { get; set; } = "250px";           // Match Sidebar width
 
+    private void ToggleSidebar()
+    {
+        if (SidebarClass == "sidebar-visible")
+        {
+            SidebarClass = "sidebar-hidden";
+            SidebarMargin = "0px";
+            NavbarPadding = "0px";
+        }
+        else
+        {
+            SidebarClass = "sidebar-visible";
+            SidebarMargin = "250px";
+            NavbarPadding = "250px";
+        }
+        StateHasChanged();  // Force re-render after changing state
+    }
 }
-
-<style>
-    /* Sidebar visibility classes */
-    .sidebar-visible {
-        transform: translateX(0); /* Show sidebar */
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .sidebar-hidden {
-        transform: translateX(-100%); /* Hide sidebar */
-        transition: transform 0.3s ease-in-out;
-    }
-
-</style>

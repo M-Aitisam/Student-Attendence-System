@@ -1,26 +1,64 @@
-﻿<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top" style="padding-left: @NavbarPadding; padding-bottom:0">
-    <div class="container-fluid">
-        <!-- Sidebar Toggle Icon -->
-        <i class="fas fa-bars me-3" @onclick="ToggleSidebar"></i>
-
-        <!-- Navbar Links -->
-        <ul class="navbar-nav">
+﻿<div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 p-0 @SidebarClass" id="sidebar">
+        <div class="sidebar-header d-flex align-items-center justify-content-start p-3 bg-dark text-white">
+            <img src="Images/SMS-Logo.png" alt="Logo" class="me-2" style="height: 40px;" />
+            <span>Student Attendance System</span>
+        </div>
+        <ul class="nav flex-column p-3">
             <li class="nav-item">
-                <a href="#" class="nav-link">Home</a>
+                <a class="nav-link active text-white" href="#">
+                    <i class="fas fa-home me-2"></i> Home
+                </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">Contact</a>
+                <a class="nav-link text-white" href="#">
+                    <i class="fas fa-user me-2"></i> Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/MainSetting">
+                    <i class="fas fa-cogs me-2"></i> Settings
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="#">
+                    <i class="fas fa-question-circle me-2"></i> Help
+                </a>
             </li>
         </ul>
-
-        <!-- Spacer to push LoginDisplay to the end -->
-        <div class="ms-auto">
-            <LoginDisplay />
-        </div>
     </div>
-</nav>
 
+    <!-- Main Content -->
+    <div class="col" id="main-content" style="margin-left: @SidebarMargin;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top" style="padding-left: @NavbarPadding; padding-bottom:0">
+            <div class="container-fluid">
+                <!-- Sidebar Toggle Icon -->
+                <i class="fas fa-bars me-3" @onclick="ToggleSidebar"></i>
+
+                <!-- Navbar Links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Contact</a>
+                    </li>
+                </ul>
+
+                <!-- Spacer to push LoginDisplay to the end -->
+                <div class="ms-auto">
+                    <LoginDisplay />
+                </div>
+            </div>
+        </nav>
+
+       
+    </div>
+</div>
 @code {
+  
     private string SidebarClass { get; set; } = "sidebar-visible";
     private string SidebarMargin { get; set; } = "250px"; // Sidebar default width
     private string NavbarPadding { get; set; } = "250px"; // Match Sidebar width
