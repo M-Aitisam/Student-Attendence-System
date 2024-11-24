@@ -1,0 +1,33 @@
+﻿<div class="col-md-3 p-0 @SidebarClass" id="sidebar">
+    <div class="sidebar-header d-flex align-items-center justify-content-start p-3 bg-dark text-white">
+        <img src="Images/SMS-Logo.png" alt="Logo" class="me-2" style="height: 40px;" />
+        <span>Student Attendance System</span>
+    </div>
+    <ul class="nav flex-column p-3">
+        <li class="nav-item">
+            <a class="nav-link active text-white" href="/">
+                <i class="fas fa-home me-2"></i> Home
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/profile">
+                <i class="fas fa-user me-2"></i> Profile
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/settings">
+                <i class="fas fa-cogs me-2"></i> Settings
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/help">
+                <i class="fas fa-question-circle me-2"></i> Help
+            </a>
+        </li>
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public string SidebarClass { get; set; } = "sidebar-visible";
+}

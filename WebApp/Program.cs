@@ -32,6 +32,10 @@ builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuth
 // Custom Services
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<UserService>(); // Register your UserService from ClassLibraryModel here
+builder.Services.AddScoped<SystemSettings>(); // Register your UserService from ClassLibraryModel here
+builder.Services.AddSingleton<ClassLibraryDal.SystemSettingsService>(); // Register your SystemSettingsService from ClassLibraryDal here
+
+
 
 var app = builder.Build();
 

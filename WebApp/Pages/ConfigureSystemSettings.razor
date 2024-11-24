@@ -1,0 +1,91 @@
+﻿@page "/ConfigSettings"
+@using ClassLibraryModel
+@using ClassLibraryDal
+@inject ClassLibraryDal.SystemSettingsService SettingsService
+
+<h3>Configure System Settings</h3>
+
+@if (Settings == null)
+{
+    <p>Loading settings...</p>
+}
+else
+{
+    <EditForm Model="Settings" OnValidSubmit="SaveSettings">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label>Attendance Threshold (%)</label>
+            <InputNumber @bind-Value="Settings.AttendanceThreshold" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Attendance Marking Type</label>
+            <InputSelect @bind-Value="Settings.AttendanceMarkingType" class="form-control">
+                <option value="Present/Absent">Present/Absent</option>
+                <option value="Detailed">Detailed</option>
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Academic Year</label>
+            <InputText @bind-Value="Settings.AcademicYear" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Enable Notifications</label>
+            <InputCheckbox @bind-Value="Settings.EnableNotifications" />
+        </div>
+
+        <div class="form-group">
+            <label>Notification Frequency</label>
+            <InputSelect @bind-Value="Settings.NotificationFrequency" class="form-control">
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Default Report Format</label>
+            <InputSelect @bind-Value="Settings.DefaultReportFormat" class="form-control">
+                <option value="PDF">PDF</option>
+                <option value="Excel">Excel</option>
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label>Enable Backups</label>
+            <InputCheckbox @bind-Value="Settings.EnableBackup" />
+        </div>
+
+        <div class="form-group">
+            <label>Session Timeout (minutes)</label>
+            <InputNumber @bind-Value="Settings.SessionTimeoutMinutes" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+    </EditForm>
+}
+
+
+@code {
+    private SystemSettings? Settings;
+
+    protected override void OnInitialized()
+    {
+        // Load the settings using the service.
+        Settings = SettingsService.GetSettings();
+    }
+
+    private void SaveSettings()
+    {
+        if (Settings != null)
+        {
+            // Save updated settings using the service.
+            SettingsService.SaveSettings(Settings);
+            Console.WriteLine("Settings saved successfully!");
+        }
+    }
+}
