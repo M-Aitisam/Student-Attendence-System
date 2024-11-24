@@ -12,21 +12,26 @@
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="WebApp.styles.css" rel="stylesheet" />
-    <link rel="icon" type="image/png" href="favicon.png"/>
+    <link rel="icon" type="image/png" href="favicon.png" />
+
+    <!-- Include Blazor head outlet for SEO and prerendering -->
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 
-<!-- Google Font: Source Sans Pro -->
+    <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
     <!-- Font Awesome Icons -->
-    @* <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css"> *@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
     <!-- IonIcons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
-</head>
+  </head>
 <body>
+    <!-- Render Blazor app with server-side prerendering -->
     <component type="typeof(App)" render-mode="ServerPrerendered" />
 
+    <!-- Error UI for Blazor -->
     <div id="blazor-error-ui">
         <environment include="Staging,Production">
             An error has occurred. This application may no longer respond until reloaded.
@@ -38,6 +43,10 @@
         <a class="dismiss">🗙</a>
     </div>
 
+    <!-- Blazor Framework Script -->
     <script src="_framework/blazor.server.js"></script>
+
+   
+
 </body>
 </html>

@@ -8,7 +8,7 @@ namespace ClassLibraryModel
 {
     public class SystemSettings
     {
-        public int AttendanceThreshold { get; set; } = 75;
+        public int AttendanceThreshold { get; set; }
         public string AttendanceMarkingType { get; set; } = "Present/Absent";
         public string AcademicYear { get; set; } = "2024-2025";
         public bool EnableNotifications { get; set; } = true;

@@ -2,90 +2,103 @@
 @using ClassLibraryModel
 @using ClassLibraryDal
 @inject ClassLibraryDal.SystemSettingsService SettingsService
+@using Microsoft.AspNetCore.Components
 
-<h3>Configure System Settings</h3>
 
-@if (Settings == null)
-{
-    <p>Loading settings...</p>
-}
-else
-{
-    <EditForm Model="Settings" OnValidSubmit="SaveSettings">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
 
-        <div class="form-group">
-            <label>Attendance Threshold (%)</label>
-            <InputNumber @bind-Value="Settings.AttendanceThreshold" class="form-control" />
-        </div>
+<div class=" wrapper d-flex justify-content-center align-items-center vh-90">
+    <!-- Config Form Container -->
+    <div class="config-form-container p-5 bg-light rounded shadow-sm">
+        <!-- Dashboard Header -->
+        <h3 class="text-center mb-4">Configure System Settings</h3>
 
-        <div class="form-group">
-            <label>Attendance Marking Type</label>
-            <InputSelect @bind-Value="Settings.AttendanceMarkingType" class="form-control">
-                <option value="Present/Absent">Present/Absent</option>
-                <option value="Detailed">Detailed</option>
-            </InputSelect>
-        </div>
+        @if (Settings == null)
+        {
+            <p>Loading settings...</p>
+        }
+        else
+        {
+            <!-- Settings Form -->
+            <EditForm Model="Settings" OnValidSubmit="SaveSettings">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-        <div class="form-group">
-            <label>Academic Year</label>
-            <InputText @bind-Value="Settings.AcademicYear" class="form-control" />
-        </div>
+                <!-- Attendance Threshold Input -->
+                <div class="mb-3">
+                    <label for="attendanceThreshold" class="form-label">Attendance Threshold (%)</label>
+                    <InputNumber id="attendanceThreshold" class="form-control" @bind-Value="Settings.AttendanceThreshold" />
+                </div>
 
-        <div class="form-group">
-            <label>Enable Notifications</label>
-            <InputCheckbox @bind-Value="Settings.EnableNotifications" />
-        </div>
+                <!-- Attendance Marking Type Input -->
+                <div class="mb-3">
+                    <label for="attendanceMarkingType" class="form-label">Attendance Marking Type</label>
+                    <InputText id="attendanceMarkingType" class="form-control" @bind-Value="Settings.AttendanceMarkingType" />
+                </div>
 
-        <div class="form-group">
-            <label>Notification Frequency</label>
-            <InputSelect @bind-Value="Settings.NotificationFrequency" class="form-control">
-                <option value="Daily">Daily</option>
-                <option value="Weekly">Weekly</option>
-                <option value="Monthly">Monthly</option>
-            </InputSelect>
-        </div>
+                <!-- Academic Year Input -->
+                <div class="mb-3">
+                    <label for="academicYear" class="form-label">Academic Year</label>
+                    <InputText id="academicYear" class="form-control" @bind-Value="Settings.AcademicYear" />
+                </div>
 
-        <div class="form-group">
-            <label>Default Report Format</label>
-            <InputSelect @bind-Value="Settings.DefaultReportFormat" class="form-control">
-                <option value="PDF">PDF</option>
-                <option value="Excel">Excel</option>
-            </InputSelect>
-        </div>
+                <!-- Notifications Enabled Input -->
+                <div class="mb-3">
+                    <label for="enableNotifications" class="form-label">Notifications Enabled</label>
+                    <InputCheckbox id="enableNotifications" class="form-check-input" @bind-Value="Settings.EnableNotifications" />
+                </div>
 
-        <div class="form-group">
-            <label>Enable Backups</label>
-            <InputCheckbox @bind-Value="Settings.EnableBackup" />
-        </div>
+                <!-- Notification Frequency Input -->
+                <div class="mb-3">
+                    <label for="notificationFrequency" class="form-label">Notification Frequency</label>
+                    <InputText id="notificationFrequency" class="form-control" @bind-Value="Settings.NotificationFrequency" />
+                </div>
 
-        <div class="form-group">
-            <label>Session Timeout (minutes)</label>
-            <InputNumber @bind-Value="Settings.SessionTimeoutMinutes" class="form-control" />
-        </div>
+                <!-- Default Report Format Input -->
+                <div class="mb-3">
+                    <label for="defaultReportFormat" class="form-label">Default Report Format</label>
+                    <InputText id="defaultReportFormat" class="form-control" @bind-Value="Settings.DefaultReportFormat" />
+                </div>
 
-        <button type="submit" class="btn btn-primary">Save Settings</button>
-    </EditForm>
-}
+                <!-- Backups Enabled Input -->
+                <div class="mb-3">
+                    <label for="enableBackup" class="form-label">Backups Enabled</label>
+                    <InputCheckbox id="enableBackup" class="form-check-input" @bind-Value="Settings.EnableBackup" />
+                </div>
 
+                <!-- Session Timeout Input -->
+                <div class="mb-3">
+                    <label for="sessionTimeout" class="form-label">Session Timeout (Minutes)</label>
+                    <InputNumber id="sessionTimeout" class="form-control" @bind-Value="Settings.SessionTimeoutMinutes" />
+                </div>
+
+                <!-- Save Button -->
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+            </EditForm>
+
+            
+
+        }
+    </div>
+</div>
 
 @code {
     private SystemSettings? Settings;
 
     protected override void OnInitialized()
     {
-        // Load the settings using the service.
+        // Load the settings using the service
         Settings = SettingsService.GetSettings();
     }
 
     private void SaveSettings()
     {
-        if (Settings != null)
+        if (Settings != null) // Ensure Settings is not null before saving
         {
-            // Save updated settings using the service.
+            // Save the updated settings using the service
             SettingsService.SaveSettings(Settings);
-            Console.WriteLine("Settings saved successfully!");
         }
     }
+
+    }
 }
+
