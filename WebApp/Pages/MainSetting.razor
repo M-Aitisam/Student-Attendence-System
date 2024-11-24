@@ -1,5 +1,4 @@
-﻿
-@page "/MainSetting"
+﻿@page "/MainSetting"
 
 <div class="container-fluid">
     <div class="row">
@@ -9,7 +8,7 @@
         <!-- Main Content -->
         <div class="col" id="main-content" style="margin-left: @SidebarMargin;">
             <!-- Navbar -->
-            <DashboardNav OnToggleSidebar="ToggleSidebar" />
+            <DashboardNav />
 
             <!-- Page Content -->
             <ConfigureSystemSettings />
@@ -21,17 +20,18 @@
     private string SidebarClass { get; set; } = "sidebar-visible";
     private string SidebarMargin { get; set; } = "250px"; // Sidebar default width
 
-    private void ToggleSidebar()
-    {
-        if (SidebarClass == "sidebar-visible")
-        {
-            SidebarClass = "sidebar-hidden";
-            SidebarMargin = "0px";
-        }
-        else
-        {
-            SidebarClass = "sidebar-visible";
-            SidebarMargin = "250px";
-        }
-    }
 }
+
+<style>
+    /* Sidebar visibility classes */
+    .sidebar-visible {
+        transform: translateX(0); /* Show sidebar */
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar-hidden {
+        transform: translateX(-100%); /* Hide sidebar */
+        transition: transform 0.3s ease-in-out;
+    }
+
+</style>
