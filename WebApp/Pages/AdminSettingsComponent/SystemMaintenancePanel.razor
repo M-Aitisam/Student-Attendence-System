@@ -1,0 +1,43 @@
+﻿@using ClassLibraryModel
+
+<h3>System Maintenance</h3>
+@if (Settings == null)
+{
+    <p>Loading settings...</p>
+}
+else
+{
+    <div class="form-group">
+        <label>Enable Backups</label>
+        <InputCheckbox class="form-check-input" @bind-Value="Settings.EnableBackup" />
+    </div>
+    <div class="form-group">
+        <label>Session Timeout (Minutes)</label>
+        <InputNumber class="form-control" @bind-Value="Settings.SessionTimeoutMinutes" />
+    </div>
+    <button class="btn btn-danger" @onclick="ClearLogs">Clear Logs</button>
+    <button class="btn btn-warning" @onclick="RunBackup">Run Backup</button>
+}
+
+@code {
+    [Parameter] public SystemSettings? Settings { get; set; }
+
+    private void ClearLogs()
+    {
+        // Logic to clear logs
+        Console.WriteLine("Logs have been cleared.");
+    }
+
+    private void RunBackup()
+    {
+        // Logic to run backup
+        if (Settings?.EnableBackup == true)
+        {
+            Console.WriteLine("Backup process started.");
+        }
+        else
+        {
+            Console.WriteLine("Backups are disabled. Enable them first.");
+        }
+    }
+}

@@ -82,11 +82,12 @@ a, .btn-link {
 
 .sidebar-visible {
     width: 250px;
+    transition: width 0.3s ease;
 }
-
 .sidebar-hidden {
-    width: 0px;
+    width: 0;
     overflow: hidden;
+    transition: width 0.3s ease;
 }
 
 #main-content {
@@ -102,6 +103,46 @@ a, .btn-link {
    background-color: #495057;
    color: white !important;
     }
+
+
+
+/* Content Area Styles */
+.admin-settings .container {
+    background-color: #ecf0f1;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.text-primary {
+    font-family: 'Arial', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+/* Smooth Transition for Sidebar & Content */
+.row {
+    transition: all 0.3s ease;
+}
+
+button.list-group-item {
+    font-size: 16px;
+}
+
+/* For better responsiveness */
+@media (max-width: 767px) {
+    .sidebar {
+        width: 0;
+    }
+
+    .sidebar-item {
+        text-align: center;
+    }
+
+    .col-md-9 {
+        margin-left: 0;
+    }
+}
+
 
 
 /*Dashboard SideBar Styling */

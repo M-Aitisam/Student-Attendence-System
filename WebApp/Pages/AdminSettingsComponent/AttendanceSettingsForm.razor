@@ -1,0 +1,38 @@
+﻿@using ClassLibraryModel
+@inherits OwningComponentBase
+
+<EditForm Model="Settings" OnValidSubmit="HandleSave">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="attendanceThreshold">Attendance Threshold (%)</label>
+        <InputNumber id="attendanceThreshold" class="form-control" @bind-Value="Settings.AttendanceThreshold" />
+    </div>
+
+    <div class="form-group">
+        <label for="academicYear">Academic Year</label>
+        <InputText id="academicYear" class="form-control" @bind-Value="Settings.AcademicYear" />
+    </div>
+
+    <div class="form-group">
+        <label for="enableNotifications">Notifications Enabled</label>
+        <InputCheckbox id="enableNotifications" class="form-check-input" @bind-Value="Settings.EnableNotifications" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+@code {
+    [Parameter] public SystemSettings Settings { get; set; } = new SystemSettings(); // Parameter to pass in the settings model
+    [Parameter] public EventCallback OnSave { get; set; }  // EventCallback to notify parent when settings are saved
+
+    // This method is invoked when the form is valid and submitted
+    private async Task HandleSave()
+    {
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync();  // Notify the parent that settings have been saved
+        }
+    }
+}

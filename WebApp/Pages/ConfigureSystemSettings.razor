@@ -1,104 +1,71 @@
-﻿@page "/ConfigSettings"
-@using ClassLibraryModel
-@using ClassLibraryDal
-@inject ClassLibraryDal.SystemSettingsService SettingsService
-@using Microsoft.AspNetCore.Components
+﻿    @page "/AdminSettings"
+    @using ClassLibraryModel
+    @using ClassLibraryDal
+    @inject ClassLibraryModel.SettingsService SettingsService
+    @inject StudentService StudentService
 
+    <div class="admin-settings container py-4 " style="margin-left:14rem ; background-color:green">
+        <!-- Header -->
+        <h1 class="text-center mb-4">Admin Settings</h1>
 
-
-<div class=" wrapper d-flex justify-content-center align-items-center vh-90">
-    <!-- Config Form Container -->
-    <div class="config-form-container p-5 bg-light rounded shadow-sm">
-        <!-- Dashboard Header -->
-        <h3 class="text-center mb-4">Configure System Settings</h3>
-
-        @if (Settings == null)
-        {
-            <p>Loading settings...</p>
-        }
-        else
-        {
-            <!-- Settings Form -->
-            <EditForm Model="Settings" OnValidSubmit="SaveSettings">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-
-                <!-- Attendance Threshold Input -->
-                <div class="mb-3">
-                    <label for="attendanceThreshold" class="form-label">Attendance Threshold (%)</label>
-                    <InputNumber id="attendanceThreshold" class="form-control" @bind-Value="Settings.AttendanceThreshold" />
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-md-3">
+                <div class="list-group">
+                    <button class="list-group-item list-group-item-action" @onclick="ShowSystemSettings">System Settings</button>
+                    <button class="list-group-item list-group-item-action" @onclick="ShowStudentManagement">Student Management</button>
+                    <button class="list-group-item list-group-item-action" @onclick="ShowAttendanceSettings">Attendance Settings</button>
+                    <button class="list-group-item list-group-item-action" @onclick="ShowReportGeneration">Report Generation</button>
+                    <button class="list-group-item list-group-item-action" @onclick="ShowMaintenanceSettings">System Maintenance</button>
                 </div>
+            </div>
 
-                <!-- Attendance Marking Type Input -->
-                <div class="mb-3">
-                    <label for="attendanceMarkingType" class="form-label">Attendance Marking Type</label>
-                    <InputText id="attendanceMarkingType" class="form-control" @bind-Value="Settings.AttendanceMarkingType" />
-                </div>
-
-                <!-- Academic Year Input -->
-                <div class="mb-3">
-                    <label for="academicYear" class="form-label">Academic Year</label>
-                    <InputText id="academicYear" class="form-control" @bind-Value="Settings.AcademicYear" />
-                </div>
-
-                <!-- Notifications Enabled Input -->
-                <div class="mb-3">
-                    <label for="enableNotifications" class="form-label">Notifications Enabled</label>
-                    <InputCheckbox id="enableNotifications" class="form-check-input" @bind-Value="Settings.EnableNotifications" />
-                </div>
-
-                <!-- Notification Frequency Input -->
-                <div class="mb-3">
-                    <label for="notificationFrequency" class="form-label">Notification Frequency</label>
-                    <InputText id="notificationFrequency" class="form-control" @bind-Value="Settings.NotificationFrequency" />
-                </div>
-
-                <!-- Default Report Format Input -->
-                <div class="mb-3">
-                    <label for="defaultReportFormat" class="form-label">Default Report Format</label>
-                    <InputText id="defaultReportFormat" class="form-control" @bind-Value="Settings.DefaultReportFormat" />
-                </div>
-
-                <!-- Backups Enabled Input -->
-                <div class="mb-3">
-                    <label for="enableBackup" class="form-label">Backups Enabled</label>
-                    <InputCheckbox id="enableBackup" class="form-check-input" @bind-Value="Settings.EnableBackup" />
-                </div>
-
-                <!-- Session Timeout Input -->
-                <div class="mb-3">
-                    <label for="sessionTimeout" class="form-label">Session Timeout (Minutes)</label>
-                    <InputNumber id="sessionTimeout" class="form-control" @bind-Value="Settings.SessionTimeoutMinutes" />
-                </div>
-
-                <!-- Save Button -->
-                <button type="submit" class="btn btn-primary">Save Settings</button>
-            </EditForm>
-
-            
-
-        }
+            <!-- Right Content -->
+            <div class="col-md-9">
+                @if (currentView == "SystemSettings")
+                {
+                    <SystemSettingsForm Settings="Settings" OnSave="SaveSettings" />
+                }
+                else if (currentView == "StudentManagement")
+                {
+                    <StudentManagementPanel />
+                }
+                else if (currentView == "AttendanceSettings")
+                {
+                    <AttendanceSettingsForm Settings="Settings" />
+                }
+                else if (currentView == "ReportGeneration")
+                {
+                    <ReportGenerationPanel />
+                }
+                else if (currentView == "Maintenance")
+                {
+                    <SystemMaintenancePanel Settings="Settings" />
+                }
+            </div>
+        </div>
     </div>
-</div>
 
-@code {
-    private SystemSettings? Settings;
+    @code {
+        private string currentView = "SystemSettings";
+        private SystemSettings Settings { get; set; } = new();
 
-    protected override void OnInitialized()
-    {
-        // Load the settings using the service
-        Settings = SettingsService.GetSettings();
-    }
-
-    private void SaveSettings()
-    {
-        if (Settings != null) // Ensure Settings is not null before saving
+        protected override void OnInitialized()
         {
-            // Save the updated settings using the service
-            SettingsService.SaveSettings(Settings);
+            Settings = SettingsService?.GetSettings() ?? new SystemSettings();
+        }
+
+        private void ShowSystemSettings() => currentView = "SystemSettings";
+        private void ShowStudentManagement() => currentView = "StudentManagement";
+        private void ShowAttendanceSettings() => currentView = "AttendanceSettings";
+        private void ShowReportGeneration() => currentView = "ReportGeneration";
+        private void ShowMaintenanceSettings() => currentView = "Maintenance";
+
+        private void SaveSettings()
+        {
+            if (Settings != null)
+            {
+                SettingsService.SaveSettings(Settings);
+            }
         }
     }
-
-    }
-}
-

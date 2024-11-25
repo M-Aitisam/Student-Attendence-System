@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using WebApp.Areas.Identity;
 using WebApp.Data;
 using ClassLibraryModel;
+using ClassLibraryDal;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,12 +30,9 @@ builder.Services.AddServerSideBlazor();
 
 // Authentication State Provider for Blazor
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-
-// Custom Services
-builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddScoped<UserService>(); // Register your UserService from ClassLibraryModel here
-builder.Services.AddScoped<SystemSettings>(); // Register your UserService from ClassLibraryModel here
-builder.Services.AddSingleton<ClassLibraryDal.SystemSettingsService>(); // Register your SystemSettingsService from ClassLibraryDal here
+builder.Services.AddScoped<ClassLibraryModel.UserService>();
+builder.Services.AddScoped<SettingsService>();
+builder.Services.AddSingleton<ClassLibraryDal.StudentService>(); // Register your SystemSettingsService from ClassLibraryDal here
 
 
 
