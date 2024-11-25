@@ -5,25 +5,64 @@
             <img src="Images/SMS-Logo.png" alt="Logo" class="me-2" style="height: 40px;" />
             <span>Student Attendance System</span>
         </div>
-        <ul class="nav flex-column p-3">
+        <ul class="nav flex-column p-3 bg-light">
+            <!-- Home -->
             <li class="nav-item">
-                <a class="nav-link active text-white" href="#">
-                    <i class="fas fa-home me-2"></i> Home
+                <a class="nav-link active text-dark d-flex align-items-center" href="#">
+                    <i class="fas fa-home me-2"></i>
+                    <span>Home</span>
                 </a>
             </li>
+
+            <!-- Profile -->
             <li class="nav-item">
-                <a class="nav-link text-white" href="#">
-                    <i class="fas fa-user me-2"></i> Profile
+                <a class="nav-link text-dark d-flex align-items-center" href="#">
+                    <i class="fas fa-user me-2"></i>
+                    <span>Profile</span>
                 </a>
             </li>
+
+            <!-- Settings with Nested Options -->
             <li class="nav-item">
-                <a class="nav-link text-white" href="/MainSetting">
-                    <i class="fas fa-cogs me-2"></i> Settings
+                <a class="nav-link text-dark d-flex align-items-center" data-bs-toggle="collapse" href="/MainSetting" role="button" aria-expanded="false" aria-controls="settingsSubmenu">
+                    <i class="fas fa-cogs me-2"></i>
+                    <span>Settings</span>
+                    <i class="fas fa-chevron-down ms-auto"></i>
                 </a>
+                <ul class="collapse list-unstyled ps-4" id="settingsSubmenu">
+                    <li>
+                        <a class="nav-link text-dark" href="/AttendenceSettingForm">
+                            <i class="fas fa-wrench me-2"></i> General Settings
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" href="/SystemSettingForm">
+                            <i class="fas fa-sliders-h me-2"></i> Main Settings
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" href="/StudentManagementPanel">
+                            <i class="fas fa-tools me-2"></i> Advanced Settings
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" href="/StudentMaintainancePanel">
+                            <i class="fas fa-tools me-2"></i> Advanced Settings
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" href="/ReportGenerationPanel">
+                            <i class="fas fa-tools me-2"></i> Advanced Settings
+                        </a>
+                    </li>
+                </ul>
             </li>
+
+            <!-- Help -->
             <li class="nav-item">
-                <a class="nav-link text-white" href="#">
-                    <i class="fas fa-question-circle me-2"></i> Help
+                <a class="nav-link text-dark d-flex align-items-center" href="#">
+                    <i class="fas fa-question-circle me-2"></i>
+                    <span>Help</span>
                 </a>
             </li>
         </ul>
@@ -55,15 +94,13 @@
         </nav>
 
         <!-- Page Content -->
-       
+
 
     </div>
 </div>
-    <!-- Main Content -->
-    
-
+<!-- Main Content -->
 @code {
-  
+
     private string SidebarClass { get; set; } = "sidebar-visible";
     private string SidebarMargin { get; set; } = "250px"; // Sidebar default width
     private string NavbarPadding { get; set; } = "250px"; // Match Sidebar width
