@@ -28,7 +28,7 @@
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
-                        <ul id="inventory-menu" class="nav nav-treeview @(IsMenuExpanded("inventory-menu") ? "show" : "")">
+                        <ul id="inventory-menu" class="nav nav-treeview @(IsMenuExpanded("inventory-menu") ? "open" : "")">
                             <li class="nav-item">
                                 <a href="/medicinerecord" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
@@ -51,7 +51,7 @@
                                 <i class="fas fa-angle-left right"></i>
                             </p>
                         </a>
-                        <ul id="sales-menu" class="nav nav-treeview @(IsMenuExpanded("sales-menu") ? "show" : "")">
+                        <ul id="sales-menu" class="nav nav-treeview @(IsMenuExpanded("sales-menu") ? "open" : "")">
                             <li class="nav-item">
                                 <a href="/salesrecord" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
@@ -75,7 +75,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top" style="padding-left: @NavbarPadding;">
                 <div class="container-fluid">
                     <!-- Sidebar Toggle Icon -->
-                    <i class="fas fa-bars me-3" @onclick="@ToggleSidebar"></i>
+                    <i class="fas fa-bars me-3" @onclick="ToggleSidebar"></i>
 
                     <!-- Navbar Links -->
                     <ul class="navbar-nav">
@@ -162,11 +162,9 @@
 
     private void ToggleSidebar()
     {
-        bool isExpanded = SidebarClass == "sidebar-expanded";
-        SidebarClass = isExpanded ? "sidebar-collapsed" : "sidebar-expanded";
-        SidebarMargin = isExpanded ? "0" : "250px";
+        SidebarClass = SidebarClass == "sidebar-expanded" ? "sidebar-hidden" : "sidebar-expanded";
+        SidebarMargin = SidebarClass == "sidebar-expanded" ? "250px" : "0";
         NavbarPadding = SidebarMargin;
-        Console.WriteLine($"Sidebar toggled. Expanded: {!isExpanded}");
     }
 
     private void ToggleMenu(string menuId)

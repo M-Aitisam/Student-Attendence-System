@@ -68,7 +68,6 @@ a, .btn-link {
     }
 
 /* */  /* */
-
 /* Sidebar Styling */
 #sidebar {
     height: 100vh;
@@ -129,17 +128,17 @@ a, .btn-link {
         display: block;
     }
 
-
 .sidebar-expanded {
     width: 250px;
     transition: width 0.3s ease;
 }
 
-.sidebar-collapsed {
+.sidebar-hidden {
     width: 0;
     overflow: hidden;
     transition: width 0.3s ease;
 }
+
 
 /* Main Content */
 #main-content {
