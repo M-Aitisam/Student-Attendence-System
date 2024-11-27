@@ -54,6 +54,30 @@ a, .btn-link {
         cursor: pointer;
         position: absolute;
         right: 0.75rem;
+    }
+
+
+
+/* Main Content */
+#main-content {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease-in-out;
+    padding: 20px;
+    z-index:999;
+}
+
+/* Navbar Styling */
+.navbar {
+    z-index: 1050;
+    transition: padding-left 0.3s ease;
+}
+
+.navbar-light .nav-link {
+    color: #343a40;
+    transition: color 0.3s ease;
+}
+
+    .navbar-light .nav-link:hover {
         top: 0.5rem;
     }
 
@@ -68,6 +92,7 @@ a, .btn-link {
     }
 
 /* */  /* */
+/* Sidebar Styling */
 /* Sidebar Styling */
 #sidebar {
     height: 100vh;
@@ -138,29 +163,6 @@ a, .btn-link {
     overflow: hidden;
     transition: width 0.3s ease;
 }
-
-
-/* Main Content */
-#main-content {
-    margin-left: 250px;
-    transition: margin-left 0.3s ease-in-out;
-    padding: 20px;
-}
-
-/* Navbar Styling */
-.navbar {
-    z-index: 1050;
-    transition: padding-left 0.3s ease;
-}
-
-.navbar-light .nav-link {
-    color: #343a40;
-    transition: color 0.3s ease;
-}
-
-    .navbar-light .nav-link:hover {
-        color: #007bff;
-    }
 
 /* Responsive Adjustments */
 @media screen and (max-width: 768px) {

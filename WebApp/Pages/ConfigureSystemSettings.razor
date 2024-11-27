@@ -7,8 +7,8 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <div id="sidebar" class="@SidebarClass">
-            <div class="sidebar-header d-flex align-items-center p-3">
+        <div id="sidebar" class="@SidebarClass col-md-3 p-0">
+            <div class="sidebar-header d-flex align-items-center justify-content-start p-3 bg-dark text-white">
                 <img src="Images/SMS-Logo.png" alt="Logo" class="me-2" style="height: 40px;" />
                 <span>Student Attendance System</span>
             </div>
@@ -20,12 +20,14 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
+
+                    <!-- Inventory Menu -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link" @onclick="@(() => ToggleMenu("inventory-menu"))">
+                        <a class="nav-link" @onclick="@(() => ToggleMenu("inventory-menu"))">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
                                 Inventory
-                                <i class="right fas fa-angle-left"></i>
+                                <i class="right fas @(IsMenuExpanded("inventory-menu") ? "fa-angle-down" : "fa-angle-left")"></i>
                             </p>
                         </a>
                         <ul id="inventory-menu" class="nav nav-treeview @(IsMenuExpanded("inventory-menu") ? "open" : "")">
@@ -43,12 +45,14 @@
                             </li>
                         </ul>
                     </li>
+
+                    <!-- Sales Menu -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link" @onclick="@(() => ToggleMenu("sales-menu"))">
+                        <a class="nav-link" @onclick="@(() => ToggleMenu("sales-menu"))">
                             <i class="nav-icon fas fa-copy"></i>
                             <p>
                                 Sales Record
-                                <i class="fas fa-angle-left right"></i>
+                                <i class="fas @(IsMenuExpanded("sales-menu") ? "fa-angle-down" : "fa-angle-left") right"></i>
                             </p>
                         </a>
                         <ul id="sales-menu" class="nav nav-treeview @(IsMenuExpanded("sales-menu") ? "open" : "")">
@@ -66,16 +70,17 @@
                             </li>
                         </ul>
                     </li>
+
                 </ul>
             </nav>
         </div>
 
         <!-- Main Content -->
         <div id="main-content" style="margin-left: @SidebarMargin">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top" style="padding-left: @NavbarPadding;">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top" style="padding-left: @NavbarPadding">
                 <div class="container-fluid">
                     <!-- Sidebar Toggle Icon -->
-                    <i class="fas fa-bars me-3" @onclick="ToggleSidebar"></i>
+                    <i class="fas @(SidebarClass == "sidebar-expanded" ? "fa-bars" : "fa-times") me-3" @onclick="ToggleSidebar"></i>
 
                     <!-- Navbar Links -->
                     <ul class="navbar-nav">
@@ -97,11 +102,21 @@
                 <!-- Left Sidebar -->
                 <div class="col-md-3">
                     <div class="list-group">
-                        <button class="list-group-item list-group-item-action" @onclick="ShowSystemSettings">System Settings</button>
-                        <button class="list-group-item list-group-item-action" @onclick="ShowStudentManagement">Student Management</button>
-                        <button class="list-group-item list-group-item-action" @onclick="ShowAttendanceSettings">Attendance Settings</button>
-                        <button class="list-group-item list-group-item-action" @onclick="ShowReportGeneration">Report Generation</button>
-                        <button class="list-group-item list-group-item-action" @onclick="ShowMaintenanceSettings">System Maintenance</button>
+                        <button class="list-group-item list-group-item-action" @onclick="ShowSystemSettings">
+                            <i class="fas fa-cogs me-2"></i> System Settings
+                        </button>
+                        <button class="list-group-item list-group-item-action" @onclick="ShowStudentManagement">
+                            <i class="fas fa-users me-2"></i> Student Management
+                        </button>
+                        <button class="list-group-item list-group-item-action" @onclick="ShowAttendanceSettings">
+                            <i class="fas fa-calendar-check me-2"></i> Attendance Settings
+                        </button>
+                        <button class="list-group-item list-group-item-action" @onclick="ShowReportGeneration">
+                            <i class="fas fa-file-alt me-2"></i> Report Generation
+                        </button>
+                        <button class="list-group-item list-group-item-action" @onclick="ShowMaintenanceSettings">
+                            <i class="fas fa-tools me-2"></i> System Maintenance
+                        </button>
                     </div>
                 </div>
 
