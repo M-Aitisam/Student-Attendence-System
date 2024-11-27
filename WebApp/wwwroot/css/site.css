@@ -67,43 +67,112 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
+/* */  /* */
 
-
-/*Dashboard SideBar Styling */
+/* Sidebar Styling */
 #sidebar {
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
+    width: 250px;
     background-color: #343A40;
-    transition: all 0.3s ease;
+    transition: width 0.3s ease;
     z-index: 1040;
+    overflow-x: hidden;
 }
 
-.sidebar-visible {
+    #sidebar.sidebar-hidden {
+        width: 0;
+        overflow: hidden;
+    }
+
+    #sidebar .sidebar-header {
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-bottom: 1px solid #495057;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        background-color: #212529;
+        color: white;
+    }
+
+    #sidebar a {
+        color: white;
+        text-decoration: none;
+    }
+
+    #sidebar .nav-link {
+        color: #c2c7d0;
+        padding: 10px 20px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        #sidebar .nav-link.active,
+        #sidebar .nav-link:hover {
+            background-color: #495057;
+            color: #ffffff;
+        }
+
+    #sidebar .nav-icon {
+        margin-right: 10px;
+    }
+
+.nav-treeview {
+    display: none;
+    padding-left: 15px;
+}
+
+    .nav-treeview.open {
+        display: block;
+    }
+
+
+.sidebar-expanded {
     width: 250px;
     transition: width 0.3s ease;
 }
-.sidebar-hidden {
+
+.sidebar-collapsed {
     width: 0;
     overflow: hidden;
     transition: width 0.3s ease;
 }
 
+/* Main Content */
 #main-content {
-    transition: margin-left 0.3s ease;
+    margin-left: 250px;
+    transition: margin-left 0.3s ease-in-out;
+    padding: 20px;
 }
 
-
-.nav-link {
-    transition: background-color 0.2s ease;
+/* Navbar Styling */
+.navbar {
+    z-index: 1050;
+    transition: padding-left 0.3s ease;
 }
 
-.nav-link:hover {
-   background-color: #495057;
-   color: white !important;
+.navbar-light .nav-link {
+    color: #343a40;
+    transition: color 0.3s ease;
+}
+
+    .navbar-light .nav-link:hover {
+        color: #007bff;
     }
 
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    #sidebar {
+        width: 0;
+    }
+
+    #main-content {
+        margin-left: 0;
+    }
+}
 
 
 /* Content Area Styles */
