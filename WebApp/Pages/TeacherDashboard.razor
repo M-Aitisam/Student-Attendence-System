@@ -1,0 +1,151 @@
+﻿@page "/TeacherDashboard"
+
+
+
+@inject AttendanceService AttendanceService
+
+
+
+<div class="container mt-4">
+   
+    <!-- Subject & Instructor Details -->
+    <div class="row mt-3">
+        <div class="col-6">
+            <p><strong>Subject:</strong> F-24-Full Stack Web Development-Frontend </p>
+        </div>
+        <div class="col-6 text-end">
+            <p><strong>Session:</strong> FALL-2024</p>
+            <p><strong>Semester Time:</strong> Thursday, 12 September 2024 - Friday, 03 January 2025</p>
+        </div>
+    </div>
+
+    <!-- Instructor Details -->
+    <table class="table table-bordered mt-3">
+        <thead class="table-light">
+            <tr>
+                <th>Instructor Name</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Faculty Type</th>
+                <th>Total Regular Classes</th>
+                <th>Total Makeup Classes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (instructorDetails != null)
+            {
+                <tr>
+                    <td>@instructorDetails.Name</td>
+                    <td>@instructorDetails.Designation</td>
+                    <td>@instructorDetails.Department</td>
+                    <td>@instructorDetails.FacultyType</td>
+                    <td>@instructorDetails.TotalRegularClasses</td>
+                    <td>@instructorDetails.TotalMakeupClasses</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center">No instructor details available</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Regular Classes (1)</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Makeup Classes (1)</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Classes Log (8)</a>
+        </li>
+    </ul>
+
+    <!-- Attendance Table -->
+    <div class="table-responsive mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Schedule ID</th>
+                    <th>Subject Name</th>
+                    <th>Schedule Day & Date</th>
+                    <th>Class Time</th>
+                    <th>Duration</th>
+                    <th>Print Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (attendanceRecords != null && attendanceRecords.Any())
+                {
+                    @foreach (var record in attendanceRecords)
+                    {
+                        <tr>
+                            <td>@record.SrNo</td>
+                            <td>@record.ScheduleID</td>
+                            <td>@record.SubjectName</td>
+                            <td>@(record.ScheduleDate)</td>
+                            <td>@record.ClassTime</td>
+                            <td>@record.Duration</td>
+                            <td><button class="btn btn-primary">Print</button></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">No attendance records available</td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+  
+</div>
+
+
+
+@code {
+    private Instructor? instructorDetails;
+    private List<AttendanceRecord>? attendanceRecords;
+
+    protected override void OnInitialized()
+    {
+        // Ensure fallback values if the service returns null
+        instructorDetails = AttendanceService.GetInstructorDetails() ?? new Instructor();
+        attendanceRecords = AttendanceService.GetAttendanceRecords() ?? new List<AttendanceRecord>();
+    }
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    h3 {
+        color: #0056b3;
+        margin-bottom: 20px;
+    }
+
+    .nav-tabs .nav-link {
+        color: #0056b3;
+        font-weight: bold;
+    }
+
+    .table thead {
+        background-color: #e9ecef;
+        font-weight: bold;
+    }
+
+    footer {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+</style>

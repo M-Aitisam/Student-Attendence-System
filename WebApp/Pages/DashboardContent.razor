@@ -1,124 +1,187 @@
-﻿@attribute [Authorize]
+﻿@inject AttendanceService AttendanceService
+@inject NavigationManager nm
 
-
-@inject AttendanceService AttendanceService
-
-
-
-<div class="container mt-4">
-    <!-- Header Section -->
-    <h3 class="text-center">Air University Online Attendance System (FALL 2024)</h3>
-
-    <!-- Subject & Instructor Details -->
-    <div class="row mt-3">
-        <div class="col-6">
-            <p><strong>Subject:</strong> F-24-Full Stack Web Development-Frontend Lab-9</p>
-        </div>
-        <div class="col-6 text-end">
-            <p><strong>Session:</strong> FALL-2024</p>
-            <p><strong>Semester Time:</strong> Thursday, 12 September 2024 - Friday, 03 January 2025</p>
+<div class="wrapper" style="font-family: 'Arial', sans-serif;">
+    <!-- Dashboard Header -->
+    <div class="container-fluid">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="small-box text-white text-center p-3 shadow-sm" style="min-width: 10rem; background-color: #4CAF50; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <div class="inner">
+                        <h3 style="font-size: 2rem;">120</h3>
+                        <p>Total Students</p>
+                    </div>
+                    <div class="icon my-3">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                    <a href="#" class="small-box-footer text-white" style="font-size: 1.1rem;">View Students <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="small-box bg-success text-white text-center p-3 shadow-sm" style="min-width: 10rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <div class="inner">
+                        <h3 style="font-size: 2rem;">95%</h3>
+                        <p>Attendance Today</p>
+                    </div>
+                    <div class="icon my-3">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                    <a href="#" class="small-box-footer text-white" style="font-size: 1.1rem;">More Details <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="small-box bg-warning text-white text-center p-3 shadow-sm" style="min-width: 10rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <div class="inner">
+                        <h3 style="font-size: 2rem;">12</h3>
+                        <p>Absent Students</p>
+                    </div>
+                    <div class="icon my-3">
+                        <i class="fas fa-user-times fa-2x"></i>
+                    </div>
+                    <a href="#" class="small-box-footer text-white" style="font-size: 1.1rem;">Check Absent List <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="small-box bg-danger text-white text-center p-3 shadow-sm" style="min-width: 10rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <div class="inner">
+                        <h3 style="font-size: 2rem;">5</h3>
+                        <p>Late Arrivals</p>
+                    </div>
+                    <div class="icon my-3">
+                        <i class="fas fa-clock fa-2x"></i>
+                    </div>
+                    <a href="#" class="small-box-footer text-white" style="font-size: 1.1rem;">View Details <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Instructor Details -->
-    <table class="table table-bordered mt-3">
-        <thead class="table-light">
-            <tr>
-                <th>Instructor Name</th>
-                <th>Designation</th>
-                <th>Department</th>
-                <th>Faculty Type</th>
-                <th>Total Regular Classes</th>
-                <th>Total Makeup Classes</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (instructorDetails != null)
-            {
-                <tr>
-                    <td>@instructorDetails.Name</td>
-                    <td>@instructorDetails.Designation</td>
-                    <td>@instructorDetails.Department</td>
-                    <td>@instructorDetails.FacultyType</td>
-                    <td>@instructorDetails.TotalRegularClasses</td>
-                    <td>@instructorDetails.TotalMakeupClasses</td>
-                </tr>
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6" class="text-center">No instructor details available</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+        <div class="row g-4">
+            <!-- Left Section -->
+            <section class="col-lg-7">
+                <!-- Attendance Chart -->
+                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
+                    <div class="card-header bg-primary text-white fw-bold">
+                        <h3 class="card-title m-0">
+                            <i class="fas fa-chart-line me-2"></i> Monthly Attendance Overview
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                       
+                        @if (instructorDetails != null)
+                        {
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Designation</th>
+                                        <th>Department</th>
+                                        <th>Faculty Type</th>
+                                        <th>Total Regular Classes</th>
+                                        <th>Total Makeup Classes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr @onclick="NavigateToTeacherDashboard" style="cursor: pointer;">
+                                        <td>@instructorDetails.Name</td>
+                                        <td>@instructorDetails.Designation</td>
+                                        <td>@instructorDetails.Department</td>
+                                        <td>@instructorDetails.FacultyType</td>
+                                        <td>@instructorDetails.TotalRegularClasses</td>
+                                        <td>@instructorDetails.TotalMakeupClasses</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>No instructor details available</p>
+                        }
+                    </div>
+                </div>
 
-    <!-- Navigation Tabs -->
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" href="#">Regular Classes (1)</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Makeup Classes (1)</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Classes Log (8)</a>
-        </li>
-    </ul>
+                <!-- Recent Attendance -->
+                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
+                    <div class="card-header bg-info text-white fw-bold">
+                        <h3 class="card-title m-0">Recent Attendance Records</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td>2024-11-23</td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Smith</td>
+                                    <td><span class="badge bg-danger">Absent</span></td>
+                                    <td>2024-11-23</td>
+                                </tr>
+                                <tr>
+                                    <td>Michael Brown</td>
+                                    <td><span class="badge bg-warning text-dark">Late</span></td>
+                                    <td>2024-11-23</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
-    <!-- Attendance Table -->
-    <div class="table-responsive mt-3">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Sr No.</th>
-                    <th>Schedule ID</th>
-                    <th>Subject Name</th>
-                    <th>Schedule Day & Date</th>
-                    <th>Class Time</th>
-                    <th>Duration</th>
-                    <th>Print Attendance</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (attendanceRecords != null && attendanceRecords.Any())
-                {
-                    @foreach (var record in attendanceRecords)
-                    {
-                        <tr>
-                            <td>@record.SrNo</td>
-                            <td>@record.ScheduleID</td>
-                            <td>@record.SubjectName</td>
-                            <td>@(record.ScheduleDate)</td>
-                            <td>@record.ClassTime</td>
-                            <td>@record.Duration</td>
-                            <td><button class="btn btn-primary">Print</button></td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="7" class="text-center">No attendance records available</td>
-                    </tr>
-                }
-            </tbody>
+            <!-- Right Section -->
+            <section class="col-lg-5">
+                <!-- Attendance Insights -->
+                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
+                    <div class="card-header bg-success text-white fw-bold">
+                        <h3 class="card-title m-0">
+                            <i class="fas fa-info-circle me-2"></i> Attendance Insights
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <p><strong>Class Average:</strong> 96%</p>
+                        <p><strong>Top Performer:</strong> Sarah Lee</p>
+                        <p><strong>Lowest Attendance:</strong> Tom White</p>
+                    </div>
+                </div>
 
-        </table>
+                <!-- Notifications -->
+                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
+                    <div class="card-header bg-warning text-dark fw-bold">
+                        <h3 class="card-title m-0">
+                            <i class="fas fa-bell me-2"></i> Notifications
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <ul style="list-style-type: none; padding: 0;">
+                            <li><strong>Holiday Notice:</strong> No classes on 24th Nov.</li>
+                            <li><strong>Exam Reminder:</strong> Science Test on 27th Nov.</li>
+                            <li><strong>Event:</strong> Annual Sports Day on 1st Dec.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="text-center mt-4">
-        <p>&copy; Copyright All Rights Reserved 2024</p>
-        <p>Web Administration || Automation Department</p>
-    </footer>
 </div>
-
-
 
 @code {
     private Instructor? instructorDetails;
     private List<AttendanceRecord>? attendanceRecords;
+
+    private void NavigateToTeacherDashboard()
+    {
+        nm.NavigateTo("/TeacherDashboard");
+    }
 
     protected override void OnInitialized()
     {
@@ -127,30 +190,3 @@
         attendanceRecords = AttendanceService.GetAttendanceRecords() ?? new List<AttendanceRecord>();
     }
 }
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
-    }
-
-    h3 {
-        color: #0056b3;
-        margin-bottom: 20px;
-    }
-
-    .nav-tabs .nav-link {
-        color: #0056b3;
-        font-weight: bold;
-    }
-
-    .table thead {
-        background-color: #e9ecef;
-        font-weight: bold;
-    }
-
-    footer {
-        font-size: 0.9rem;
-        color: #6c757d;
-    }
-</style>
