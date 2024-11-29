@@ -104,54 +104,55 @@ a, .btn-link {
     transition: width 0.3s ease;
     z-index: 1040;
     overflow-x: hidden;
+    padding-top: 20px;  /* Added padding to top for better spacing */
 }
 
-    #sidebar.sidebar-hidden {
-        width: 0;
-        overflow: hidden;
-    }
+#sidebar.sidebar-hidden {
+    width: 0;
+    overflow: hidden;
+}
 
-    #sidebar .sidebar-header {
-        font-size: 1.2rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        border-bottom: 1px solid #495057;
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        background-color: #212529;
-        color: white;
-    }
+#sidebar .sidebar-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid #495057;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    background-color: #212529;
+    color: white;
+}
 
-    #sidebar a {
-        color: white;
-        text-decoration: none;
-    }
+#sidebar a {
+    color: white;
+    text-decoration: none;
+}
 
-    #sidebar .nav-link {
-        color: #c2c7d0;
-        padding: 10px 20px;
-        transition: background-color 0.3s, color 0.3s;
-    }
+#sidebar .nav-link {
+    color: #c2c7d0;
+    padding: 10px 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
 
-        #sidebar .nav-link.active,
-        #sidebar .nav-link:hover {
-            background-color: #495057;
-            color: #ffffff;
-        }
+#sidebar .nav-link.active,
+#sidebar .nav-link:hover {
+    background-color: #495057;
+    color: #ffffff;
+}
 
-    #sidebar .nav-icon {
-        margin-right: 10px;
-    }
+#sidebar .nav-icon {
+    margin-right: 10px;
+}
 
 .nav-treeview {
     display: none;
     padding-left: 15px;
 }
 
-    .nav-treeview.open {
-        display: block;
-    }
+.nav-treeview.open {
+    display: block;
+}
 
 .sidebar-expanded {
     width: 250px;
@@ -163,18 +164,6 @@ a, .btn-link {
     overflow: hidden;
     transition: width 0.3s ease;
 }
-
-/* Responsive Adjustments */
-@media screen and (max-width: 768px) {
-    #sidebar {
-        width: 0;
-    }
-
-    #main-content {
-        margin-left: 0;
-    }
-}
-
 
 /* Content Area Styles */
 .admin-settings .container {
@@ -194,29 +183,35 @@ a, .btn-link {
     transition: all 0.3s ease;
 }
 
+/* List Group Styling */
 button.list-group-item {
     font-size: 16px;
 }
 
 /* For better responsiveness */
-@media (max-width: 767px) {
-    .sidebar {
-        width: 0;
-    }
 
-    .sidebar-item {
-        text-align: center;
-    }
 
-    .col-md-9 {
-        margin-left: 0;
-    }
+/* Dashboard Sidebar Styling */
+#sidebar .nav-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width:250px;
+}
+
+/* Sidebar toggle button on smaller screens */
+.fas.fa-bars {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.fas.fa-bars:hover {
+    color: #f1c40f; /* Color change on hover */
 }
 
 
-
-/*Dashboard SideBar Styling */
-
-
-
-
+/* For smaller toggle icon */
+.sidebar-toggle-icon {
+    font-size: 18px; /* Adjust the size here to make it small */
+}

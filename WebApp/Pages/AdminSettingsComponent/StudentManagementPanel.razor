@@ -3,6 +3,7 @@
 @using ClassLibraryDal
 @inject StudentService StudentService
 
+<div class="col-md-7">
 <h3>Manage Students</h3>
 <button class="btn btn-success mb-3" @onclick="ShowAddStudentModal">Add Student</button>
 
@@ -60,6 +61,7 @@
     </div>
 }
 
+</div>
 @code {
     private List<Student> students = new List<Student>();
     private Student currentStudent = new Student();

@@ -1,7 +1,8 @@
 ﻿@page "/SystemSettingForm"
 @using ClassLibraryModel
 
-<EditForm Model="Settings" OnValidSubmit="HandleSave">
+
+<EditForm Model="Settings" OnValidSubmit="HandleSave" class="col-md-4" >
     <DataAnnotationsValidator />
     <div class="form-group">
         <label>Attendance Threshold (%)</label>
@@ -12,7 +13,7 @@
         <InputText class="form-control" @bind-Value="Settings.AcademicYear" />
     </div>
     <div class="form-group">
-        <label>Notifications Enabled</label>
+        <label>Notifications Enabled</label>    
         <InputCheckbox class="form-check-input" @bind-Value="Settings.EnableNotifications" />
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
