@@ -14,13 +14,10 @@
 
         public void SetLoggedInUser(string email)
         {
-            _loggedInUserEmail = email;
+            _loggedInUserEmail = email  ;
         }
 
-        public string? GetLoggedInUser()
-        {
-            return _loggedInUserEmail;
-        }
+       
 
         public Task<bool> ValidateUserAsync(string email, string password, string role)
         {
