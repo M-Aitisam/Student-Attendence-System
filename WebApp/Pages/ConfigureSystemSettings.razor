@@ -1,4 +1,4 @@
-﻿@page "/AdminSettings"
+﻿@page "/AdminDashboard"
 @using ClassLibraryModel
 @using ClassLibraryDal
 @inject ClassLibraryModel.SettingsService SettingsService
@@ -21,7 +21,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link d-flex  gap-10" style="width:230px ; margin-left:13px" @onclick="@(() => ToggleMenu("inventory-menu"))">
+                        <a class="nav-link d-flex  gap-10" style="width:230px ; margin-left:10x" @onclick="@(() => ToggleMenu("inventory-menu"))">
                             <i class="nav-icon fas  mt-1  fa-tachometer-alt"></i>
                             <p >
                                 Inventory
@@ -32,13 +32,13 @@
                             <li class="nav-item">
                                 <a href="/medicinerecord" style="width:230px ; margin-left:13px" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>List of Medicines</p>
+                                    <p>Attendence Form </p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/add_medicine_record" style="width:230px ; margin-left:13px" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Medicine Record</p>
+                                    <p>System Setting Form </p>
                                 </a>
                             </li>
                         </ul>

@@ -4,11 +4,12 @@
     {
         private string? _loggedInUserEmail;
 
-        // A simple in-memory user store (for demonstration purposes)
-        private readonly Dictionary<string, string> _users = new()
+        // In-memory user store for roles
+        private readonly Dictionary<string, (string Password, string Role)> _users = new()
         {
-            { "aitisam11@gmail.com", "Aitisam@1234" }, // Admin user
-                  // Example user
+            { "aitisam11@gmail.com", ("Aitisam@1234", "Admin") },
+            { "teacher@teacher.edu", ("TeacherPass123", "Teacher") },
+            { "student@gmail.com", ("StudentPass123", "Student") }
         };
 
         public void SetLoggedInUser(string email)
@@ -21,12 +22,12 @@
             return _loggedInUserEmail;
         }
 
-        // Async method to validate the user
-        public Task<bool> ValidateUserAsync(string email, string password)
+        public Task<bool> ValidateUserAsync(string email, string password, string role)
         {
-            if (_users.ContainsKey(email) && _users[email] == password)
+            if (_users.ContainsKey(email))
             {
-                return Task.FromResult(true);
+                var (storedPassword, storedRole) = _users[email];
+                return Task.FromResult(storedPassword == password && storedRole == role);
             }
 
             return Task.FromResult(false);

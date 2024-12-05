@@ -1,90 +1,111 @@
 ﻿@page "/"
+@using ClassLibraryModel
+@using WebApp.Pages
 @inject NavigationManager nm
 @inject UserService userService
 
 <style>
-        /* Add  styles for input focus */
     .form-control:focus {
-
-        border: 2px solid black !important; /* Light 2px black border */
-        box-shadow: none; /* Remove the default box-shadow */
-        outline: none; /* Remove the outline */
+        border: 2px solid black !important;
+        box-shadow: none;
+        outline: none;
     }
 </style>
+
 <div class="fixed-top">
-    <BrandTitleBar></BrandTitleBar>
+<BrandTitleBar /> 
 </div>
 
-    <div class="container" style="margin-top:3rem">
-        <main role="main" class="pb-1">
-            <h1 class="text-center">Login</h1>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <form @onsubmit="HandleLogin">
-                        <div class="form-floating mb-3">
-                            <input class="form-control" type="email" placeholder="Email" @bind="loginModel.Email" />
-                            <label>Email</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input class="form-control" type="password" placeholder="Password" @bind="loginModel.Password" />
-                            <label>Password</label>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" @bind="loginModel.RememberMe" /> Remember me
-                                </label>
-                            </div>
-                            <a href="/Identity/Account/ForgotPassword">Forgot your password?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Log in</button>
-                    </form>
-                    <div class="text-center mt-3 text-danger">
-                        @ErrorMessage
+<div class="container" style="margin-top:3rem">
+    <main role="main" class="pb-1">
+        <h1 class="text-center">Login</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form @onsubmit="HandleLogin">
+                    <div class="form-floating mb-3">
+                        <select class="form-control" @bind="SelectedRole">
+                            <option value="">Select Role</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Teacher">Teacher</option>
+                            <option value="Student">Student</option>
+                        </select>
+                        <label>Role</label>
                     </div>
-                    <div class="text-center mt-3">
-                        <a class="btn btn-success" href="/Identity/Account/Register">Register as a new user</a>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="email" placeholder="Email" @bind="loginModel.Email" />
+                        <label>Email</label>
                     </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="password" placeholder="Password" @bind="loginModel.Password" />
+                        <label>Password</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Log in</button>
+                </form>
+                <div class="text-center mt-3 text-danger">
+                    @ErrorMessage
                 </div>
             </div>
-        </main>
-        <div class="fixed-bottom">
-            <BrandFooterBar></BrandFooterBar>
         </div>
+    </main>
+    <div class="fixed-bottom">
+        <BrandFooterBar></BrandFooterBar>
     </div>
+</div>
 
-    @code {
-        private LoginModel loginModel = new LoginModel();
-        private string ErrorMessage = string.Empty;
+@code {
+    private LoginModel loginModel = new();
+    private string SelectedRole = string.Empty;
+    private string ErrorMessage = string.Empty;
 
-        private async Task HandleLogin()
+    private async Task HandleLogin()
+    {
+        if (string.IsNullOrWhiteSpace(SelectedRole))
         {
-            if (string.IsNullOrWhiteSpace(loginModel.Email) || string.IsNullOrWhiteSpace(loginModel.Password))
-            {
-                ErrorMessage = "Email and Password cannot be empty.";
-                return;
-            }
-
-            // Simplified user validation for demo purposes.
-             bool isValidUser = await userService.ValidateUserAsync(loginModel.Email, loginModel.Password);
-            if (isValidUser)
-            {
-                // Store the logged-in user's email
-                userService.SetLoggedInUser(loginModel.Email);
-
-                // Redirect to the dashboard
-                nm.NavigateTo("/dashboard");
-            }
-            else
-            {
-                ErrorMessage = "Invalid email or password. Please try again.";
-            }
+            ErrorMessage = "Please select a role.";
+            return;
         }
 
-        public class LoginModel
+        if (string.IsNullOrWhiteSpace(loginModel.Email) || string.IsNullOrWhiteSpace(loginModel.Password))
         {
-            public string Email { get; set; } = string.Empty;
-            public string Password { get; set; } = string.Empty;
-            public bool RememberMe { get; set; }
+            ErrorMessage = "Email and Password cannot be empty.";
+            return;
+        }
+
+        // Role-specific validation
+        if (SelectedRole == "Teacher" && !loginModel.Email.EndsWith("@teacher.edu"))
+        {
+            ErrorMessage = "Teachers must use an email ending with '@teacher.edu'.";
+            return;
+        }
+
+        bool isValidUser = await userService.ValidateUserAsync(loginModel.Email, loginModel.Password, SelectedRole);
+        if (isValidUser)
+        {
+            userService.SetLoggedInUser(loginModel.Email);
+
+            // Redirect based on role
+            switch (SelectedRole)
+            {
+                case "Admin":
+                    nm.NavigateTo("/AdminDashboard");
+                    break;
+                case "Teacher":
+                    nm.NavigateTo("/TeacherDashboard");
+                    break;
+                case "Student":
+                    nm.NavigateTo("/StudentDashboard");
+                    break;
+            }
+        }
+        else
+        {
+            ErrorMessage = "Invalid email or password for the selected role.";
         }
     }
+
+    public class LoginModel
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}
