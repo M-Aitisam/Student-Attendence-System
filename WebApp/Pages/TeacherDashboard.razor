@@ -1,5 +1,8 @@
 ﻿@page "/TeacherDashboard"
 @inject IJSRuntime JSRuntime
+@inject AttendanceService AttendanceService
+@using ClassLibraryModel
+@using ClassLibraryDal
 
 <style>
     /* Dashboard Styling */
@@ -24,7 +27,9 @@
             transform: scale(1.05);
         }
 
-    .online-board, .events-section, .performance-section {
+    .online-board,
+    .events-section,
+    .performance-section {
         background-color: #ffffff;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -44,7 +49,6 @@
         max-height: 400px;
     }
 
-    /* Performance chart */
     .performance-chart {
         display: flex;
         justify-content: space-between;
@@ -137,63 +141,123 @@
             </div>
         </div>
     </div>
+
+    <!-- Instructor Details -->
+    <table class="table table-bordered mt-3">
+        <thead class="table-light">
+            <tr>
+                <th>Instructor Name</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Faculty Type</th>
+                <th>Total Regular Classes</th>
+                <th>Total Makeup Classes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (InstructorDetails != null)
+            {
+                <tr>
+                    <td>@InstructorDetails.Name</td>
+                    <td>@InstructorDetails.Designation</td>
+                    <td>@InstructorDetails.Department</td>
+                    <td>@InstructorDetails.FacultyType</td>
+                    <td>@InstructorDetails.TotalRegularClasses</td>
+                    <td>@InstructorDetails.TotalMakeupClasses</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center">No instructor details available</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Attendance Table -->
+    <div class="table-responsive mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Schedule ID</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Attendance (Start Time)</th>
+                    <th>Attendance (End Time)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (AttendanceRecords.Any())
+                {
+                    @foreach (var record in AttendanceRecords)
+                    {
+                        <tr>
+                            <td>@record.SrNo</td>
+                            <td>@record.ScheduleId</td>
+                            <td>@record.Subject</td>
+                            <td>@record.Teacher</td>
+                            <td>@(record.StartDate?.ToString("dd/MM/yyyy") ?? "-")</td>
+                            <td>@(record.EndDate?.ToString("dd/MM/yyyy") ?? "-")</td>
+                            <td>@(record.StartTime?.ToString("hh\\:mm\\:ss") ?? "-")</td>
+                            <td>@(record.EndTime?.ToString("hh\\:mm\\:ss") ?? "-")</td>
+                            <td>@record.Status</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="text-center">No attendance records available</td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
 </div>
 
 @code {
+    private Instructor? InstructorDetails;
+    private List<AttendanceRecord> AttendanceRecords = new();
     private List<CalendarDay> Calendar = new()
     {
         new CalendarDay
         {
-            Date = "Monday, 1 June 2019",
+            Date = DateTime.ParseExact("1 June 2019", "d MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture),
             Events = new List<CalendarEvent>
             {
                 new CalendarEvent { Title = "10a Demo Test" },
                 new CalendarEvent { Title = "2p Parent Teacher Meeting" }
             }
-        },
-        new CalendarDay
-        {
-            Date = "Tuesday, 2 June 2019",
-            Events = new List<CalendarEvent>
-            {
-                new CalendarEvent { Title = "10a Lecture Demo" }
-            }
         }
     };
 
+    private List<Activity> RecentActivities = new()
+    {
+        new Activity { User = "Mark Thompson", Role = "Admin", Action = "processed payment for", Details = "Invoice #12003" },
+        new Activity { User = "Sarah Lee", Role = "Manager", Action = "updated schedule for", Details = "Room A" }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        InstructorDetails = await AttendanceService.GetInstructorDetailsAsync();
+        AttendanceRecords = await AttendanceService.GetAttendanceRecordsAsync();
+    }
+
     private class CalendarDay
     {
-        public string Date { get; set; } = string.Empty;
+        public DateTime Date { get; set; }
         public List<CalendarEvent> Events { get; set; } = new();
     }
 
     private class CalendarEvent
     {
         public string Title { get; set; } = string.Empty;
-        public string Start { get; set; } = string.Empty;  // Add this property to define start date/time
-    }
-
-    private List<Activity> RecentActivities = new()
-    {
-        new Activity { User = "Mark Thompson", Role = "Admin", Action = "processed payment for", Details = "Invoice (Tuition Fees for 2019)" },
-        new Activity { User = "Mark Thompson", Role = "Admin", Action = "created an invoice for", Details = "Tuition Fees for 2019" },
-        new Activity { User = "Mark Thompson", Role = "Admin", Action = "created an invoice for", Details = "Other Fees" }
-    };
-
-    private List<CalendarEvent> CalendarEvents = new()
-    {
-        new CalendarEvent { Title = "Demo Test", Start = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") },
-        new CalendarEvent { Title = "Parent Teacher Meeting", Start = DateTime.Now.AddDays(5).ToString("yyyy-MM-dd") }
-    };
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // Pass calendar events to JavaScript
-            var eventsJsArray = CalendarEvents.Select(e => new { title = e.Title, start = e.Start }).ToList();
-            await JSRuntime.InvokeVoidAsync("initializeCalendar", eventsJsArray);
-        }
     }
 
     private class Activity

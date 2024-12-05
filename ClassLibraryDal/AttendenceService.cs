@@ -9,33 +9,39 @@ namespace ClassLibraryDal
 {
     public class AttendanceService
     {
-        public Instructor GetInstructorDetails()
+        public async Task<Instructor> GetInstructorDetailsAsync()
         {
-            return new Instructor
+            // Replace with actual implementation
+            return await Task.FromResult(new Instructor
             {
-                Name = "Mr. Kaleemullah",
-                Designation = "Lecturer",
+                Name = "John Doe",
+                Designation = "Professor",
                 Department = "Computer Science",
-                FacultyType = "Regular Faculty",
-                TotalRegularClasses = 1,
-                TotalMakeupClasses = 7
-            };
+                FacultyType = "Regular",
+                TotalRegularClasses = 100,
+                TotalMakeupClasses = 10
+            });
         }
 
-        public List<AttendanceRecord> GetAttendanceRecords()
+        public async Task<List<AttendanceRecord>> GetAttendanceRecordsAsync()
         {
-            return new List<AttendanceRecord>
+            // Replace with actual implementation
+            return await Task.FromResult(new List<AttendanceRecord>
+        {
+            new AttendanceRecord
             {
-                new AttendanceRecord
-                {
-                    SrNo = 1,
-                    ScheduleID = "84933",
-                    SubjectName = "F-24-Full Stack Web Development-Frontend Lab-9",
-                    ScheduleDate = "Wednesday, 27 November 2024",
-                    ClassTime = "16:00 - 18:40",
-                    Duration = "3 Hrs."
-                }
-            };
+                SrNo = 1,
+                ScheduleId = 101,
+                Subject = "Mathematics",
+                Teacher = "Mr. Smith",
+                StartDate = DateTime.Now.Date,
+                EndDate = DateTime.Now.Date.AddDays(1),
+                StartTime = DateTime.Now.TimeOfDay,
+                EndTime = DateTime.Now.TimeOfDay.Add(TimeSpan.FromHours(1)),
+                Status = "Present"
+            }
+        });
         }
     }
+
 }
