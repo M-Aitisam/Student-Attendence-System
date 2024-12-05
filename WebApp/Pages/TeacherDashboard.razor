@@ -201,10 +201,10 @@
                             <td>@record.ScheduleId</td>
                             <td>@record.Subject</td>
                             <td>@record.Teacher</td>
-                            <td>@(record.StartDate?.ToString("dd/MM/yyyy") ?? "-")</td>
-                            <td>@(record.EndDate?.ToString("dd/MM/yyyy") ?? "-")</td>
-                            <td>@(record.StartTime?.ToString("hh\\:mm\\:ss") ?? "-")</td>
-                            <td>@(record.EndTime?.ToString("hh\\:mm\\:ss") ?? "-")</td>
+                            <td>@(record.StartDate.ToString("dd/MM/yyyy") ?? "-")</td>
+                            <td>@(record.EndDate.ToString("dd/MM/yyyy") ?? "-")</td>
+                            <td>@(record.StartTime.ToString("hh\\:mm\\:ss") ?? "-")</td>
+                            <td>@(record.EndTime.ToString("hh\\:mm\\:ss") ?? "-")</td>
                             <td>@record.Status</td>
                         </tr>
                     }

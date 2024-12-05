@@ -1,22 +1,11 @@
-﻿function initializeCalendar(events) {
-    var calendarEl = document.getElementById('calendar');
-
-    if (typeof FullCalendar === 'undefined') {
-        console.error('FullCalendar is not defined');
-        return;
-    }
-
+﻿document.addEventListener("DOMContentLoaded", function () {
+    var calendarEl = document.getElementById("calendar");
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            start: 'prev,next today',
-            center: 'title',
-            end: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: events // Pass events from Blazor
-        
-
+        initialView: "dayGridMonth",
+        events: [
+            { title: "Demo Test", start: "2024-12-01", allDay: true },
+            { title: "Parent Teacher Meet", start: "2024-12-05", allDay: true },
+        ],
     });
-
     calendar.render();
-}
+});

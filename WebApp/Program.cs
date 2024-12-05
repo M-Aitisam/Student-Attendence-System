@@ -31,8 +31,8 @@ builder.Services.AddServerSideBlazor();
 // Authentication State Provider for Blazor
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddScoped<ClassLibraryModel.UserService>();
-builder.Services.AddScoped<SettingsService>();
-builder.Services.AddSingleton<ClassLibraryDal.StudentService>(); // Register your SystemSettingsService from ClassLibraryDal here
+//builder.Services.AddScoped<SettingsService>();
+//builder.Services.AddSingleton<ClassLibraryDal.StudentService>(); // Register your SystemSettingsService from ClassLibraryDal here
 builder.Services.AddScoped<AttendanceService>();
 
 
