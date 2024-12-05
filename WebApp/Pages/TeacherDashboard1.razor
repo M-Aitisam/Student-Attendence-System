@@ -1,12 +1,15 @@
 ﻿@page "/TeacherDashboard"
+@inject IJSRuntime JSRuntime
 
 <style>
+    /* Dashboard Styling */
     .dashboard {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 1rem;
         margin-bottom: 2rem;
     }
+
     .dashboard-card {
         background-color: #ffffff;
         border-radius: 8px;
@@ -14,13 +17,21 @@
         text-align: center;
         padding: 1rem;
         border-top: 4px solid #007bff;
+        transition: transform 0.3s ease-in-out;
     }
-    .online-board, .events-section {
+
+        .dashboard-card:hover {
+            transform: scale(1.05);
+        }
+
+    .online-board, .events-section, .performance-section {
         background-color: #ffffff;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         padding: 1rem;
+        margin-top: 1rem;
     }
+
     .section-title {
         font-size: 1.25rem;
         font-weight: bold;
@@ -28,39 +39,39 @@
         padding-bottom: 0.5rem;
         margin-bottom: 1rem;
     }
-    .recent-activities, .calendar {
-        overflow-y: auto;
+
+    #calendar {
         max-height: 400px;
     }
-    .activity {
-        border-bottom: 1px solid #ddd;
-        padding: 0.5rem 0;
+
+    /* Performance chart */
+    .performance-chart {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
     }
-    .activity:last-child {
-        border-bottom: none;
-    }
-    .calendar-event {
-        background-color: #007bff;
-        color: #ffffff;
-        border-radius: 4px;
-        padding: 0.2rem 0.5rem;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-    }
+
+        .performance-chart div {
+            flex: 1;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 0 1rem;
+        }
 </style>
 
 <div>
     <h1>Teacher Dashboard</h1>
 
-    <!-- Dashboard Overview -->
+    <!-- Dashboard Stats -->
     <div class="dashboard">
         <div class="dashboard-card">
-            <h2>29</h2>
-            <p>Events</p>
+            <h2>@Calendar.Sum(c => c.Events.Count)</h2>
+            <p>Upcoming Events</p>
         </div>
         <div class="dashboard-card" style="border-top: 4px solid #28a745;">
-            <h2>#</h2>
-            <p>Social Learning</p>
+            <h2>45</h2>
+            <p>Active Social Learning</p>
         </div>
         <div class="dashboard-card" style="border-top: 4px solid #ffc107;">
             <h2>400.80 AUD</h2>
@@ -72,18 +83,25 @@
         </div>
     </div>
 
-    <!-- Online Notice Board and Events -->
+    <!-- Recent Activities and Calendar -->
     <div class="row">
         <div class="col-md-6">
             <div class="online-board">
                 <div class="section-title">Online Notice Board</div>
-                <div class="recent-activities">
-                    @foreach (var activity in RecentActivities)
+                <div>
+                    @if (RecentActivities.Any())
                     {
-                        <div class="activity">
-                            <strong>@activity.User</strong> (@activity.Role) @activity.Action <br />
-                            <small>@activity.Details</small>
-                        </div>
+                        @foreach (var activity in RecentActivities)
+                        {
+                            <div class="activity">
+                                <strong>@activity.User</strong> (@activity.Role) @activity.Action <br />
+                                <small>@activity.Details</small>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No recent activities to display.</p>
                     }
                 </div>
             </div>
@@ -91,32 +109,37 @@
 
         <div class="col-md-6">
             <div class="events-section">
-                <div class="section-title">Events and Class Schedule</div>
-                <div class="calendar">
-                    @foreach (var eventDay in Calendar)
-                    {
-                        <div>
-                            <strong>@eventDay.Date</strong>
-                            @foreach (var evnt in eventDay.Events)
-                            {
-                                <div class="calendar-event">@evnt.Title</div>
-                            }
-                        </div>
-                    }
-                </div>
+                <div class="section-title">Real-Time Calendar</div>
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Section -->
+    <div class="performance-section">
+        <div class="section-title">Classroom Performance</div>
+        <div class="performance-chart">
+            <div>
+                <h4>Top Performers</h4>
+                <ul>
+                    <li>Student A - 95%</li>
+                    <li>Student B - 92%</li>
+                    <li>Student C - 90%</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Students Needing Attention</h4>
+                <ul>
+                    <li>Student X - 55%</li>
+                    <li>Student Y - 60%</li>
+                    <li>Student Z - 62%</li>
+                </ul>
             </div>
         </div>
     </div>
 </div>
 
 @code {
-    private List<Activity> RecentActivities = new()
-    {
-        new Activity { User = "Mark Thompson", Role = "Admin", Action = "processed payment for", Details = "Invoice (Tuition Fees for 2019)" },
-        new Activity { User = "Mark Thompson", Role = "Admin", Action = "created an invoice for", Details = "Tuition Fees for 2019" },
-        new Activity { User = "Mark Thompson", Role = "Admin", Action = "created an invoice for", Details = "Other Fees" }
-    };
-
     private List<CalendarDay> Calendar = new()
     {
         new CalendarDay
@@ -138,22 +161,46 @@
         }
     };
 
-    private class Activity
-    {
-        public string? User { get; set; }
-        public string? Role { get; set; }
-        public string? Action { get; set; }
-        public string? Details { get; set; }
-    }
-
     private class CalendarDay
     {
-        public string? Date { get; set; }
+        public string Date { get; set; } = string.Empty;
         public List<CalendarEvent> Events { get; set; } = new();
     }
 
     private class CalendarEvent
     {
-        public string? Title { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Start { get; set; } = string.Empty;  // Add this property to define start date/time
+    }
+
+    private List<Activity> RecentActivities = new()
+    {
+        new Activity { User = "Mark Thompson", Role = "Admin", Action = "processed payment for", Details = "Invoice (Tuition Fees for 2019)" },
+        new Activity { User = "Mark Thompson", Role = "Admin", Action = "created an invoice for", Details = "Tuition Fees for 2019" },
+        new Activity { User = "Mark Thompson", Role = "Admin", Action = "created an invoice for", Details = "Other Fees" }
+    };
+
+    private List<CalendarEvent> CalendarEvents = new()
+    {
+        new CalendarEvent { Title = "Demo Test", Start = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") },
+        new CalendarEvent { Title = "Parent Teacher Meeting", Start = DateTime.Now.AddDays(5).ToString("yyyy-MM-dd") }
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Pass calendar events to JavaScript
+            var eventsJsArray = CalendarEvents.Select(e => new { title = e.Title, start = e.Start }).ToList();
+            await JSRuntime.InvokeVoidAsync("initializeCalendar", eventsJsArray);
+        }
+    }
+
+    private class Activity
+    {
+        public string User { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        public string Action { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty;
     }
 }
