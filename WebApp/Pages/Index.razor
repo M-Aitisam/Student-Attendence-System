@@ -78,6 +78,12 @@
             return;
         }
 
+        if (SelectedRole == "Student" && !loginModel.Email.EndsWith("@students.au.edu.pk"))
+        {
+            ErrorMessage = "Students must use an email ending with '@students.au.edu.pk'.";
+            return;
+        }
+
         bool isValidUser = await userService.ValidateUserAsync(loginModel.Email, loginModel.Password, SelectedRole);
         if (isValidUser)
         {

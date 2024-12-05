@@ -1,0 +1,159 @@
+﻿@page "/TeacherDashboard"
+
+<style>
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .dashboard-card {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        padding: 1rem;
+        border-top: 4px solid #007bff;
+    }
+    .online-board, .events-section {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+    }
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .recent-activities, .calendar {
+        overflow-y: auto;
+        max-height: 400px;
+    }
+    .activity {
+        border-bottom: 1px solid #ddd;
+        padding: 0.5rem 0;
+    }
+    .activity:last-child {
+        border-bottom: none;
+    }
+    .calendar-event {
+        background-color: #007bff;
+        color: #ffffff;
+        border-radius: 4px;
+        padding: 0.2rem 0.5rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<div>
+    <h1>Teacher Dashboard</h1>
+
+    <!-- Dashboard Overview -->
+    <div class="dashboard">
+        <div class="dashboard-card">
+            <h2>29</h2>
+            <p>Events</p>
+        </div>
+        <div class="dashboard-card" style="border-top: 4px solid #28a745;">
+            <h2>#</h2>
+            <p>Social Learning</p>
+        </div>
+        <div class="dashboard-card" style="border-top: 4px solid #ffc107;">
+            <h2>400.80 AUD</h2>
+            <p>Total Unpaid</p>
+        </div>
+        <div class="dashboard-card" style="border-top: 4px solid #17a2b8;">
+            <h2>2688.40 AUD</h2>
+            <p>Total Paid</p>
+        </div>
+    </div>
+
+    <!-- Online Notice Board and Events -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="online-board">
+                <div class="section-title">Online Notice Board</div>
+                <div class="recent-activities">
+                    @foreach (var activity in RecentActivities)
+                    {
+                        <div class="activity">
+                            <strong>@activity.User</strong> (@activity.Role) @activity.Action <br />
+                            <small>@activity.Details</small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="events-section">
+                <div class="section-title">Events and Class Schedule</div>
+                <div class="calendar">
+                    @foreach (var eventDay in Calendar)
+                    {
+                        <div>
+                            <strong>@eventDay.Date</strong>
+                            @foreach (var evnt in eventDay.Events)
+                            {
+                                <div class="calendar-event">@evnt.Title</div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Activity> RecentActivities = new()
+    {
+        new Activity { User = "Mark Thompson", Role = "Admin", Action = "processed payment for", Details = "Invoice (Tuition Fees for 2019)" },
+        new Activity { User = "Mark Thompson", Role = "Admin", Action = "created an invoice for", Details = "Tuition Fees for 2019" },
+        new Activity { User = "Mark Thompson", Role = "Admin", Action = "created an invoice for", Details = "Other Fees" }
+    };
+
+    private List<CalendarDay> Calendar = new()
+    {
+        new CalendarDay
+        {
+            Date = "Monday, 1 June 2019",
+            Events = new List<CalendarEvent>
+            {
+                new CalendarEvent { Title = "10a Demo Test" },
+                new CalendarEvent { Title = "2p Parent Teacher Meeting" }
+            }
+        },
+        new CalendarDay
+        {
+            Date = "Tuesday, 2 June 2019",
+            Events = new List<CalendarEvent>
+            {
+                new CalendarEvent { Title = "10a Lecture Demo" }
+            }
+        }
+    };
+
+    private class Activity
+    {
+        public string? User { get; set; }
+        public string? Role { get; set; }
+        public string? Action { get; set; }
+        public string? Details { get; set; }
+    }
+
+    private class CalendarDay
+    {
+        public string? Date { get; set; }
+        public List<CalendarEvent> Events { get; set; } = new();
+    }
+
+    private class CalendarEvent
+    {
+        public string? Title { get; set; }
+    }
+}
