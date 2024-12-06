@@ -105,7 +105,7 @@
 
         protected override void OnParametersSet()
         {
-            // Load data based on parameters
+            
             if (!string.IsNullOrEmpty(ClassName) && !string.IsNullOrEmpty(SubjectName) && !string.IsNullOrEmpty(TeacherName))
             {
                 InstructorDetails = AttendanceService.GetInstructorDetails(ClassName, SubjectName, TeacherName);
