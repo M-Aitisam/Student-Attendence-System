@@ -9,39 +9,33 @@ namespace ClassLibraryDal
 {
     public class AttendanceService
     {
-        public async Task<Instructor> GetInstructorDetailsAsync()
+        public Instructor GetInstructorDetails()
         {
-            // Replace with actual implementation
-            return await Task.FromResult(new Instructor
+            return new Instructor
             {
-                Name = "John Doe",
-                Designation = "Professor",
+                Name = "Mr. Kaleemullah",
+                Designation = "Lecturer",
                 Department = "Computer Science",
-                FacultyType = "Regular",
-                TotalRegularClasses = 100,
-                TotalMakeupClasses = 10
-            });
+                FacultyType = "Regular Faculty",
+                TotalRegularClasses = 1,
+                TotalMakeupClasses = 7
+            };
         }
 
-        public async Task<List<AttendanceRecord>> GetAttendanceRecordsAsync()
+        public List<AttendanceRecord> GetAttendanceRecords()
         {
-            // Replace with actual implementation
-            return await Task.FromResult(new List<AttendanceRecord>
-        {
-            new AttendanceRecord
+            return new List<AttendanceRecord>
             {
-                SrNo = 1,
-                ScheduleId = 101,
-                Subject = "Mathematics",
-                Teacher = "Mr. Smith",
-                StartDate = DateTime.Now.Date,
-                EndDate = DateTime.Now.Date.AddDays(1),
-                StartTime = DateTime.Now.TimeOfDay,
-                EndTime = DateTime.Now.TimeOfDay.Add(TimeSpan.FromHours(1)),
-                Status = "Present"
-            }
-        });
+                new AttendanceRecord
+                {
+                    SrNo = 1,
+                    ScheduleID = "84933",
+                    SubjectName = "F-24-Full Stack Web Development-Frontend Lab-9",
+                    ScheduleDate = "Wednesday, 27 November 2024",
+                    ClassTime = "16:00 - 18:40",
+                    Duration = "3 Hrs."
+                }
+            };
         }
     }
-
 }

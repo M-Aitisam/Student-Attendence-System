@@ -69,7 +69,8 @@
                         </h3>
                     </div>
                     <div class="card-body p-4">
-                        @if (InstructorDetails != null)
+
+                        @if (instructorDetails != null)
                         {
                             <table class="table table-striped">
                                 <thead>
@@ -84,12 +85,12 @@
                                 </thead>
                                 <tbody>
                                     <tr @onclick="NavigateToTeacherDashboard" style="cursor: pointer;">
-                                        <td>@InstructorDetails.Name</td>
-                                        <td>@InstructorDetails.Designation</td>
-                                        <td>@InstructorDetails.Department</td>
-                                        <td>@InstructorDetails.FacultyType</td>
-                                        <td>@InstructorDetails.TotalRegularClasses</td>
-                                        <td>@InstructorDetails.TotalMakeupClasses</td>
+                                        <td>@instructorDetails.Name</td>
+                                        <td>@instructorDetails.Designation</td>
+                                        <td>@instructorDetails.Department</td>
+                                        <td>@instructorDetails.FacultyType</td>
+                                        <td>@instructorDetails.TotalRegularClasses</td>
+                                        <td>@instructorDetails.TotalMakeupClasses</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -110,31 +111,62 @@
                         <table class="table table-striped table-bordered">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>Subject</th>
-                                    <th>Teacher</th>
+                                    <th>Student Name</th>
                                     <th>Status</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (AttendanceRecords != null)
-                                {
-                                    @foreach (var record in AttendanceRecords)
-                                    {
-                                        <tr>
-                                            <td>@record.Subject</td>
-                                            <td>@record.Teacher</td>
-                                            <td>@record.Status</td>
-                                        </tr>
-                                    }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td colspan="3" class="text-center">No attendance records available</td>
-                                    </tr>
-                                }
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td><span class="badge bg-success">Present</span></td>
+                                    <td>2024-11-23</td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Smith</td>
+                                    <td><span class="badge bg-danger">Absent</span></td>
+                                    <td>2024-11-23</td>
+                                </tr>
+                                <tr>
+                                    <td>Michael Brown</td>
+                                    <td><span class="badge bg-warning text-dark">Late</span></td>
+                                    <td>2024-11-23</td>
+                                </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Section -->
+            <section class="col-lg-5">
+                <!-- Attendance Insights -->
+                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
+                    <div class="card-header bg-success text-white fw-bold">
+                        <h3 class="card-title m-0">
+                            <i class="fas fa-info-circle me-2"></i> Attendance Insights
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <p><strong>Class Average:</strong> 96%</p>
+                        <p><strong>Top Performer:</strong> Sarah Lee</p>
+                        <p><strong>Lowest Attendance:</strong> Tom White</p>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
+                    <div class="card-header bg-warning text-dark fw-bold">
+                        <h3 class="card-title m-0">
+                            <i class="fas fa-bell me-2"></i> Notifications
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <ul style="list-style-type: none; padding: 0;">
+                            <li><strong>Holiday Notice:</strong> No classes on 24th Nov.</li>
+                            <li><strong>Exam Reminder:</strong> Science Test on 27th Nov.</li>
+                            <li><strong>Event:</strong> Annual Sports Day on 1st Dec.</li>
+                        </ul>
                     </div>
                 </div>
             </section>
@@ -143,22 +175,18 @@
 </div>
 
 @code {
-    private Instructor? InstructorDetails { get; set; }
-    private List<AttendanceRecord>? AttendanceRecords { get; set; }
-
-    private async Task LoadDataAsync()
-    {
-        InstructorDetails = await AttendanceService.GetInstructorDetailsAsync();
-        AttendanceRecords = await AttendanceService.GetAttendanceRecordsAsync();
-    }
+    private Instructor? instructorDetails;
+    private List<AttendanceRecord>? attendanceRecords;
 
     private void NavigateToTeacherDashboard()
     {
         nm.NavigateTo("/TeacherDashboard");
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await LoadDataAsync();
+        // Ensure fallback values if the service returns null
+        instructorDetails = AttendanceService.GetInstructorDetails() ?? new Instructor();
+        attendanceRecords = AttendanceService.GetAttendanceRecords() ?? new List<AttendanceRecord>();
     }
 }
