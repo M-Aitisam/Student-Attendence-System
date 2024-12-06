@@ -1,0 +1,49 @@
+﻿@page "/attendance-entry"
+@inject AttendanceService AttendanceService
+@inject NavigationManager Navigation
+
+<h3>Enter Attendance Record</h3>
+
+<div class="container mt-4">
+    <EditForm Model="@NewRecord" OnValidSubmit="@HandleValidSubmit">
+        <div class="mb-3">
+            <label for="srNo" class="form-label">Sr No</label>
+            <InputNumber id="srNo" class="form-control" @bind-Value="NewRecord.SrNo" />
+        </div>
+        <div class="mb-3">
+            <label for="scheduleId" class="form-label">Schedule ID</label>
+            <InputText id="scheduleId" class="form-control" @bind-Value="NewRecord.ScheduleID" />
+        </div>
+        <div class="mb-3">
+            <label for="subjectName" class="form-label">Subject Name</label>
+            <InputText id="subjectName" class="form-control" @bind-Value="NewRecord.SubjectName" />
+        </div>
+        <div class="mb-3">
+            <label for="scheduleDate" class="form-label">Schedule Date</label>
+            <InputText id="scheduleDate" class="form-control" @bind-Value="NewRecord.ScheduleDate" />
+        </div>
+        <div class="mb-3">
+            <label for="classTime" class="form-label">Class Time</label>
+            <InputText id="classTime" class="form-control" @bind-Value="NewRecord.ClassTime" />
+        </div>
+        <div class="mb-3">
+            <label for="className" class="form-label">Class Name</label>
+            <InputText id="className" class="form-control" @bind-Value="NewRecord.ClassName" />
+        </div>
+        <div class="mb-3">
+            <label for="duration" class="form-label">Duration</label>
+            <InputText id="duration" class="form-control" @bind-Value="NewRecord.Duration" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </EditForm>
+</div>
+
+@code {
+    private AttendanceRecord NewRecord = new AttendanceRecord();
+
+    private void HandleValidSubmit()
+    {
+        AttendanceService.SaveAttendanceRecord(NewRecord);
+        Navigation.NavigateTo("/TeacherDashboard");
+    }
+}

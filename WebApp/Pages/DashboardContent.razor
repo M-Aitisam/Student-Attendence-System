@@ -183,10 +183,16 @@
         nm.NavigateTo("/TeacherDashboard");
     }
 
+     private string className = "Class 10";
+    private string subjectName = "Mathematics";
+    private string teacherName = "John Smith";
+
     protected override void OnInitialized()
     {
-        // Ensure fallback values if the service returns null
-        instructorDetails = AttendanceService.GetInstructorDetails() ?? new Instructor();
-        attendanceRecords = AttendanceService.GetAttendanceRecords() ?? new List<AttendanceRecord>();
+        // Fetch instructor details and attendance records with proper arguments
+        instructorDetails = AttendanceService.GetInstructorDetails(className, subjectName, teacherName)
+            ?? new Instructor();
+        attendanceRecords = AttendanceService.GetAttendanceRecords(className, subjectName)
+            ?? new List<AttendanceRecord>();
     }
 }
