@@ -13,6 +13,8 @@ namespace ClassLibraryModel
         public string? SubjectName { get; set; }
         public string? ScheduleDate { get; set; }
         public string? ClassTime { get; set; }
+        public string? ClassName { get; set; }
+
         public string? Duration { get; set; }
     }
 }

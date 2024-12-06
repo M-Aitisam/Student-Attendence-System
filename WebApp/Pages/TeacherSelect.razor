@@ -1,0 +1,73 @@
+﻿@page "/teacher-selection"
+@inject NavigationManager Navigation
+
+<h3>Teacher Selection</h3>
+
+<div>
+    <label for="classSelect">Select Class:</label>
+    <select id="classSelect" @bind="SelectedClass">
+        <option value="">--Select Class--</option>
+        @foreach (var className in Classes)
+        {
+            <option value="@className">@className</option>
+        }
+    </select>
+</div>
+
+@if (!string.IsNullOrEmpty(SelectedClass))
+{
+    <div>
+        <label for="subjectSelect">Select Subject:</label>
+        <select id="subjectSelect" @bind="SelectedSubject">
+            <option value="">--Select Subject--</option>
+            @foreach (var subject in Subjects)
+            {
+                <option value="@subject">@subject</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="teacherSelect">Select Teacher:</label>
+        <select id="teacherSelect" @bind="SelectedTeacher">
+            <option value="">--Select Teacher--</option>
+            @foreach (var teacher in Teachers)
+            {
+                <option value="@teacher">@teacher</option>
+            }
+        </select>
+    </div>
+
+    <button @onclick="NavigateToDashboard">OK</button>
+}
+else
+{
+    <p>Please select a class to continue.</p>
+}
+
+@code {
+    // Properties for selections
+    private string? SelectedClass { get; set; }
+    private string? SelectedSubject { get; set; }
+    private string? SelectedTeacher { get; set; }
+
+    // Sample data for dropdowns
+    private List<string> Classes = new() { "F-24-ADSCS-#A", "F-24-ADSCS-#B" };
+    private List<string> Subjects = new() { "DataStructure", "Visual Programming Lab", "Data Structure Lab", "Visual Programming Class", "Full Stack Frontent", "Calculus", "Software Engineering" ,"Inforamtion Security Lab" };
+    private List<string> Teachers = new() { "Mr. Smith", "Ms. Johnson", "Mrs. Brown", "Dr. Wilson", "Prof. Taylor" };
+
+    // Navigation method
+    private void NavigateToDashboard()
+    {
+        if (!string.IsNullOrEmpty(SelectedClass) &&
+            !string.IsNullOrEmpty(SelectedSubject) &&
+            !string.IsNullOrEmpty(SelectedTeacher))
+        {
+            Navigation.NavigateTo($"/TeacherDashboard?class={SelectedClass}&subject={SelectedSubject}&teacher={SelectedTeacher}");
+        }
+        else
+        {
+            // Handle validation or show an error message
+        }
+    }
+}
