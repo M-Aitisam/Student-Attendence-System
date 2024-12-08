@@ -48,22 +48,23 @@
     </table>
 
     <!-- Attendance Table -->
-    <div class="table-responsive mt-3">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Sr No.</th>
-                    <th>Schedule ID</th>
-                    <th>Subject Name</th>
-                    <th>Schedule Day & Date</th>
-                    <th>Class Time</th>
-                    <th>Duration</th>
-                    <th>Print Attendance</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (AttendanceRecords != null && AttendanceRecords.Any())
-                {
+    <div class="mt-5">
+        <h4>Attendance Records</h4>
+        @if (AttendanceRecords != null && AttendanceRecords.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Schedule ID</th>
+                        <th>Subject Name</th>
+                        <th>Schedule Date</th>
+                        <th>Class Time</th>
+                        <th>Class Name</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach (var record in AttendanceRecords)
                     {
                         <tr>
@@ -72,47 +73,36 @@
                             <td>@record.SubjectName</td>
                             <td>@record.ScheduleDate</td>
                             <td>@record.ClassTime</td>
+                            <td>@record.ClassName</td>
                             <td>@record.Duration</td>
-                            <td><button class="btn btn-primary" @onclick="() => PrintAttendance(record)">Print</button></td>
                         </tr>
                     }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="7" class="text-center">No attendance records available</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No attendance records available.</p>
+        }
     </div>
 </div>
 
 @code {
-    // Parameters
-    [Parameter] public string? ClassName { get; set; }
-    [Parameter] public string? SubjectName { get; set; }
-    [Parameter] public string? TeacherName { get; set; }
+    [Parameter] public string? SubjectName { get; set; } = " Calculus"; // Ensure SubjectName is initialized
 
-    // Dynamic data
-    private string Session { get; set; } = "FALL-2024"; // Example value
-    private string SemesterTime { get; set; } = "Thursday, 12 September 2024 - Friday, 03 January 2025"; // Example value
+    private string Session { get; set; } = "FALL-2024";
+    private string SemesterTime { get; set; } = "Thursday, 12 September 2024 - Friday, 03 January 2025";
     private Instructor? InstructorDetails;
     private List<AttendanceRecord> AttendanceRecords = new();
 
-    protected override void OnParametersSet()
+    protected override void OnInitialized()
     {
-        // Load data when parameters are set
-        if (!string.IsNullOrEmpty(ClassName) && !string.IsNullOrEmpty(SubjectName) && !string.IsNullOrEmpty(TeacherName))
-        {
-            InstructorDetails = AttendanceService.GetInstructorDetails(ClassName, SubjectName, TeacherName);
-            AttendanceRecords = AttendanceService.GetAttendanceRecords(ClassName, SubjectName) ?? new List<AttendanceRecord>();
-        }
+        InstructorDetails = AttendanceService.GetInstructorDetails("ClassName", "SubjectName", "TeacherName");
+        AttendanceRecords = AttendanceService.GetAttendanceRecords("ClassName", "SubjectName") ?? new List<AttendanceRecord>();
     }
 
     private void PrintAttendance(AttendanceRecord record)
     {
-        // Logic to handle attendance printing
         Console.WriteLine($"Printing attendance for Schedule ID: {record.ScheduleID}");
     }
 }

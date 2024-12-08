@@ -2,9 +2,10 @@
 @inject AttendanceService AttendanceService
 @inject NavigationManager Navigation
 
-<h3>Enter Attendance Record</h3>
+<h3>Attendance Management</h3>
 
 <div class="container mt-4">
+    <!-- Attendance Entry Form -->
     <EditForm Model="@NewRecord" OnValidSubmit="@HandleValidSubmit">
         <div class="mb-3">
             <label for="srNo" class="form-label">Sr No</label>
@@ -36,14 +37,61 @@
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </EditForm>
+
+    <!-- Attendance Records Table -->
+    <div class="mt-5">
+        <h4>Attendance Records</h4>
+        @if (AttendanceRecords != null && AttendanceRecords.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Schedule ID</th>
+                        <th>Subject Name</th>
+                        <th>Schedule Date</th>
+                        <th>Class Time</th>
+                        <th>Class Name</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var record in AttendanceRecords)
+                    {
+                        <tr>
+                            <td>@record.SrNo</td>
+                            <td>@record.ScheduleID</td>
+                            <td>@record.SubjectName</td>
+                            <td>@record.ScheduleDate</td>
+                            <td>@record.ClassTime</td>
+                            <td>@record.ClassName</td>
+                            <td>@record.Duration</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No attendance records available.</p>
+        }
+    </div>
 </div>
 
 @code {
     private AttendanceRecord NewRecord = new AttendanceRecord();
+    private List<AttendanceRecord>? AttendanceRecords;
 
-    private void HandleValidSubmit()
+    protected override async Task OnInitializedAsync()
     {
-        AttendanceService.SaveAttendanceRecord(NewRecord);
-        Navigation.NavigateTo("/TeacherDashboard");
+        AttendanceRecords = await AttendanceService.GetAttendanceRecordsAsync();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await AttendanceService.SaveAttendanceRecordAsync(NewRecord);
+        AttendanceRecords = await AttendanceService.GetAttendanceRecordsAsync(); // Refresh records
+        NewRecord = new AttendanceRecord(); // Clear the form
+        StateHasChanged(); // Trigger UI update
     }
 }
