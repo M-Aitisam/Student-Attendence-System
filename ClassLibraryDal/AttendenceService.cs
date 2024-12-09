@@ -37,10 +37,12 @@ namespace ClassLibraryDal
             return Task.FromResult(_attendanceRecords);
         }
 
-        // Add a new attendance record
+        // Add a new attendance record (synchronous)
         public void AddAttendanceRecord(AttendanceRecord record)
         {
-            if (record == null) throw new ArgumentNullException(nameof(record));
+            if (record == null)
+                throw new ArgumentNullException(nameof(record));
+
             _attendanceRecords.Add(record);
             NotifyAttendanceUpdated();
         }
@@ -48,7 +50,9 @@ namespace ClassLibraryDal
         // Save attendance record asynchronously
         public Task SaveAttendanceRecordAsync(AttendanceRecord record)
         {
-            if (record == null) throw new ArgumentNullException(nameof(record));
+            if (record == null)
+                throw new ArgumentNullException(nameof(record));
+
             _attendanceRecords.Add(record);
             NotifyAttendanceUpdated();
             return Task.CompletedTask;
@@ -62,12 +66,43 @@ namespace ClassLibraryDal
             OnAttendanceUpdated?.Invoke();
         }
 
-        // Save attendance record (synchronous method)
-        public void SaveAttendanceRecord(AttendanceRecord record)
+        // Update an existing attendance record (optional utility)
+        public void UpdateAttendanceRecord(AttendanceRecord updatedRecord)
         {
-            if (record == null) throw new ArgumentNullException(nameof(record));
-            _attendanceRecords.Add(record);
-            NotifyAttendanceUpdated();
+            if (updatedRecord == null)
+                throw new ArgumentNullException(nameof(updatedRecord));
+
+            var existingRecord = _attendanceRecords.FirstOrDefault(r => r.Id == updatedRecord.Id);
+            if (existingRecord != null)
+            {
+                // Replace the existing record with updated data
+                _attendanceRecords.Remove(existingRecord);
+                _attendanceRecords.Add(updatedRecord);
+                NotifyAttendanceUpdated();
+            }
+        }
+
+        // Delete an attendance record
+        public void DeleteAttendanceRecord(int recordId)
+        {
+            var record = _attendanceRecords.FirstOrDefault(r => r.Id == recordId);
+            if (record != null)
+            {
+                _attendanceRecords.Remove(record);
+                NotifyAttendanceUpdated();
+            }
+        }
+
+        // Seed instructors for testing/demo purposes
+        public void SeedInstructors(List<Instructor> instructors)
+        {
+            _instructors.AddRange(instructors);
+        }
+
+        // Seed attendance records for testing/demo purposes
+        public void SeedAttendanceRecords(List<AttendanceRecord> records)
+        {
+            _attendanceRecords.AddRange(records);
         }
     }
 }

@@ -1,126 +1,67 @@
 ﻿@page "/TeacherDashboard"
-@page "/TeacherDashboard/{ClassName}/{SubjectName?}"
-
-@inject NavigationManager Navigation
 @inject AttendanceService AttendanceService
 
-<div class="container mt-4">
+<h3>Teacher Dashboard</h3>
 
-    <!-- Subject & Instructor Details -->
-    <div class="row mt-3">
-        <div class="col-6">
-            <p><strong>Subject:</strong> @SubjectName</p>
-        </div>
-        <div class="col-6 text-end">
-            <p><strong>Session:</strong> @Session</p>
-            <p><strong>Semester Time:</strong> @SemesterTime</p>
-        </div>
-    </div>
+<div>
+    <h4>Instructor Details</h4>
+    @if (InstructorDetails != null)
+    {
+        <p>Name: @InstructorDetails.Name</p>
+        <p>Designation: @InstructorDetails.Designation</p>
+        <p>Department: @InstructorDetails.Department</p>
+    }
+    else
+    {
+        <p>No instructor details available</p>
+    }
+</div>
 
-    <!-- Instructor Details -->
-    <table class="table table-bordered mt-3">
-        <thead class="table-light">
-            <tr>
-                <th>Instructor Name</th>
-                <th>Designation</th>
-                <th>Department</th>
-                <th>Faculty Type</th>
-                <th>Total Regular Classes</th>
-                <th>Total Makeup Classes</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (InstructorDetails != null)
-            {
+<div>
+    <h4>Attendance Records</h4>
+    @if (AttendanceRecords != null && AttendanceRecords.Any())
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@InstructorDetails.Name</td>
-                    <td>@InstructorDetails.Designation</td>
-                    <td>@InstructorDetails.Department</td>
-                    <td>@InstructorDetails.FacultyType</td>
-                    <td>@InstructorDetails.TotalRegularClasses</td>
-                    <td>@InstructorDetails.TotalMakeupClasses</td>
+                    <th>Sr No</th>
+                    <th>Schedule ID</th>
+                    <th>Subject Name</th>
+                    <th>Schedule Date</th>
+                    <th>Class Time</th>
+                    <th>Class Name</th>
+                    <th>Duration</th>
                 </tr>
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6" class="text-center">No instructor details available</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-   
-
-    <!-- Attendance Table -->
-    <div class="mt-5">
-        <h4>Attendance Records</h4>
-        @if (AttendanceRecords != null && AttendanceRecords.Any())
-        {
-            <table class="table table-striped">
-                <thead>
+            </thead>
+            <tbody>
+                @foreach (var record in AttendanceRecords)
+                {
                     <tr>
-                        <th>Sr No</th>
-                        <th>Schedule ID</th>
-                        <th>Subject Name</th>
-                        <th>Schedule Date</th>
-                        <th>Class Time</th>
-                        <th>Class Name</th>
-                        <th>Duration</th>
+                        <td>@record.SrNo</td>
+                        <td>@record.ScheduleID</td>
+                        <td>@record.SubjectName</td>
+                        <td>@record.ScheduleDate?.ToShortDateString()</td>
+                        <td>@record.ClassTime</td>
+                        <td>@record.ClassName</td>
+                        <td>@record.Duration</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var record in AttendanceRecords)
-                    {
-                        <tr>
-                            <td>@record.SrNo</td>
-                            <td>@record.ScheduleID</td>
-                            <td>@record.SubjectName</td>
-                            <td>@record.ScheduleDate</td>
-                            <td>@record.ClassTime</td>
-                            <td>@record.ClassName</td>
-                            <td>@record.Duration</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p>No attendance records available.</p>
-        }
-    </div>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No attendance records available</p>
+    }
 </div>
 
 @code {
-    // State properties
-    [Parameter] public string? ClassName { get; set; }
-    [Parameter] public string? SubjectName { get; set; }
-
-    // Session details
-    private string Session { get; set; } = "FALL-2024";
-    private string SemesterTime { get; set; } = "Thursday, 12 September 2024 - Friday, 03 January 2025";
-
-    // Data properties
     private Instructor? InstructorDetails;
     private List<AttendanceRecord>? AttendanceRecords;
 
-    private AttendanceRecord NewRecord = new AttendanceRecord();
-
     protected override async Task OnInitializedAsync()
     {
-        if (!string.IsNullOrEmpty(ClassName) && !string.IsNullOrEmpty(SubjectName))
-        {
-            InstructorDetails = AttendanceService.GetInstructorDetails(ClassName, SubjectName, "TeacherName");
-            AttendanceRecords = await AttendanceService.GetAttendanceRecordsAsync();
-        }
-    }
-
-    private async Task HandleValidSubmit()
-    {
-        await AttendanceService.SaveAttendanceRecordAsync(NewRecord);
-        AttendanceRecords = await AttendanceService.GetAttendanceRecordsAsync(); // Refresh records
-        NewRecord = new AttendanceRecord(); // Clear the form
-        StateHasChanged(); // Trigger UI update
+        AttendanceRecords = await AttendanceService.GetAttendanceRecordsAsync();
+        InstructorDetails = AttendanceService.GetInstructorDetails("SomeClass", "SomeSubject", "TeacherName");
     }
 }
