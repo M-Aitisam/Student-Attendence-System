@@ -9,7 +9,7 @@
         {
             { "aitisam11@gmail.com", ("Aitisam@1234", "Admin") },
             { "teacher@teacher.edu", ("Teacher@1234", "Teacher") },
-            { "student@gmail.com", ("Student@1234", "Student") }
+            { "student@students.au.edu.pk", ("Student@1234", "Student") }
         };
 
         public void SetLoggedInUser(string email)
