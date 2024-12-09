@@ -22,10 +22,13 @@
             <label for="subjectName" class="form-label">Subject Name</label>
             <InputText id="subjectName" class="form-control" @bind-Value="NewRecord.SubjectName" />
         </div>
-        <div class="mb-3">
-            <label for="scheduleDate" class="form-label">Schedule Date</label>
-            <InputText id="scheduleDate" class="form-control" @bind-Value="NewRecord.ScheduleDate" />
-        </div>
+            <div class="d-flex">
+                <div class="mb-3 me-2">
+                    <label for="scheduleDate" class="form-label">Schedule Date</label>
+                    <InputDate id="scheduleDate" class="form-control" @bind-Value="NewRecord.ScheduleDate" />
+                </div>
+            </div>
+
         </div>
         <div class="d-flex">
         <div class="mb-3">
@@ -99,5 +102,6 @@
         AttendanceRecords = await AttendanceService.GetAttendanceRecordsAsync(); // Refresh records
         NewRecord = new AttendanceRecord(); // Clear the form
         StateHasChanged(); // Trigger UI update
+        Navigation.NavigateTo($"/TeacherDashboard/{NewRecord.ClassName}/{NewRecord.SubjectName}");
     }
 }

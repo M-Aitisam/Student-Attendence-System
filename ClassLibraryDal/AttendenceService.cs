@@ -9,8 +9,8 @@ namespace ClassLibraryDal
     public class AttendanceService
     {
         // Private fields for storing data
-        private readonly List<Instructor> _instructors = new(); // Initialized inline
-        private readonly List<AttendanceRecord> _attendanceRecords = new(); // Initialized inline
+        private readonly List<Instructor> _instructors = new();
+        private readonly List<AttendanceRecord> _attendanceRecords = new();
 
         // Fetch instructor details based on class name, subject name, and teacher name
         public Instructor? GetInstructorDetails(string className, string subjectName, string teacherName)

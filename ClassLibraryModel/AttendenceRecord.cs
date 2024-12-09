@@ -11,7 +11,7 @@ namespace ClassLibraryModel
         public int SrNo { get; set; }
         public string? ScheduleID { get; set; }
         public string? SubjectName { get; set; }
-        public string? ScheduleDate { get; set; }
+        public DateTime? ScheduleDate { get; set; }
         public string? ClassTime { get; set; }
         public string? ClassName { get; set; }
 
