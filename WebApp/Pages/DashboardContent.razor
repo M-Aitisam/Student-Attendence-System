@@ -1,198 +1,204 @@
 ﻿@inject AttendanceService AttendanceService
 @inject NavigationManager nm
-
-<div class="wrapper" style="font-family: 'Arial', sans-serif;">
-    <!-- Dashboard Header -->
-    <div class="container-fluid">
+@using ClassLibraryModel
+@inject IJSRuntime JSRuntime
+<!-- Page Wrapper -->
+<div class="wrapper" style="font-family: Calibri; background-color: #f8f9fa;">
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+        <!-- Metrics Section -->
         <div class="row g-4">
-            <div class="col-lg-3 col-md-6 col-12">
-                <div class="small-box text-white text-center p-3 shadow-sm" style="min-width: 10rem; background-color: #4CAF50; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                    <div class="inner">
-                        <h3 style="font-size: 2rem;">120</h3>
-                        <p>Total Students</p>
+            @foreach (var card in GetMetrics())
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="card text-center shadow-sm rounded">
+                        <div class="card-body">
+                            <h5 class="text-@card.Color fw-bold mb-2">@card.Title</h5>
+                            <h2 class="fw-bold text-dark">@card.Value</h2>
+                            <span class="badge bg-@card.BadgeColor">@card.BadgeText</span>
+                        </div>
                     </div>
-                    <div class="icon my-3">
-                        <i class="fas fa-users fa-2x"></i>
+                </div>
+            }
+        </div>
+
+        <!-- Attendance and Recruitment Section -->
+        <div class="row mt-4">
+            <div class="col-lg-6">
+                <div class="card shadow-sm rounded">
+                    <div class="card-header bg-primary text-white fw-bold">Daily Attendance Statistic</div>
+                    <div class="card-body text-center">
+                        <canvas id="attendanceChart"></canvas>
                     </div>
-                    <a href="#" class="small-box-footer text-white" style="font-size: 1.1rem;">View Students <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-12">
-                <div class="small-box bg-success text-white text-center p-3 shadow-sm" style="min-width: 10rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                    <div class="inner">
-                        <h3 style="font-size: 2rem;">95%</h3>
-                        <p>Attendance Today</p>
+            <div class="col-lg-6">
+                <div class="card shadow-sm rounded">
+                    <div class="card-header bg-secondary text-white fw-bold">Recruitment Overview</div>
+                    <div class="card-body text-center">
+                        <canvas id="recruitmentChart"></canvas>
                     </div>
-                    <div class="icon my-3">
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </div>
-                    <a href="#" class="small-box-footer text-white" style="font-size: 1.1rem;">More Details <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-                <div class="small-box bg-warning text-white text-center p-3 shadow-sm" style="min-width: 10rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                    <div class="inner">
-                        <h3 style="font-size: 2rem;">12</h3>
-                        <p>Absent Students</p>
-                    </div>
-                    <div class="icon my-3">
-                        <i class="fas fa-user-times fa-2x"></i>
-                    </div>
-                    <a href="#" class="small-box-footer text-white" style="font-size: 1.1rem;">Check Absent List <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-12">
-                <div class="small-box bg-danger text-white text-center p-3 shadow-sm" style="min-width: 10rem; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                    <div class="inner">
-                        <h3 style="font-size: 2rem;">5</h3>
-                        <p>Late Arrivals</p>
-                    </div>
-                    <div class="icon my-3">
-                        <i class="fas fa-clock fa-2x"></i>
-                    </div>
-                    <a href="#" class="small-box-footer text-white" style="font-size: 1.1rem;">View Details <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Main Content -->
-    <div class="container-fluid py-4">
-        <div class="row g-4">
-            <!-- Left Section -->
-            <section class="col-lg-7">
-                <!-- Attendance Chart -->
-                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
-                    <div class="card-header bg-primary text-white fw-bold">
-                        <h3 class="card-title m-0">
-                            <i class="fas fa-chart-line me-2"></i> Monthly Attendance Overview
-                        </h3>
+        <!-- Employee List -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm rounded">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between">
+                        <span>Employee List</span>
+                        <button class="btn btn-success btn-sm" @onclick="ShowAddEmployeeModal">Add New Employee</button>
                     </div>
-                    <div class="card-body p-4">
-
-                        @if (instructorDetails != null)
-                        {
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Designation</th>
-                                        <th>Department</th>
-                                        <th>Faculty Type</th>
-                                        <th>Total Regular Classes</th>
-                                        <th>Total Makeup Classes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr @onclick="NavigateToTeacherDashboard" style="cursor: pointer;">
-                                        <td>@instructorDetails.Name</td>
-                                        <td>@instructorDetails.Designation</td>
-                                        <td>@instructorDetails.Department</td>
-                                        <td>@instructorDetails.FacultyType</td>
-                                        <td>@instructorDetails.TotalRegularClasses</td>
-                                        <td>@instructorDetails.TotalMakeupClasses</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        }
-                        else
-                        {
-                            <p>No instructor details available</p>
-                        }
-                    </div>
-                </div>
-
-                <!-- Recent Attendance -->
-                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
-                    <div class="card-header bg-info text-white fw-bold">
-                        <h3 class="card-title m-0">Recent Attendance Records</h3>
-                    </div>
-                    <div class="card-body p-4">
-                        <table class="table table-striped table-bordered">
-                            <thead class="table-dark">
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
                                 <tr>
-                                    <th>Student Name</th>
+                                    <th>Name</th>
+                                    <th>ID</th>
+                                    <th>Email</th>
+                                    <th>Date of Birth</th>
+                                    <th>Join Date</th>
                                     <th>Status</th>
-                                    <th>Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>John Doe</td>
-                                    <td><span class="badge bg-success">Present</span></td>
-                                    <td>2024-11-23</td>
-                                </tr>
-                                <tr>
-                                    <td>Jane Smith</td>
-                                    <td><span class="badge bg-danger">Absent</span></td>
-                                    <td>2024-11-23</td>
-                                </tr>
-                                <tr>
-                                    <td>Michael Brown</td>
-                                    <td><span class="badge bg-warning text-dark">Late</span></td>
-                                    <td>2024-11-23</td>
-                                </tr>
+                                @if (Employees.Any())
+                                {
+                                    @foreach (var employee in Employees)
+                                    {
+                                        <tr>
+                                            <td>@employee.Name</td>
+                                            <td>@employee.Id</td>
+                                            <td>@employee.Email</td>
+                                            <td>@employee.DOB.ToShortDateString()</td>
+                                            <td>@employee.JoinDate.ToShortDateString()</td>
+                                            <td>
+                                                <select class="form-select form-select-sm" @onchange="(e) => UpdateStatus(employee, e.Value.ToString())">
+                                                    <option selected="@((employee.Status == "Active") ? "selected" : null)">Active</option>
+                                                    <option selected="@((employee.Status == "Inactive") ? "selected" : null)">Inactive</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm me-1" @onclick="() => EditEmployee(employee)">Edit</button>
+                                                <button class="btn btn-danger btn-sm" @onclick="() => RemoveEmployee(employee)">Remove</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center">No employees found.</td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </section>
-
-            <!-- Right Section -->
-            <section class="col-lg-5">
-                <!-- Attendance Insights -->
-                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
-                    <div class="card-header bg-success text-white fw-bold">
-                        <h3 class="card-title m-0">
-                            <i class="fas fa-info-circle me-2"></i> Attendance Insights
-                        </h3>
-                    </div>
-                    <div class="card-body p-4">
-                        <p><strong>Class Average:</strong> 96%</p>
-                        <p><strong>Top Performer:</strong> Sarah Lee</p>
-                        <p><strong>Lowest Attendance:</strong> Tom White</p>
-                    </div>
-                </div>
-
-                <!-- Notifications -->
-                <div class="card shadow-sm mb-4" style="border-radius: 12px;">
-                    <div class="card-header bg-warning text-dark fw-bold">
-                        <h3 class="card-title m-0">
-                            <i class="fas fa-bell me-2"></i> Notifications
-                        </h3>
-                    </div>
-                    <div class="card-body p-4">
-                        <ul style="list-style-type: none; padding: 0;">
-                            <li><strong>Holiday Notice:</strong> No classes on 24th Nov.</li>
-                            <li><strong>Exam Reminder:</strong> Science Test on 27th Nov.</li>
-                            <li><strong>Event:</strong> Annual Sports Day on 1st Dec.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
     </div>
 </div>
 
 @code {
-    private Instructor? instructorDetails;
-    private List<AttendanceRecord>? attendanceRecords;
+    private List<Employee> Employees = new();
+    private bool ShowModal = false;
+    private bool IsEditMode = false;
+    private Employee NewEmployee = new();
 
-    private void NavigateToTeacherDashboard()
+    private void ShowAddEmployeeModal()
     {
-        nm.NavigateTo("/TeacherDashboard");
+        NewEmployee = new Employee();
+        IsEditMode = false;
+        ShowModal = true;
     }
 
-     private string className = "Class 10";
-    private string subjectName = "Mathematics";
-    private string teacherName = "John Smith";
-
-    protected override void OnInitialized()
+    private void EditEmployee(Employee employee)
     {
-        // Fetch instructor details and attendance records with proper arguments
-        instructorDetails = AttendanceService.GetInstructorDetails(className, subjectName, teacherName)
-            ?? new Instructor();
-        attendanceRecords = AttendanceService.GetAttendanceRecords(className, subjectName)
-            ?? new List<AttendanceRecord>();
+        NewEmployee = new Employee(employee);
+        IsEditMode = true;
+        ShowModal = true;
+    }
+
+    private void RemoveEmployee(Employee employee)
+    {
+        Employees.Remove(employee);
+    }
+
+    private void UpdateStatus(Employee employee, string status)
+    {
+        employee.Status = status;
+    }
+
+    private void SaveEmployee()
+    {
+        if (IsEditMode)
+        {
+            var existing = Employees.FirstOrDefault(e => e.Id == NewEmployee.Id);
+            if (existing != null)
+            {
+                existing.Update(NewEmployee);
+            }
+        }
+        else
+        {
+            NewEmployee.Id = Guid.NewGuid().ToString().Substring(0, 8);
+            Employees.Add(new Employee(NewEmployee));
+        }
+        ShowModal = false;
+    }
+
+    private void CloseModal() => ShowModal = false;
+
+    private List<MetricCard> GetMetrics() => new()
+    {
+        new MetricCard("Total Employees", Employees.Count.ToString(), "success", "green", "+0% | Current Employees"),
+        new MetricCard("Active Employees", Employees.Count(e => e.Status == "Active").ToString(), "primary", "blue", "Working Today"),
+        new MetricCard("Inactive Employees", Employees.Count(e => e.Status == "Inactive").ToString(), "warning", "orange", "Absent Today"),
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await InitializeCharts();
+        }
+    }
+
+    private async Task InitializeCharts()
+    {
+        // Attendance Chart
+        await JSRuntime.InvokeVoidAsync("initializeAttendanceChart", new
+        {
+            labels = new[] { "Present", "Absent" },
+            data = new[] { Employees.Count(e => e.Status == "Active"), Employees.Count(e => e.Status == "Inactive") }
+        });
+
+        // Recruitment Chart
+        await JSRuntime.InvokeVoidAsync("initializeRecruitmentChart", new
+        {
+            labels = new[] { "IT Students", "Software", "Data Analytics" },
+            data = new[] { 28, 19, 36 }
+        });
+    }
+
+    private class MetricCard
+    {
+        public string Title { get; }
+        public string Value { get; }
+        public string Color { get; }
+        public string BadgeColor { get; }
+        public string BadgeText { get; }
+
+        public MetricCard(string title, string value, string color, string badgeColor, string badgeText)
+        {
+            Title = title;
+            Value = value;
+            Color = color;
+            BadgeColor = badgeColor;
+            BadgeText = badgeText;
+        }
     }
 }
