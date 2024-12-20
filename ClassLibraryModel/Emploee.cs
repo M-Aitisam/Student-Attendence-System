@@ -16,8 +16,9 @@ namespace ClassLibraryModel
             public DateTime JoinDate { get; set; } = DateTime.Now;
             public string Status { get; set; } = "Active";
 
-            // Default constructor
-            public Employee() { }
+        public bool IsNewRecruit { get; set; }
+        // Default constructor
+        public Employee() { }
 
             // Copy constructor
             public Employee(Employee other)
