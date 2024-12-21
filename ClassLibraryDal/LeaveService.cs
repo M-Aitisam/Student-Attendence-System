@@ -40,8 +40,19 @@ namespace ClassLibraryDal
             if (existingApplication != null)
             {
                 existingApplication.Status = leaveApplication.Status;
+                existingApplication.Date = leaveApplication.Date; // Sync other fields if needed
+                existingApplication.StudentName = leaveApplication.StudentName;
             }
         }
+        public void UpdateLeaveStatus(int leaveId, string status)
+        {
+            var leaveApplication = _leaveApplications.FirstOrDefault(l => l.LeaveId == leaveId);
+            if (leaveApplication != null)
+            {
+                leaveApplication.Status = status;
+            }
+        }
+
     }
 
 }

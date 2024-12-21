@@ -66,7 +66,7 @@
         </div>
 
         <div class="row mt-4">
-            <div class="col-md-4 mb-4">
+            <div class="col-md-7 mb-4">
                 <div class="card shadow-sm rounded">
                     <div class="card-header bg-secondary text-white fw-bold">Recruitment Overview</div>
                     <div class="card-body text-center">
@@ -74,25 +74,20 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm rounded">
-                    <div class="card-header bg-success text-white fw-bold">Loan Payments</div>
-                    <div class="card-body text-center">
-                        <canvas id="loanPaymentChart" ></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
+
+            <div class="col-md-5 mb-4">
                 <div class="card shadow-sm rounded">
                     <div class="card-header bg-warning text-white fw-bold">Leave Applications</div>
                     <div class="card-body">
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
+                                    <th>Leave ID</th>
                                     <th>Name</th>
                                     <th>Date</th>
                                     <th>Status</th>
-                                    <th>Actions</th> <!-- Add Actions Column -->
+                                    <th>Reason</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -101,12 +96,13 @@
                                     @foreach (var application in LeaveApplications)
                                     {
                                         <tr>
+                                            <td>@application.LeaveId</td>
                                             <td>@application.StudentName</td>
                                             <td>@application.Date.ToShortDateString()</td>
-                                            <td>@application.Status</td>
+                                            <td>@(application.Status ?? "Status Missing")</td>
+                                            <td>@(application.Reason ?? "Reason Missing")</td>
                                             <td>
-                                                <!-- Accept and Decline Buttons -->
-                                                @if (application.Status == "Pending")
+                                                @if (string.Equals(application.Status, "Pending", StringComparison.OrdinalIgnoreCase))
                                                 {
                                                     <button class="btn btn-success btn-sm" @onclick="() => AcceptLeave(application)">Accept</button>
                                                     <button class="btn btn-danger btn-sm" @onclick="() => DeclineLeave(application)">Decline</button>
@@ -122,7 +118,7 @@
                                 else
                                 {
                                     <tr>
-                                        <td colspan="4" class="text-center">No leave applications found.</td>
+                                        <td colspan="6" class="text-center">No leave applications found.</td>
                                     </tr>
                                 }
                             </tbody>
@@ -130,11 +126,8 @@
                     </div>
                 </div>
             </div>
-
-          
-
-        <!-- Employee List -->
-        <div class="row mt-4">
+         <!-- Employee List -->
+          <div class="row mt-4">
             <div class="col-12">
                 <div class="card shadow-sm rounded">
                     <div class="card-header bg-dark text-white d-flex justify-content-between">
@@ -357,7 +350,10 @@
             await JSRuntime.InvokeVoidAsync("initializeCharts");
             await JSRuntime.InvokeVoidAsync("initializeDropdowns");
         }
+
+
     }
+
 
     private void ShowEmployeeDetails(Employee employee)
     {
@@ -428,38 +424,44 @@
     {
         ShowDeleteConfirmation = false;
     }
-
-
-   
-
     private List<LeaveApplication> LeaveApplications = new();
+
     protected override void OnInitialized()
     {
-        // Fetch leave applications for the employee
-        LeaveApplications = LeaveService.GetLeaveApplications();
+        // Fetch leave applications from the service
+        LeaveApplications = LeaveService.GetLeaveApplications() ?? new List<LeaveApplication>();
+
+        // Example Data for Debugging
+        if (!LeaveApplications.Any())
+        {
+            LeaveApplications = new List<LeaveApplication>
+        {
+            new LeaveApplication { StudentName = "John Doe", Date = DateTime.Now, Status = "Pending", Reason = "Medical" },
+            new LeaveApplication { StudentName = "Jane Smith", Date = DateTime.Now.AddDays(-1), Status = "Approved", Reason = "Personal" }
+        };
+        }
     }
 
     private void AcceptLeave(LeaveApplication application)
     {
-        // Change the status to Accepted
+        // Update status to Accepted
         application.Status = "Accepted";
-
-        // Update the leave application in the service (you can call the appropriate service method here)
         LeaveService.UpdateLeaveApplication(application);
-
-        // Refresh the leave applications list
-        LeaveApplications = LeaveService.GetLeaveApplications();
+        RefreshLeaveApplications();
     }
 
     private void DeclineLeave(LeaveApplication application)
     {
-        // Change the status to Declined
+        // Update status to Declined
         application.Status = "Declined";
-
-        // Update the leave application in the service (you can call the appropriate service method here)
         LeaveService.UpdateLeaveApplication(application);
+        RefreshLeaveApplications();
+    }
 
+    private void RefreshLeaveApplications()
+    {
         // Refresh the leave applications list
-        LeaveApplications = LeaveService.GetLeaveApplications();
+        LeaveApplications = LeaveService.GetLeaveApplications() ?? new List<LeaveApplication>();
+        StateHasChanged();
     }
 }
