@@ -266,6 +266,15 @@
     private Employee EditEmployeeData = new();
     private Employee NewEmployee = new();
 
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeCharts");
+        }
+    }
+
     private void ShowEmployeeDetails(Employee employee)
     {
         SelectedEmployee = employee;

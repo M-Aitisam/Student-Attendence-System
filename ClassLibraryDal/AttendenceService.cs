@@ -104,5 +104,30 @@ namespace ClassLibraryDal
         {
             _attendanceRecords.AddRange(records);
         }
+
+        public Task<List<Employee>> GetEmployees()
+        {
+            var employees = new List<Employee>
+        {
+            new Employee { Id = "1", Name = "John Doe", Status = "Active", DOB = new DateTime(1990, 5, 15), JoinDate = new DateTime(2020, 1, 1) },
+            new Employee { Id = "2", Name = "Jane Smith", Status = "Inactive", DOB = new DateTime(1988, 3, 22), JoinDate = new DateTime(2019, 6, 10) }
+            // Add more employees as needed
+        };
+
+            return Task.FromResult(employees);
+        }
+
+        // Example: Get a list of leave applications (replace with actual data fetching logic)
+        public Task<List<LeaveApplication>> GetLeaveApplications()
+        {
+            var leaveApplications = new List<LeaveApplication>
+        {
+            new LeaveApplication { EmployeeName = "John Doe", Date = new DateTime(2024, 12, 15), Status = "Approved" },
+            new LeaveApplication { EmployeeName = "Jane Smith", Date = new DateTime(2024, 12, 18), Status = "Pending" }
+            // Add more leave applications as needed
+        };
+
+            return Task.FromResult(leaveApplications);
+        }
     }
 }

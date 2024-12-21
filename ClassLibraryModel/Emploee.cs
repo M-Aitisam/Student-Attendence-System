@@ -15,7 +15,7 @@ namespace ClassLibraryModel
             public DateTime DOB { get; set; } = DateTime.Now;
             public DateTime JoinDate { get; set; } = DateTime.Now;
             public string Status { get; set; } = "Active";
-
+        public decimal Salary { get; set; }
         public bool IsNewRecruit { get; set; }
         // Default constructor
         public Employee() { }
