@@ -1,0 +1,177 @@
+﻿@page "/StudentDashboard"
+@using ClassLibraryDal
+@inject AttendanceService AttendanceService
+@inject LeaveService LeaveService
+@inject NavigationManager NavigationManager
+
+<h3>Student Dashboard</h3>
+
+<!-- Attendance Report -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-info text-white fw-bold">Attendance Report</div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Subject Name</th>
+                    <th>Total Classes</th>
+                    <th>Classes Attended</th>
+                    <th>Classes Absent</th>
+                    <th>Attendance Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var subject in Subjects)
+                {
+                    <tr>
+                        <td>@subject.SrNo</td>
+                        <td>@subject.SubjectName</td>
+                        <td>@subject.Total</td>
+                        <td>@subject.Atts</td>
+                        <td>@subject.Abs</td>
+                        <td>@subject.Percent.ToString("F2")%</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Leave Applications -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-warning text-white fw-bold">Leave Applications</div>
+    <div class="card-body">
+        <button class="btn btn-primary mb-3" @onclick="ShowLeaveApplicationForm">Apply for Leave</button>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Leave ID</th>
+                    <th>Student Name</th>
+                    <th>Leave Date</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var application in LeaveApplications)
+                {
+                    <tr>
+                        <td>@application.LeaveId</td>
+                        <td>@application.StudentName</td>
+                        <td>@application.Date.ToShortDateString()</td>
+                        <td>@application.Status</td>
+                        <td>@(string.IsNullOrEmpty(application.Reason) ? "No reason provided" : application.Reason)</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" @onclick="() => CancelLeaveApplication(application)">Cancel</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal for Applying Leave -->
+<!-- Modal for Applying Leave -->
+@if (ShowLeaveForm)
+{
+    <div class="modal" style="display: block; background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Apply for Leave</h5>
+                    <button type="button" class="btn-close" @onclick="CloseLeaveForm"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="leaveDate">Leave Date</label>
+                        <input type="date" id="leaveDate" class="form-control" @bind="LeaveRequest.Date" required />
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="leaveReason">Reason for Leave</label>
+                        <textarea id="leaveReason" class="form-control" @bind="LeaveRequest.Reason" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="addName">Name</label>
+                        <input type="text" id="addName" class="form-control" @bind="LeaveRequest.StudentName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="addId">ID</label>
+                        <input type="number" id="addId" class="form-control" @bind="LeaveRequest.LeaveId" />
+                    </div>
+                    @if (!string.IsNullOrEmpty(ErrorMessage))
+                    {
+                        <div class="alert alert-danger mt-3">
+                            @ErrorMessage
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" @onclick="ApplyLeave">Apply</button>
+                    <button class="btn btn-secondary" @onclick="CloseLeaveForm">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Subject> Subjects = new List<Subject>();
+    private List<LeaveApplication> LeaveApplications = new List<LeaveApplication>();
+    private bool ShowLeaveForm = false;
+    private LeaveApplication LeaveRequest = new LeaveApplication();
+    private string ErrorMessage = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        // Fetch the attendance data for subjects
+        Subjects = AttendanceService.GetSubjects();
+
+        // Fetch leave applications for the student
+        LeaveApplications = LeaveService.GetLeaveApplications();
+    }
+
+    private void ShowLeaveApplicationForm()
+    {
+        // Show the leave application form
+        ShowLeaveForm = true;
+        LeaveRequest = new LeaveApplication(); // Clear previous form data
+        ErrorMessage = string.Empty; // Clear any error message
+    }
+
+    private void CloseLeaveForm()
+    {
+        // Close the leave application form
+        ShowLeaveForm = false;
+    }
+
+    private void ApplyLeave()
+    {
+        if (LeaveRequest?.Date == null || string.IsNullOrEmpty(LeaveRequest.Reason))
+        {
+            // Display error message if required fields are not filled
+            ErrorMessage = "Please provide a valid leave date and reason.";
+            return;
+        }
+
+        // Apply the leave by adding the request to the list or calling an API
+        LeaveService.ApplyLeave(LeaveRequest);
+
+        // Refresh the leave applications
+        LeaveApplications = LeaveService.GetLeaveApplications();
+
+        // Close the leave application form
+        CloseLeaveForm();
+    }
+
+    private void CancelLeaveApplication(LeaveApplication application)
+    {
+        // Cancel leave application logic (mark as cancelled or delete)
+        LeaveService.CancelLeave(application.LeaveId);
+
+        // Refresh the leave applications
+        LeaveApplications = LeaveService.GetLeaveApplications();
+    }
+}

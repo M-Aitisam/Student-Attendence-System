@@ -1,4 +1,6 @@
 ﻿@inject AttendanceService AttendanceService
+@inject LeaveService LeaveService
+
 @inject NavigationManager nm
 @using ClassLibraryModel
 @inject IJSRuntime JSRuntime
@@ -90,6 +92,7 @@
                                     <th>Name</th>
                                     <th>Date</th>
                                     <th>Status</th>
+                                    <th>Actions</th> <!-- Add Actions Column -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -99,6 +102,14 @@
                                         <td>@application.EmployeeName</td>
                                         <td>@application.Date.ToShortDateString()</td>
                                         <td>@application.Status</td>
+                                        <td>
+                                            <!-- Accept and Decline Buttons -->
+                                            @if (application.Status == "Pending")
+                                            {
+                                                <button class="btn btn-success btn-sm" @onclick="() => AcceptLeave(application)">Accept</button>
+                                                <button class="btn btn-danger btn-sm" @onclick="() => DeclineLeave(application)">Decline</button>
+                                            }
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -106,6 +117,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- Employee List -->
@@ -312,7 +324,6 @@
 
 @code {
     private List<Employee> Employees = new();
-    private List<LeaveApplication> LeaveApplications = new();
     private bool ShowEmployeeModal = false;
     private bool ShowEditModal = false;
     private bool ShowAddEmployeeModalState = false;
@@ -400,4 +411,37 @@
         ShowDeleteConfirmation = false;
     }
 
+
+   
+
+    private List<LeaveApplication> LeaveApplications = new();
+    protected override void OnInitialized()
+    {
+        // Fetch leave applications for the employee
+        LeaveApplications = LeaveService.GetLeaveApplications();
+    }
+
+    private void AcceptLeave(LeaveApplication application)
+    {
+        // Change the status to Accepted
+        application.Status = "Accepted";
+
+        // Update the leave application in the service (you can call the appropriate service method here)
+        LeaveService.UpdateLeaveApplication(application);
+
+        // Refresh the leave applications list
+        LeaveApplications = LeaveService.GetLeaveApplications();
+    }
+
+    private void DeclineLeave(LeaveApplication application)
+    {
+        // Change the status to Declined
+        application.Status = "Declined";
+
+        // Update the leave application in the service (you can call the appropriate service method here)
+        LeaveService.UpdateLeaveApplication(application);
+
+        // Refresh the leave applications list
+        LeaveApplications = LeaveService.GetLeaveApplications();
+    }
 }

@@ -129,5 +129,17 @@ namespace ClassLibraryDal
 
             return Task.FromResult(leaveApplications);
         }
+       
+            public List<Subject> GetSubjects()
+            {
+                // Fetch attendance data from the database or in-memory
+                return new List<Subject>
+        {
+            new Subject { SrNo = 1, SubjectName = "Mathematics", Total = 50, Atts = 45, Abs = 5, Percent = 90.0 },
+            new Subject { SrNo = 2, SubjectName = "Physics", Total = 50, Atts = 40, Abs = 10, Percent = 80.0 }
+        };
+            }
+        
+
     }
 }
