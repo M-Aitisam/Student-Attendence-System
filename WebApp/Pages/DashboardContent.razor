@@ -142,8 +142,25 @@
                                             <td>@employee.JoinDate.ToShortDateString()</td>
                                             <td>@employee.Status</td>
                                             <td>
-                                                <button class="btn btn-primary btn-sm me-1" @onclick="() => ShowEditModalHandler(employee)">Edit</button>
-                                                <button class="btn btn-danger btn-sm" @onclick="() => RemoveEmployee(employee)">Delete</button>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm" type="button" id="dropdownMenuButton_@employee.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton_@employee.Id">
+                                                        <li>
+                                                            <button class="dropdown-item" @onclick="() => ShowEditModalHandler(employee)">
+                                                                <i class="bi bi-pencil"></i> Update
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button class="dropdown-item text-danger" @onclick="() => RemoveEmployee(employee)">
+                                                                <i class="bi bi-trash"></i> Delete
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+
+                                                </div>
+
                                             </td>
                                         </tr>
                                     }
@@ -237,6 +254,18 @@
                                 <input type="text" id="addName" class="form-control" @bind="NewEmployee.Name" />
                             </div>
                             <div class="form-group">
+                                <label for="addId">ID</label>
+                                <input type="number" id="addId" class="form-control" @bind="NewEmployee.Id" />
+                            </div>
+                            <div class="form-group">
+                                <label for="addDob">Date of Birth</label>
+                                <input type="date" id="addDob" class="form-control" @bind="NewEmployee.DOB" />
+                            </div>
+                            <div class="form-group">
+                                <label for="addJoinDate">Join Date</label>
+                                <input type="date" id="addJoinDate" class="form-control" @bind="NewEmployee.JoinDate" />
+                            </div>
+                            <div class="form-group">
                                 <label for="addEmail">Email</label>
                                 <input type="email" id="addEmail" class="form-control" @bind="NewEmployee.Email" />
                             </div>
@@ -256,6 +285,7 @@
                 </div>
             </div>
         }
+
     </div>
 </div>
 
@@ -274,6 +304,7 @@
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("initializeCharts");
+            await JSRuntime.InvokeVoidAsync("initializeDropdowns");
         }
     }
 

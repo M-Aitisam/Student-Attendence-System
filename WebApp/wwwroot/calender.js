@@ -1,4 +1,14 @@
-﻿window.initializeCharts = () => {
+﻿//click  icon to  show edit delete icin
+
+function initializeDropdowns() {
+    var dropdowns = document.querySelectorAll('.dropdown-toggle');
+    dropdowns.forEach(dropdown => {
+        new bootstrap.Dropdown(dropdown);
+    });
+}
+
+//m
+window.initializeCharts = () => {
     const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
     const recruitmentCtx = document.getElementById('recruitmentChart').getContext('2d');
     const loanPaymentCtx = document.getElementById('loanPaymentChart').getContext('2d');
