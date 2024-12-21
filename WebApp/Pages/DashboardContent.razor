@@ -153,15 +153,14 @@
                                                             </button>
                                                         </li>
                                                         <li>
-                                                            <button class="dropdown-item text-danger" @onclick="() => RemoveEmployee(employee)">
+                                                            <button class="dropdown-item text-danger" @onclick="() => ConfirmDelete(employee)">
                                                                 <i class="bi bi-trash"></i> Delete
                                                             </button>
                                                         </li>
                                                     </ul>
-
                                                 </div>
-
                                             </td>
+
                                         </tr>
                                     }
                                 }
@@ -177,6 +176,28 @@
                 </div>
             </div>
         </div>
+
+        @if (ShowDeleteConfirmation)
+        {
+            <div class="modal" style="display: block; background-color: rgba(0,0,0,0.5);">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Confirm Deletion</h5>
+                            <button type="button" class="btn-close" @onclick="CancelDelete"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete <strong>@SelectedEmployee?.Name</strong>?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger" @onclick="() => RemoveEmployee(SelectedEmployee)">Delete</button>
+                            <button class="btn btn-secondary" @onclick="CancelDelete">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
 
         <!-- Modals -->
         @if (ShowEmployeeModal)
@@ -295,6 +316,7 @@
     private bool ShowEmployeeModal = false;
     private bool ShowEditModal = false;
     private bool ShowAddEmployeeModalState = false;
+    private bool ShowDeleteConfirmation = false;
     private Employee? SelectedEmployee;
     private Employee EditEmployeeData = new();
     private Employee NewEmployee = new();
@@ -357,8 +379,25 @@
         ShowEditModal = false;
     }
 
-    private void RemoveEmployee(Employee employee)
+   
+    private void ConfirmDelete(Employee employee)
     {
-        Employees.Remove(employee);
+        ShowDeleteConfirmation = true;
+        SelectedEmployee = employee;
     }
+
+    private void RemoveEmployee(Employee? employee)
+    {
+        if (employee != null)
+        {
+            Employees.Remove(employee);
+        }
+        ShowDeleteConfirmation = false;
+    }
+
+    private void CancelDelete()
+    {
+        ShowDeleteConfirmation = false;
+    }
+
 }
