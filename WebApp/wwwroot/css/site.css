@@ -215,3 +215,9 @@ button.list-group-item {
 .sidebar-toggle-icon {
     font-size: 18px; /* Adjust the size here to make it small */
 }
+
+
+
+.chart-container {
+    height: 20rem;
+}

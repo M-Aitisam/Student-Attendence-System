@@ -6,9 +6,9 @@
 @inject IJSRuntime JSRuntime
 
 <!-- Page Wrapper -->
-<div class="wrapper" style="font-family: Calibri; background-color: #f8f9fa;">
+<div class="wrapper" style="font-family: Calibri; ">
     <!-- Main Content -->
-    <div class="container-fluid py-4">
+    <div class="container-fluid ">
         <!-- Metrics Section -->
         <div class="row">
             <div class="col-md-6">
@@ -70,7 +70,7 @@
                 <div class="card shadow-sm rounded">
                     <div class="card-header bg-secondary text-white fw-bold">Recruitment Overview</div>
                     <div class="card-body text-center">
-                        <canvas id="recruitmentChart"></canvas>
+                        <canvas id="recruitmentChart" style="height:30rem"></canvas>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                 <div class="card shadow-sm rounded">
                     <div class="card-header bg-success text-white fw-bold">Loan Payments</div>
                     <div class="card-body text-center">
-                        <canvas id="loanPaymentChart"></canvas>
+                        <canvas id="loanPaymentChart" ></canvas>
                     </div>
                 </div>
             </div>
@@ -96,20 +96,33 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var application in LeaveApplications)
+                                @if (LeaveApplications?.Any() == true)
+                                {
+                                    @foreach (var application in LeaveApplications)
+                                    {
+                                        <tr>
+                                            <td>@application.StudentName</td>
+                                            <td>@application.Date.ToShortDateString()</td>
+                                            <td>@application.Status</td>
+                                            <td>
+                                                <!-- Accept and Decline Buttons -->
+                                                @if (application.Status == "Pending")
+                                                {
+                                                    <button class="btn btn-success btn-sm" @onclick="() => AcceptLeave(application)">Accept</button>
+                                                    <button class="btn btn-danger btn-sm" @onclick="() => DeclineLeave(application)">Decline</button>
+                                                }
+                                                else
+                                                {
+                                                    <span>Processed</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td>@application.EmployeeName</td>
-                                        <td>@application.Date.ToShortDateString()</td>
-                                        <td>@application.Status</td>
-                                        <td>
-                                            <!-- Accept and Decline Buttons -->
-                                            @if (application.Status == "Pending")
-                                            {
-                                                <button class="btn btn-success btn-sm" @onclick="() => AcceptLeave(application)">Accept</button>
-                                                <button class="btn btn-danger btn-sm" @onclick="() => DeclineLeave(application)">Decline</button>
-                                            }
-                                        </td>
+                                        <td colspan="4" class="text-center">No leave applications found.</td>
                                     </tr>
                                 }
                             </tbody>
@@ -118,7 +131,7 @@
                 </div>
             </div>
 
-        </div>
+          
 
         <!-- Employee List -->
         <div class="row mt-4">
@@ -187,6 +200,11 @@
                     </div>
                 </div>
             </div>
+
+            </div>
+        </div>
+
+    </div>
         </div>
 
         @if (ShowDeleteConfirmation)
@@ -319,8 +337,8 @@
             </div>
         }
 
-    </div>
-</div>
+  
+
 
 @code {
     private List<Employee> Employees = new();

@@ -61,7 +61,7 @@
                         <td>@application.LeaveId</td>
                         <td>@application.StudentName</td>
                         <td>@application.Date.ToShortDateString()</td>
-                        <td>@application.Status</td>
+                        <td>@(application.Status == "Accepted" ? "Accepted" : "Pending")</td>
                         <td>@(string.IsNullOrEmpty(application.Reason) ? "No reason provided" : application.Reason)</td>
                         <td>
                             <button class="btn btn-danger btn-sm" @onclick="() => CancelLeaveApplication(application)">Cancel</button>
@@ -73,7 +73,6 @@
     </div>
 </div>
 
-<!-- Modal for Applying Leave -->
 <!-- Modal for Applying Leave -->
 @if (ShowLeaveForm)
 {
@@ -149,21 +148,33 @@
 
     private void ApplyLeave()
     {
-        if (LeaveRequest?.Date == null || string.IsNullOrEmpty(LeaveRequest.Reason))
+        if (LeaveRequest?.Date == null || string.IsNullOrEmpty(LeaveRequest.Reason) || string.IsNullOrEmpty(LeaveRequest.StudentName))
         {
             // Display error message if required fields are not filled
-            ErrorMessage = "Please provide a valid leave date and reason.";
+            ErrorMessage = "Please provide all required details.";
             return;
         }
 
-        // Apply the leave by adding the request to the list or calling an API
-        LeaveService.ApplyLeave(LeaveRequest);
+        try
+        {
+            // Apply the leave by adding the request to the data source
+            LeaveService.ApplyLeave(LeaveRequest);
 
-        // Refresh the leave applications
-        LeaveApplications = LeaveService.GetLeaveApplications();
+            // Refresh the leave applications list
+            LeaveApplications = LeaveService.GetLeaveApplications();
 
-        // Close the leave application form
-        CloseLeaveForm();
+            // Clear any error messages
+            ErrorMessage = string.Empty;
+
+            // Close the form on successful submission
+            CloseLeaveForm();
+        }
+        catch (Exception ex)
+        {
+            // Log the exception and show an error message
+            ErrorMessage = "Failed to apply for leave. Please try again.";
+            Console.Error.WriteLine($"Error applying leave: {ex.Message}");
+        }
     }
 
     private void CancelLeaveApplication(LeaveApplication application)
