@@ -42,7 +42,13 @@ namespace ClassLibraryDal
                 existingApplication.Status = leaveApplication.Status;
                 existingApplication.Date = leaveApplication.Date; // Sync other fields if needed
                 existingApplication.StudentName = leaveApplication.StudentName;
+
             }
+        }
+        public Task<List<LeaveApplication>> GetLeaveApplication()
+        {
+            // Simulating async call by returning Task.FromResult
+            return Task.FromResult(_leaveApplications);
         }
         public void UpdateLeaveStatus(int leaveId, string status)
         {

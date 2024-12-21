@@ -4,6 +4,7 @@
 @inject LeaveService LeaveService
 @inject NavigationManager NavigationManager
 
+
 <h3>Student Dashboard</h3>
 
 <!-- Attendance Report -->
@@ -112,14 +113,14 @@
                     <button class="btn btn-secondary" @onclick="CloseLeaveForm">Cancel</button>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
 }
 
 @code {
     private List<Subject> Subjects = new List<Subject>();
     private List<LeaveApplication> LeaveApplications = new List<LeaveApplication>();
-    private bool ShowLeaveForm = false ;
+    private bool ShowLeaveForm = false;
     private LeaveApplication LeaveRequest = new LeaveApplication();
     private string ErrorMessage = string.Empty;
 

@@ -1,6 +1,5 @@
 ﻿@inject AttendanceService AttendanceService
 @inject LeaveService LeaveService
-
 @inject NavigationManager nm
 @using ClassLibraryModel
 @inject IJSRuntime JSRuntime
@@ -91,9 +90,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (LeaveApplications?.Any() == true)
+                                @if (LeaveApplication?.Any() == true)
                                 {
-                                    @foreach (var application in LeaveApplications)
+                                    @foreach (var application in LeaveApplication)
                                     {
                                         <tr>
                                             <td>@application.LeaveId</td>
@@ -353,8 +352,6 @@
 
 
     }
-
-
     private void ShowEmployeeDetails(Employee employee)
     {
         SelectedEmployee = employee;
@@ -404,7 +401,7 @@
         ShowEditModal = false;
     }
 
-   
+
     private void ConfirmDelete(Employee employee)
     {
         ShowDeleteConfirmation = true;
@@ -424,44 +421,50 @@
     {
         ShowDeleteConfirmation = false;
     }
-    private List<LeaveApplication> LeaveApplications = new();
 
-    protected override void OnInitialized()
-    {
-        // Fetch leave applications from the service
-        LeaveApplications = LeaveService.GetLeaveApplications() ?? new List<LeaveApplication>();
+    private List<LeaveApplication>? LeaveApplication { get; set; }
 
-        // Example Data for Debugging
-        if (!LeaveApplications.Any())
+        protected override async Task OnInitializedAsync()
         {
-            LeaveApplications = new List<LeaveApplication>
-        {
-            new LeaveApplication { StudentName = "John Doe", Date = DateTime.Now, Status = "Pending", Reason = "Medical" },
-            new LeaveApplication { StudentName = "Jane Smith", Date = DateTime.Now.AddDays(-1), Status = "Approved", Reason = "Personal" }
-        };
+            // Assuming GetLeaveApplications() returns Task<List<LeaveApplication>>
+            LeaveApplication = await LeaveService.GetLeaveApplication() ?? new List<LeaveApplication>();
+
+            // If no leave applications were retrieved, use default ones
+            if (!LeaveApplication.Any())
+            {
+                LeaveApplication = new List<LeaveApplication>
+            {
+                new LeaveApplication
+                {
+                    StudentName = "John Doe",
+                    Date = DateTime.Now,
+                    Status = "Pending",
+                    Reason = "Medical"
+                },
+                new LeaveApplication
+                {
+                    StudentName = "Jane Smith",
+                    Date = DateTime.Now.AddDays(-1),
+                    Status = "Approved",
+                    Reason = "Personal"
+                }
+            };
+            }
         }
-    }
+   
+
 
     private void AcceptLeave(LeaveApplication application)
     {
-        // Update status to Accepted
         application.Status = "Accepted";
-        LeaveService.UpdateLeaveApplication(application);
-        RefreshLeaveApplications();
+         LeaveService.UpdateLeaveApplication(application);
+       
     }
 
     private void DeclineLeave(LeaveApplication application)
     {
-        // Update status to Declined
         application.Status = "Declined";
-        LeaveService.UpdateLeaveApplication(application);
-        RefreshLeaveApplications();
-    }
-
-    private void RefreshLeaveApplications()
-    {
-        // Refresh the leave applications list
-        LeaveApplications = LeaveService.GetLeaveApplications() ?? new List<LeaveApplication>();
-        StateHasChanged();
+         LeaveService.UpdateLeaveApplication(application);
+       
     }
 }

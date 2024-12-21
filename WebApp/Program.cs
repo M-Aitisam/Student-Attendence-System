@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 using WebApp.Areas.Identity;
 using WebApp.Data;
+using WebApp.Hub;
+
 using ClassLibraryModel;
 using ClassLibraryDal;
 
@@ -58,6 +61,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<LeaveHub>("/leavehub");
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
