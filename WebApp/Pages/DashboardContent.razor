@@ -9,55 +9,62 @@
     <div class="container-fluid py-4">
         <!-- Metrics Section -->
         <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm rounded text-center">
-                    <div class="card-body">
-                        <h5 class="text-secondary">Total Employees</h5>
-                        <h2 class="fw-bold text-dark">@Employees.Count()</h2>
-                        <span class="badge bg-success">+15%</span>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm rounded text-center">
+                            <div class="card-body">
+                                <h5 class="text-secondary">Total Employees</h5>
+                                <h2 class="fw-bold text-dark">@Employees.Count()</h2>
+                                <span class="badge bg-success">+15%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm rounded text-center">
+                            <div class="card-body">
+                                <h5 class="text-secondary">Active Employees</h5>
+                                <h2 class="fw-bold text-dark">@Employees.Count(e => e.Status == "Active")</h2>
+                                <span class="badge bg-info">Stable</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm rounded text-center">
+                            <div class="card-body">
+                                <h5 class="text-secondary">Inactive Employees</h5>
+                                <h2 class="fw-bold text-dark">@Employees.Count(e => e.Status == "Inactive")</h2>
+                                <span class="badge bg-warning">-10%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm rounded text-center">
+                            <div class="card-body">
+                                <h5 class="text-secondary">New Recruits</h5>
+                                <h2 class="fw-bold text-dark">@Employees.Count(e => e.IsNewRecruit)</h2>
+                                <span class="badge bg-primary">+20%</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm rounded text-center">
-                    <div class="card-body">
-                        <h5 class="text-secondary">Active Employees</h5>
-                        <h2 class="fw-bold text-dark">@Employees.Count(e => e.Status == "Active")</h2>
-                        <span class="badge bg-info">Stable</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm rounded text-center">
-                    <div class="card-body">
-                        <h5 class="text-secondary">Inactive Employees</h5>
-                        <h2 class="fw-bold text-dark">@Employees.Count(e => e.Status == "Inactive")</h2>
-                        <span class="badge bg-warning">-10%</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm rounded text-center">
-                    <div class="card-body">
-                        <h5 class="text-secondary">New Recruits</h5>
-                        <h2 class="fw-bold text-dark">@Employees.Count(e => e.IsNewRecruit)</h2>
-                        <span class="badge bg-primary">+20%</span>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Attendance and Recruitment Section -->
-        <div class="row mt-4">
-            <div class="col-lg-6 mb-4">
+            <!-- Attendance and Recruitment Section -->
+            <div class="col-md-6">
                 <div class="card shadow-sm rounded">
-                    <div class="card-header bg-primary text-white fw-bold">Daily Attendance Statistic</div>
+                    <div class="card-header bg-primary text-white fw-bold">Daily Attendance Statistics</div>
                     <div class="card-body text-center">
                         <canvas id="attendanceChart"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 mb-4">
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm rounded">
                     <div class="card-header bg-secondary text-white fw-bold">Recruitment Overview</div>
                     <div class="card-body text-center">
@@ -65,11 +72,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Loan Payment Section -->
-        <div class="row mt-4">
-            <div class="col-lg-6 mb-4">
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm rounded">
                     <div class="card-header bg-success text-white fw-bold">Loan Payments</div>
                     <div class="card-body text-center">
@@ -77,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 mb-4">
+            <div class="col-md-4 mb-4">
                 <div class="card shadow-sm rounded">
                     <div class="card-header bg-warning text-white fw-bold">Leave Applications</div>
                     <div class="card-body">
@@ -169,12 +172,12 @@
                             <button type="button" class="btn-close" @onclick="CloseEmployeeDetails"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>Name:</strong> @SelectedEmployee.Name</p>
-                            <p><strong>ID:</strong> @SelectedEmployee.Id</p>
-                            <p><strong>Email:</strong> @SelectedEmployee.Email</p>
-                            <p><strong>DOB:</strong> @SelectedEmployee.DOB.ToShortDateString()</p>
-                            <p><strong>Join Date:</strong> @SelectedEmployee.JoinDate.ToShortDateString()</p>
-                            <p><strong>Status:</strong> @SelectedEmployee.Status</p>
+                            <p><strong>Name:</strong> @SelectedEmployee?.Name</p>
+                            <p><strong>ID:</strong> @SelectedEmployee?.Id</p>
+                            <p><strong>Email:</strong> @SelectedEmployee?.Email</p>
+                            <p><strong>DOB:</strong> @SelectedEmployee?.DOB.ToShortDateString()</p>
+                            <p><strong>Join Date:</strong> @SelectedEmployee?.JoinDate.ToShortDateString()</p>
+                            <p><strong>Status:</strong> @SelectedEmployee?.Status</p>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-secondary" @onclick="CloseEmployeeDetails">Close</button>
@@ -261,11 +264,10 @@
     private List<LeaveApplication> LeaveApplications = new();
     private bool ShowEmployeeModal = false;
     private bool ShowEditModal = false;
-    private bool ShowAddEmployeeModalState = false; // New state for Add Employee Modal
-    private Employee SelectedEmployee;
+    private bool ShowAddEmployeeModalState = false;
+    private Employee? SelectedEmployee;
     private Employee EditEmployeeData = new();
     private Employee NewEmployee = new();
-
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -288,7 +290,7 @@
 
     private void ShowAddEmployeeModal()
     {
-        NewEmployee = new Employee(); // Initialize a new Employee object
+        NewEmployee = new Employee();
         ShowAddEmployeeModalState = true;
     }
 
