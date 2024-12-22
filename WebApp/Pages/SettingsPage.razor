@@ -1,7 +1,6 @@
 ﻿@page "/settings"
+@inject IJSRuntime JSRuntime
 @inject SettingsService SettingsService
-
-<h3>Settings</h3>
 
 <div class="settings-container">
     <!-- User Preferences -->
@@ -73,17 +72,26 @@
     protected override async Task OnInitializedAsync()
     {
         Settings = await SettingsService.GetSettingsAsync();
+        await SetTheme(Settings.Theme);
+    }
+
+    private async Task SetTheme(string theme)
+    {
+        Console.WriteLine($"Setting theme to: {theme}"); // Log the selected theme
+        await JSRuntime.InvokeVoidAsync("changeTheme", theme);
     }
 
     private async Task SaveSettings()
     {
         await SettingsService.SaveSettingsAsync(Settings);
-        // Optionally, show a confirmation message
+        await SetTheme(Settings.Theme); // Apply the new theme
+                                        // Optionally, show a confirmation message
         Console.WriteLine("Settings saved.");
     }
 
     private void ResetSettings()
     {
         Settings = new SettingsModel(); // Resets to default
+        SetTheme(Settings.Theme); // Reset theme to default
     }
 }

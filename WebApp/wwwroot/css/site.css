@@ -260,6 +260,10 @@ input[type="checkbox"] {
     margin-left: 10px;
 }
 
+input[type="range"] {
+    width: 100%;
+}
+
 .actions {
     display: flex;
     justify-content: space-between;
