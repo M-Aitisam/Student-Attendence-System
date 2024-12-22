@@ -38,7 +38,7 @@ builder.Services.AddScoped<ClassLibraryModel.UserService>();
 //builder.Services.AddSingleton<ClassLibraryDal.StudentService>(); // Register your SystemSettingsService from ClassLibraryDal here
 builder.Services.AddScoped<AttendanceService>();
 builder.Services.AddScoped<LeaveService>();
-
+builder.Services.AddScoped<SettingsService>();
 builder.Services.AddScoped<SubjectService>(); // Register SubjectService
 
 

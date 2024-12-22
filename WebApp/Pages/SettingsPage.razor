@@ -1,0 +1,89 @@
+﻿@page "/settings"
+@inject SettingsService SettingsService
+
+<h3>Settings</h3>
+
+<div class="settings-container">
+    <!-- User Preferences -->
+    <section class="settings-section">
+        <h4>User Preferences</h4>
+        <div class="form-group">
+            <label for="theme">Theme</label>
+            <select id="theme" @bind="Settings.Theme" class="form-control">
+                <option value="Light">Light</option>
+                <option value="Dark">Dark</option>
+                <option value="System">System Default</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="language">Language</label>
+            <select id="language" @bind="Settings.Language" class="form-control">
+                <option value="en-US">English</option>
+                <option value="fr-FR">French</option>
+                <option value="es-ES">Spanish</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- Application Settings -->
+    <section class="settings-section">
+        <h4>Application Settings</h4>
+        <div class="form-group">
+            <label for="itemsPerPage">Items per Page</label>
+            <input id="itemsPerPage" type="number" @bind="Settings.ItemsPerPage" min="5" max="100" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="enableAutoSave">Enable Auto Save</label>
+            <input id="enableAutoSave" type="checkbox" @bind="Settings.EnableAutoSave" />
+        </div>
+
+        <div class="form-group">
+            <label for="autoSaveInterval">Auto Save Interval (in seconds)</label>
+            <input id="autoSaveInterval" type="range" @bind="Settings.AutoSaveInterval" min="5" max="60" />
+            <span>@Settings.AutoSaveInterval seconds</span>
+        </div>
+    </section>
+
+    <!-- Notification Settings -->
+    <section class="settings-section">
+        <h4>Notification Settings</h4>
+        <div class="form-group">
+            <label for="emailNotifications">Email Notifications</label>
+            <input id="emailNotifications" type="checkbox" @bind="Settings.EmailNotifications" />
+        </div>
+
+        <div class="form-group">
+            <label for="pushNotifications">Push Notifications</label>
+            <input id="pushNotifications" type="checkbox" @bind="Settings.PushNotifications" />
+        </div>
+    </section>
+
+    <!-- Actions -->
+    <section class="actions">
+        <button class="btn btn-primary" @onclick="SaveSettings">Save</button>
+        <button class="btn btn-secondary" @onclick="ResetSettings">Reset</button>
+    </section>
+</div>
+
+@code {
+    private SettingsModel Settings = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Settings = await SettingsService.GetSettingsAsync();
+    }
+
+    private async Task SaveSettings()
+    {
+        await SettingsService.SaveSettingsAsync(Settings);
+        // Optionally, show a confirmation message
+        Console.WriteLine("Settings saved.");
+    }
+
+    private void ResetSettings()
+    {
+        Settings = new SettingsModel(); // Resets to default
+    }
+}

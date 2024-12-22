@@ -221,3 +221,52 @@ button.list-group-item {
 .chart-container {
     height: 20rem;
 }
+
+
+/*Styling Setting Page */
+.settings-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.settings-section {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+    .settings-section h4 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="checkbox"] {
+    margin-left: 10px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .actions .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
