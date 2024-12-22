@@ -131,19 +131,20 @@
         try
         {
             var leaveApplicationsJson = await JSRuntime.InvokeAsync<string>("localStorageHelper.getItem", "leaveApplications");
+
             if (!string.IsNullOrEmpty(leaveApplicationsJson))
             {
-                LeaveApplications = JsonSerializer.Deserialize<List<LeaveApplication>>(leaveApplicationsJson);
+                LeaveApplications = JsonSerializer.Deserialize<List<LeaveApplication>>(leaveApplicationsJson) ?? new List<LeaveApplication>();
+            }
+            else
+            {
+                LeaveApplications = new List<LeaveApplication>(); // Fallback if the JSON is empty or null
             }
         }
         catch (JsonException ex)
         {
             Console.Error.WriteLine($"Error deserializing leave applications: {ex.Message}");
             LeaveApplications = new List<LeaveApplication>(); // Fallback to an empty list
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Unexpected error: {ex.Message}");
         }
     }
 
@@ -199,7 +200,7 @@
     private async Task CancelLeaveApplication(LeaveApplication application)
     {
         // Cancel leave application logic (mark as cancelled or delete)
-        LeaveService.CancelLeave(application.LeaveId);
+        // LeaveService.CancelLeave(application.LeaveId);
 
         // Refresh the leave applications
         LeaveApplications = LeaveService.GetLeaveApplications();

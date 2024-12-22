@@ -23,21 +23,9 @@ namespace ClassLibraryDal
             _leaveApplications.Add(leaveApplication);
             SaveLeaveApplicationsToLocalStorage(); // Save to localStorage
         }
-
-        public void CancelLeave(int leaveId)
-        {
-            // Remove the leave application (or update status)
-            var leaveApplication = _leaveApplications.FirstOrDefault(l => l.LeaveId == leaveId);
-            if (leaveApplication != null)
-            {
-                _leaveApplications.Remove(leaveApplication);
-                SaveLeaveApplicationsToLocalStorage(); // Save to localStorage
-            }
-        }
-
         public void UpdateLeaveApplication(LeaveApplication leaveApplication)
         {
-            // Find and update the status of the leave application (for simplicity, updating the list directly)
+            // Find and update the status of the leave application
             var existingApplication = _leaveApplications.FirstOrDefault(l => l.LeaveId == leaveApplication.LeaveId);
             if (existingApplication != null)
             {
@@ -46,8 +34,13 @@ namespace ClassLibraryDal
                 existingApplication.StudentName = leaveApplication.StudentName;
                 SaveLeaveApplicationsToLocalStorage(); // Save to localStorage
             }
+            else
+            {
+                // If application does not exist, add it (to prevent deletion)
+                _leaveApplications.Add(leaveApplication);
+                SaveLeaveApplicationsToLocalStorage(); // Save to localStorage
+            }
         }
-
         public Task<List<LeaveApplication>> GetLeaveApplication()
         {
             // Simulating async call by returning Task.FromResult
@@ -69,9 +62,8 @@ namespace ClassLibraryDal
         {
             // Convert leave applications list to JSON and save to localStorage
             var json = JsonSerializer.Serialize(_leaveApplications);
-            // This part would ideally call JavaScript Interop to store the data in localStorage on the frontend.
-            // Example:
             // JSRuntime.InvokeVoidAsync("localStorageHelper.setItem", "leaveApplications", json);
         }
+            
     }
 }
