@@ -3,6 +3,8 @@
 @inject AttendanceService AttendanceService
 @inject LeaveService LeaveService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@using System.Text.Json;
 
 
 <h3>Student Dashboard</h3>
@@ -77,7 +79,7 @@
 <!-- Modal for Applying Leave -->
 @if (ShowLeaveForm)
 {
-    <div class="modal" style="display: block; background-color: rgba(0,0,0,0.5);">
+    <div class="modal fade show" style="display: block; background-color: rgba(0,0,0,0.5);">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -124,14 +126,27 @@
     private LeaveApplication LeaveRequest = new LeaveApplication();
     private string ErrorMessage = string.Empty;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        // Fetch the attendance data for subjects
-        Subjects = AttendanceService.GetSubjects();
-
-        // Fetch leave applications for the student
-        LeaveApplications = LeaveService.GetLeaveApplications();
+        try
+        {
+            var leaveApplicationsJson = await JSRuntime.InvokeAsync<string>("localStorageHelper.getItem", "leaveApplications");
+            if (!string.IsNullOrEmpty(leaveApplicationsJson))
+            {
+                LeaveApplications = JsonSerializer.Deserialize<List<LeaveApplication>>(leaveApplicationsJson);
+            }
+        }
+        catch (JsonException ex)
+        {
+            Console.Error.WriteLine($"Error deserializing leave applications: {ex.Message}");
+            LeaveApplications = new List<LeaveApplication>(); // Fallback to an empty list
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Unexpected error: {ex.Message}");
+        }
     }
+
 
     private void ShowLeaveApplicationForm()
     {
@@ -147,7 +162,7 @@
         ShowLeaveForm = false;
     }
 
-    private void ApplyLeave()
+    private async Task ApplyLeave()
     {
         if (LeaveRequest?.Date == null || string.IsNullOrEmpty(LeaveRequest.Reason) || string.IsNullOrEmpty(LeaveRequest.StudentName))
         {
@@ -164,6 +179,9 @@
             // Refresh the leave applications list
             LeaveApplications = LeaveService.GetLeaveApplications();
 
+            // Save the updated leave applications to localStorage
+            await JSRuntime.InvokeVoidAsync("localStorageHelper.setItem", "leaveApplications", LeaveApplications);
+
             // Clear any error messages
             ErrorMessage = string.Empty;
 
@@ -178,12 +196,15 @@
         }
     }
 
-    private void CancelLeaveApplication(LeaveApplication application)
+    private async Task CancelLeaveApplication(LeaveApplication application)
     {
         // Cancel leave application logic (mark as cancelled or delete)
         LeaveService.CancelLeave(application.LeaveId);
 
         // Refresh the leave applications
         LeaveApplications = LeaveService.GetLeaveApplications();
+
+        // Save the updated leave applications to localStorage
+        await JSRuntime.InvokeVoidAsync("localStorageHelper.setItem", "leaveApplications", LeaveApplications);
     }
 }

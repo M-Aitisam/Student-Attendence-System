@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace ClassLibraryDal
 {
@@ -21,6 +21,7 @@ namespace ClassLibraryDal
         {
             // Add the leave application to the list (or save to the database)
             _leaveApplications.Add(leaveApplication);
+            SaveLeaveApplicationsToLocalStorage(); // Save to localStorage
         }
 
         public void CancelLeave(int leaveId)
@@ -30,6 +31,7 @@ namespace ClassLibraryDal
             if (leaveApplication != null)
             {
                 _leaveApplications.Remove(leaveApplication);
+                SaveLeaveApplicationsToLocalStorage(); // Save to localStorage
             }
         }
 
@@ -42,23 +44,34 @@ namespace ClassLibraryDal
                 existingApplication.Status = leaveApplication.Status;
                 existingApplication.Date = leaveApplication.Date; // Sync other fields if needed
                 existingApplication.StudentName = leaveApplication.StudentName;
-
+                SaveLeaveApplicationsToLocalStorage(); // Save to localStorage
             }
         }
+
         public Task<List<LeaveApplication>> GetLeaveApplication()
         {
             // Simulating async call by returning Task.FromResult
             return Task.FromResult(_leaveApplications);
         }
+
         public void UpdateLeaveStatus(int leaveId, string status)
         {
             var leaveApplication = _leaveApplications.FirstOrDefault(l => l.LeaveId == leaveId);
             if (leaveApplication != null)
             {
                 leaveApplication.Status = status;
+                SaveLeaveApplicationsToLocalStorage(); // Save to localStorage
             }
         }
 
+        // Helper method to save leave applications to localStorage
+        private void SaveLeaveApplicationsToLocalStorage()
+        {
+            // Convert leave applications list to JSON and save to localStorage
+            var json = JsonSerializer.Serialize(_leaveApplications);
+            // This part would ideally call JavaScript Interop to store the data in localStorage on the frontend.
+            // Example:
+            // JSRuntime.InvokeVoidAsync("localStorageHelper.setItem", "leaveApplications", json);
+        }
     }
-
 }

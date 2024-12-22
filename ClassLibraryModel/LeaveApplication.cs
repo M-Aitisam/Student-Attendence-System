@@ -15,7 +15,7 @@ namespace ClassLibraryModel
         public DateTime Date { get; set; }
         public string? Status { get; set; }
         public string? Reason { get; set; }
-        public string? AdminResponse { get; set; }  // New property for admin response
+
     }
 
 

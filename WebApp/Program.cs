@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using WebApp.Areas.Identity;
 using WebApp.Data;
 using WebApp.Hub;
-
+using Blazored.LocalStorage;
 using ClassLibraryModel;
 using ClassLibraryDal;
 
@@ -30,7 +30,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-
+builder.Services.AddBlazoredLocalStorage();
 // Authentication State Provider for Blazor
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddScoped<ClassLibraryModel.UserService>();
