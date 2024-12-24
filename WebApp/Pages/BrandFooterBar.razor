@@ -1,14 +1,124 @@
-﻿<footer class="text-center text-white py-3" style="background-color: #343a40;">
-    <div class="container">
-        <p class="mb-1">
-            <strong>Student Attendance System</strong>
-        </p>
-        <p class="mb-0">
-            &copy; 2024 | Designed for better student management and attendance tracking.
-        </p>
-        <p class="mb-0">
-            <a href="/privacy-policy" class="text-white text-decoration-none">Privacy Policy</a> |
-            <a href="/terms" class="text-white text-decoration-none">Terms of Service</a>
-        </p>
+﻿<footer class="text-center text-white py-3" style="background: linear-gradient(135deg, #343a40, #1d2124); position: relative;">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <!-- Logo and Title -->
+        <div class="d-flex align-items-center mb-2 mb-md-0">
+            <img src="Images/SMS-Logo.png" alt="Logo" class="me-2" style="height: 40px;" />
+            <span class="h5 mb-0 font-weight-bold" style="letter-spacing: 1.5px;">Student Attendance System</span>
+        </div>
+        <!-- Links -->
+        <div class="d-flex gap-3">
+            <div class="position-relative">
+                <a href="#" class="text-white text-decoration-none privacy-link">
+                    <i class="bi bi-shield-lock-fill"></i> Privacy Policy |
+                </a>
+                <!-- Privacy Policy Popup -->
+                <div class="privacy-popup">
+                    <h6><i class="bi bi-shield-lock-fill"></i> Privacy Policy</h6>
+                    <span class="emoji">🔒</span> <strong>Your Privacy:</strong> We respect your privacy and protect your data.<br>
+                    <span class="emoji">📊</span> <strong>Data Collection:</strong> We collect only necessary information.<br>
+                    <span class="emoji">💻</span> <strong>Data Usage:</strong> Your data is used solely for attendance tracking.<br>
+                    <span class="emoji">🔑</span> <strong>Security:</strong> We ensure that your information is kept secure.<br>
+                    <p class="text-center"><small>By using this system, you agree to the privacy policy above.</small></p>
+                </div>
+            </div>
+            <div class="position-relative">
+                <a href="#" class="text-white text-decoration-none terms-link">
+                    <i class="bi bi-file-earmark-text-fill"></i> Terms of Service |
+                </a>
+                <!-- Terms Popup -->
+                <div class="terms-popup">
+                    <h6><i class="bi bi-file-earmark-lock-fill"></i> Terms of Service</h6>
+                    <span class="emoji">📜</span> <strong>Respect the Platform:</strong> Follow all the rules and regulations.<br>
+                    <span class="emoji">🔒</span> <strong>Privacy Matters:</strong> Never share confidential information.<br>
+                    <span class="emoji">🚫</span> <strong>Data Misuse:</strong> Any misuse of data will not be tolerated.<br>
+                    <span class="emoji">🌍</span> <strong>Global Compliance:</strong> Adhere to local and international laws.<br>
+                    <span class="emoji">💼</span> <strong>Service Usage:</strong> Only use the system for its intended purpose.<br>
+                    <p class="text-center"><small>By using this system, you agree to all the terms mentioned above.</small></p>
+                </div>
+            </div>
+            <a href=" " class="text-white text-decoration-none">
+                <i class="bi bi-facebook me-2"></i> |
+            </a>
+            <a href="https://www.instagram.com/" class="text-white text-decoration-none">
+                <i class="bi bi-instagram me-2"></i> |
+            </a>
+            <a href="https://www.linkedin.com/in/aitisam-ahmed-9395b62a0/" class="text-white text-decoration-none">
+                <i class="bi bi-linkedin"></i>
+            </a>
+        </div>
     </div>
 </footer>
+
+<style>
+    /* Popup Styling for Privacy Policy */
+    .privacy-popup {
+        display: none;
+        position: absolute;
+        bottom: 120%; /* Adjust to position above the link */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        background: #1d2124;
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        text-align: left;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    /* Popup Styling for Terms */
+    .terms-popup {
+        display: none;
+        position: absolute;
+        bottom: 120%; /* Adjust to position above the link */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        background: #1d2124;
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        text-align: left;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+        /* Arrow for popup */
+        .privacy-popup::after, .terms-popup::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: #1d2124 transparent transparent transparent;
+        }
+
+        /* Show popup on hover */
+        .privacy-link:hover + .privacy-popup,
+        .terms-link:hover + .terms-popup,
+        .privacy-popup:hover,
+        .terms-popup:hover {
+            display: block;
+        }
+
+    /* Link Styling */
+    .privacy-link, .terms-link {
+        position: relative;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    /* Emoji Styling */
+    .emoji {
+        font-size: 1.2rem;
+        margin-right: 10px;
+    }
+</style>
