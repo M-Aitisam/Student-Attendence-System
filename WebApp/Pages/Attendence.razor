@@ -1,13 +1,11 @@
 ﻿@page "/attendance"
 @using System.Data.SqlClient
 @inject IWebHostEnvironment WebHostEnvironment
-@* IWebHostEnvironment is used to access web-related details 
-like the root path (WebRootPath) or the content root (ContentRootPath). *@
 @using System.Text.Json
 
 <PageTitle>Attendance</PageTitle>
 
-<div class="container mt-5">
+<div class="container">
     <div class="card shadow">
         <div class="card-header bg-primary text-white text-center">
             <h1 class="mb-0">📋 Attendance Sheet</h1>
@@ -60,10 +58,19 @@ like the root path (WebRootPath) or the content root (ContentRootPath). *@
     </div>
 </div>
 
+<!-- Toast Notification -->
+@if (IsToastVisible)
+{
+    <div class="toast show">
+        @ToastMessage
+    </div>
+}
+
 @code {
     private List<Student> Students = new();
+    private bool IsToastVisible { get; set; }
+    private string ToastMessage { get; set; } = string.Empty;
 
-  
     protected override async Task OnInitializedAsync()
     {
         try
@@ -88,32 +95,42 @@ like the root path (WebRootPath) or the content root (ContentRootPath). *@
         }
     }
 
-
     private async Task SubmitAttendance()
     {
         try
         {
-            using (SqlConnection con = DBHelper.GetConnection())
+            // Filter the students who are marked as present
+            var studentsToSave = Students.Where(student => student.IsPresent).ToList();
+
+            if (studentsToSave.Any())
             {
-                await con.OpenAsync();
-
-                foreach (var student in Students)
+                using (SqlConnection con = DBHelper.GetConnection())
                 {
-                    string query = "INSERT INTO Attendance (SerialNo, RollId, Name, IsPresent, AttendanceDate) VALUES (@SerialNo, @RollId, @Name, @IsPresent, @AttendanceDate)";
+                    await con.OpenAsync();
 
-                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    foreach (var student in studentsToSave)
                     {
-                        cmd.Parameters.AddWithValue("@SerialNo", student.SerialNo);
-                        cmd.Parameters.AddWithValue("@RollId", student.RollId);
-                        cmd.Parameters.AddWithValue("@Name", student.Name);
-                        cmd.Parameters.AddWithValue("@IsPresent", student.IsPresent);
-                        cmd.Parameters.AddWithValue("@AttendanceDate", DateTime.Now);
+                        string query = "INSERT INTO Students (SerialNo, RollId, Name, IsPresent, AttendanceDate) VALUES (@SerialNo, @RollId, @Name, @IsPresent, @AttendanceDate)";
 
-                        await cmd.ExecuteNonQueryAsync();
+                        using (SqlCommand cmd = new SqlCommand(query, con))
+                        {
+                            cmd.Parameters.AddWithValue("@SerialNo", student.SerialNo);
+                            cmd.Parameters.AddWithValue("@RollId", student.RollId);
+                            cmd.Parameters.AddWithValue("@Name", student.Name);
+                            cmd.Parameters.AddWithValue("@IsPresent", student.IsPresent);
+                            cmd.Parameters.AddWithValue("@AttendanceDate", DateTime.Now);
+
+                            await cmd.ExecuteNonQueryAsync();
+                        }
                     }
-                }
 
-                Console.WriteLine("Attendance saved to the database successfully!");
+                    // Show success message
+                    ShowToastMessage("Attendance saved successfully!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No students were marked as present.");
             }
         }
         catch (Exception ex)
@@ -122,11 +139,24 @@ like the root path (WebRootPath) or the content root (ContentRootPath). *@
         }
     }
 
+    private void ShowToastMessage(string message)
+    {
+        ToastMessage = message;
+        IsToastVisible = true;
+
+        // Hide the toast after 3 seconds
+        Task.Delay(3000).ContinueWith(_ =>
+        {
+            IsToastVisible = false;
+            StateHasChanged(); // Force re-render
+        });
+    }
+
     private class Student
     {
         public int SerialNo { get; set; }
-        public string RollId { get; set; }
-        public string Name { get; set; }
+        public string? RollId { get; set; }
+        public string? Name { get; set; }
         public bool IsPresent { get; set; }
     }
 }

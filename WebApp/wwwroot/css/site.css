@@ -274,3 +274,21 @@ input[type="range"] {
         font-size: 16px;
         cursor: pointer;
     }
+
+
+/* Toast Notification Styles */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    display: none;
+    z-index: 9999;
+}
+
+    .toast.show {
+        display: block;
+    }
