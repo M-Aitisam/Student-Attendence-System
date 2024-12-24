@@ -1,0 +1,117 @@
+﻿@page "/attendance"
+@using System.Text.Json
+
+<PageTitle>Attendance</PageTitle>
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+            <h1 class="mb-0">📋 Attendance Sheet</h1>
+            <p class="mb-0">Mark attendance for the students by selecting the checkboxes below.</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Serial No</th>
+                            <th>Roll ID</th>
+                            <th>Name</th>
+                            <th>Present</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Students != null && Students.Any())
+                        {
+                            @foreach (var student in Students)
+                            {
+                                <tr>
+                                    <td>@student.SerialNo</td>
+                                    <td>@student.RollId</td>
+                                    <td>@student.Name</td>
+                                    <td class="text-center">
+                                        <input type="checkbox" @bind="student.IsPresent" class="form-check-input" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center">No data available or loading...</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div>
+                <input type="checkbox"  class="form-check-input" /> Are you sure you  want to  save
+                </div>
+                <div class="text-center mt-4">
+                    <button class="btn btn-success btn-lg" @onclick="SubmitAttendance">✓ Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Student> Students = new();
+
+    [Inject] private IWebHostEnvironment WebHostEnvironment { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var filePath = Path.Combine(WebHostEnvironment.WebRootPath, "students.json"); // Use WebRootPath for wwwroot
+            Console.WriteLine($"Attempting to read file from: {filePath}");
+
+            if (File.Exists(filePath))
+            {
+                var json = await File.ReadAllTextAsync(filePath);
+                Students = JsonSerializer.Deserialize<List<Student>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Student>();
+                Console.WriteLine($"File read successfully. Total students loaded: {Students.Count}");
+            }
+            else
+            {
+                Console.WriteLine($"File not found at path: {filePath}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading students: {ex.Message}");
+        }
+    }
+
+    private async Task SubmitAttendance()
+    {
+        try
+        {
+            var attendanceDir = Path.Combine(WebHostEnvironment.ContentRootPath, "AttendanceData");
+            if (!Directory.Exists(attendanceDir))
+            {
+                Directory.CreateDirectory(attendanceDir);
+            }
+            var attendanceFilePath = Path.Combine(attendanceDir, "attendance.json");
+
+            var attendanceJson = JsonSerializer.Serialize(Students, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(attendanceFilePath, attendanceJson);
+
+            Console.WriteLine($"Attendance submitted and saved to: {attendanceFilePath}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving attendance: {ex.Message}");
+        }
+    }
+
+    private class Student
+    {
+        public int SerialNo { get; set; }
+        public string? RollId { get; set; }
+        public string? Name { get; set; }
+        public bool IsPresent { get; set; }
+    }
+}
