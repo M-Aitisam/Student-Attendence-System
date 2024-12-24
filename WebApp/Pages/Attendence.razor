@@ -1,4 +1,8 @@
 ﻿@page "/attendance"
+@using System.Data.SqlClient
+@inject IWebHostEnvironment WebHostEnvironment
+@* IWebHostEnvironment is used to access web-related details 
+like the root path (WebRootPath) or the content root (ContentRootPath). *@
 @using System.Text.Json
 
 <PageTitle>Attendance</PageTitle>
@@ -46,7 +50,7 @@
             </div>
             <div class="d-flex justify-content-between">
                 <div>
-                <input type="checkbox"  class="form-check-input" /> Are you sure you  want to  save
+                    <input type="checkbox" class="form-check-input" /> Are you sure you want to save?
                 </div>
                 <div class="text-center mt-4">
                     <button class="btn btn-success btn-lg" @onclick="SubmitAttendance">✓ Submit</button>
@@ -59,8 +63,7 @@
 @code {
     private List<Student> Students = new();
 
-    [Inject] private IWebHostEnvironment WebHostEnvironment { get; set; }
-
+  
     protected override async Task OnInitializedAsync()
     {
         try
@@ -70,7 +73,7 @@
 
             if (File.Exists(filePath))
             {
-                var json = await File.ReadAllTextAsync(filePath);
+                var json = await File.ReadAllTextAsync(filePath);  // Asynchronously read the file
                 Students = JsonSerializer.Deserialize<List<Student>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Student>();
                 Console.WriteLine($"File read successfully. Total students loaded: {Students.Count}");
             }
@@ -85,21 +88,33 @@
         }
     }
 
+
     private async Task SubmitAttendance()
     {
         try
         {
-            var attendanceDir = Path.Combine(WebHostEnvironment.ContentRootPath, "AttendanceData");
-            if (!Directory.Exists(attendanceDir))
+            using (SqlConnection con = DBHelper.GetConnection())
             {
-                Directory.CreateDirectory(attendanceDir);
+                await con.OpenAsync();
+
+                foreach (var student in Students)
+                {
+                    string query = "INSERT INTO Attendance (SerialNo, RollId, Name, IsPresent, AttendanceDate) VALUES (@SerialNo, @RollId, @Name, @IsPresent, @AttendanceDate)";
+
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@SerialNo", student.SerialNo);
+                        cmd.Parameters.AddWithValue("@RollId", student.RollId);
+                        cmd.Parameters.AddWithValue("@Name", student.Name);
+                        cmd.Parameters.AddWithValue("@IsPresent", student.IsPresent);
+                        cmd.Parameters.AddWithValue("@AttendanceDate", DateTime.Now);
+
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+
+                Console.WriteLine("Attendance saved to the database successfully!");
             }
-            var attendanceFilePath = Path.Combine(attendanceDir, "attendance.json");
-
-            var attendanceJson = JsonSerializer.Serialize(Students, new JsonSerializerOptions { WriteIndented = true });
-            await File.WriteAllTextAsync(attendanceFilePath, attendanceJson);
-
-            Console.WriteLine($"Attendance submitted and saved to: {attendanceFilePath}");
         }
         catch (Exception ex)
         {
@@ -110,8 +125,8 @@
     private class Student
     {
         public int SerialNo { get; set; }
-        public string? RollId { get; set; }
-        public string? Name { get; set; }
+        public string RollId { get; set; }
+        public string Name { get; set; }
         public bool IsPresent { get; set; }
     }
 }
