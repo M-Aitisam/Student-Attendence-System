@@ -292,3 +292,12 @@ input[type="range"] {
     .toast.show {
         display: block;
     }
+
+
+
+
+
+#step1, #step2, #step3, #step4, #step5 {
+    display: block !important;
+    visibility: visible !important;
+}

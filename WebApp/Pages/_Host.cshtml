@@ -28,7 +28,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
-  </head>
+
+    <!-- Add intro.js -->
+    <link href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css" rel="stylesheet" />
+
+</head>
 <body>
     <!-- Render Blazor app with server-side prerendering -->
     <component type="typeof(App)" render-mode="ServerPrerendered" />
@@ -46,7 +50,6 @@
     </div>
 
     <!-- Blazor Framework Script -->
-    @* <script src="https://cdn.fullcalendar.io/fullcalendar/3.2.0/fullcalendar.min.js"></script> *@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -54,6 +57,7 @@
     <script src="~/calender.js"></script>
     <script src="_framework/blazor.server.js"></script>
     <script src="~/localStorageHelper.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
     <script src="~/theme.js"></script>
 </body>
 </html>

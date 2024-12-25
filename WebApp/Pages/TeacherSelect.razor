@@ -1,62 +1,101 @@
 ﻿@page "/teacher-selection"
 @inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
 
-<h3>Teacher Selection</h3>
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center" data-intro="Welcome to the Teacher Selection page! Start by selecting a class.">
+            <h3>Teacher Selection</h3>
+        </div>
+        <div class="card-body">
+            <!-- Step 1: Select Class -->
+            <div class="mb-4" id="step1" data-intro="Select a class from this dropdown.">
+                <label for="classSelect" class="form-label fw-bold">Select Class:</label>
+                <select id="classSelect" @bind="SelectedClass" class="form-select">
+                    <option value="">-- Select Class --</option>
+                    @foreach (var className in Classes)
+                    {
+                        <option value="@className">@className</option>
+                    }
+                </select>
+            </div>
 
-<div>
-    <label for="classSelect">Select Class:</label>
-    <select id="classSelect" @bind="SelectedClass">
-        <option value="">--Select Class--</option>
-        @foreach (var className in Classes)
-        {
-            <option value="@className">@className</option>
-        }
-    </select>
+            <!-- Step 2: Select Subject -->
+            @if (!string.IsNullOrEmpty(SelectedClass))
+            {
+                <div class="mb-4" id="step2" data-intro="Now, select the subject you are teaching.">
+                    <label for="subjectSelect" class="form-label fw-bold">Select Subject:</label>
+                    <select id="subjectSelect" @bind="SelectedSubject" class="form-select">
+                        <option value="">-- Select Subject --</option>
+                        @foreach (var subject in Subjects)
+                        {
+                            <option value="@subject">@subject</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Step 3: Select Teacher -->
+                <div class="mb-4" id="step3" data-intro="Finally, choose the teacher for the class.">
+                    <label for="teacherSelect" class="form-label fw-bold">Select Teacher:</label>
+                    <select id="teacherSelect" @bind="SelectedTeacher" class="form-select">
+                        <option value="">-- Select Teacher --</option>
+                        @foreach (var teacher in Teachers)
+                        {
+                            <option value="@teacher">@teacher</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Confirmation Button -->
+                <div class="text-center" id="step4" data-intro="Click OK to proceed to the dashboard.">
+                    <button class="btn btn-success w-50" @onclick="NavigateToDashboard">OK</button>
+                </div>
+            }
+            else
+            {
+                <p id="step5" class="text-danger text-center mt-3" data-intro="You must select a class to continue.">Please select a class to continue.</p>
+            }
+        </div>
+    </div>
 </div>
 
-@if (!string.IsNullOrEmpty(SelectedClass))
-{
-    <div>
-        <label for="subjectSelect">Select Subject:</label>
-        <select id="subjectSelect" @bind="SelectedSubject">
-            <option value="">--Select Subject--</option>
-            @foreach (var subject in Subjects)
-            {
-                <option value="@subject">@subject</option>
-            }
-        </select>
-    </div>
-
-    <div>
-        <label for="teacherSelect">Select Teacher:</label>
-        <select id="teacherSelect" @bind="SelectedTeacher">
-            <option value="">--Select Teacher--</option>
-            @foreach (var teacher in Teachers)
-            {
-                <option value="@teacher">@teacher</option>
-            }
-        </select>
-    </div>
-
-    <button @onclick="NavigateToDashboard">OK</button>
-}
-else
-{
-    <p>Please select a class to continue.</p>
-}
-
 @code {
-    // Properties for selections
     private string? SelectedClass { get; set; }
     private string? SelectedSubject { get; set; }
     private string? SelectedTeacher { get; set; }
 
-    // Sample data for dropdowns
-    private List<string> Classes = new() { "F-24-ADSCS-#A", "F-24-ADSCS-#B" };
-    private List<string> Subjects = new() { "DataStructure", "Visual Programming Lab", "Data Structure Lab", "Visual Programming Class", "Full Stack Frontent", "Calculus", "Software Engineering" ,"Inforamtion Security Lab" , "Industrial Project" };
-    private List<string> Teachers = new() { "KaleemUllah", "Mr.Azhar", "Asim Ali Fayaz","Shakeel Ahmed", "Sagheer Ahmed.", "Jahanzeb Khan" , "Dr Nazia" , "Khawaja Tahir" , "Bilal Khan" };
+    private List<string> Classes = new()
+    {
+        "F-24-ADSCS-#A",
+        "F-24-ADSCS-#B"
+    };
 
-    // Navigation method
+    private List<string> Subjects = new()
+    {
+        "Data Structure",
+        "Visual Programming Lab",
+        "Data Structure Lab",
+        "Visual Programming Class",
+        "Full Stack Frontend",
+        "Calculus",
+        "Software Engineering",
+        "Information Security Lab",
+        "Industrial Project"
+    };
+
+    private List<string> Teachers = new()
+    {
+        "Kaleem Ullah",
+        "Mr. Azhar",
+        "Asim Ali Fayaz",
+        "Shakeel Ahmed",
+        "Sagheer Ahmed",
+        "Jahanzeb Khan",
+        "Dr. Nazia",
+        "Khawaja Tahir",
+        "Bilal Khan"
+    };
+
     private void NavigateToDashboard()
     {
         if (!string.IsNullOrEmpty(SelectedClass) &&
@@ -65,9 +104,14 @@ else
         {
             Navigation.NavigateTo($"/TeacherDashboard?class={SelectedClass}&subject={SelectedSubject}&teacher={SelectedTeacher}");
         }
-        else
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
         {
-            // Handle validation or show an error message
+            // Call the JavaScript function to start the tour
+            JSRuntime.InvokeVoidAsync("startTourOnTeacherSelection");
         }
     }
 }
