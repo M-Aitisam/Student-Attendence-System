@@ -67,7 +67,7 @@
         <div class="row mt-4">
             <div class="col-md-7 mb-4">
                 <div class="card shadow-sm rounded">
-                    <div class="card-header bg-secondary text-white fw-bold">Recruitment Overview</div>
+                    <div class="card-header bg-secondary text-white fw-bold">Student Performance</div>
                     <div class="card-body text-center">
                         <canvas id="recruitmentChart" style="height:30rem"></canvas>
                     </div>
@@ -97,19 +97,31 @@
                                         <tr>
                                             <td>@application.LeaveId</td>
                                             <td>@application.StudentName</td>
-                                            <td>@application.Date.ToShortDateString()</td>
-                                            <td>@(application.Status ?? "Status Missing")</td>
-                                            <td>@(application.Reason ?? "Reason Missing")</td>
+                                            <td>@application.Date.ToString("yyyy-MM-dd")</td>
                                             <td>
-                                                @if (string.Equals(application.Status, "Pending", StringComparison.OrdinalIgnoreCase))
-                                                {
-                                                    <button class="btn btn-success btn-sm" @onclick="() => AcceptLeave(application)">Accept</button>
-                                                    <button class="btn btn-danger btn-sm" @onclick="() => DeclineLeave(application)">Decline</button>
-                                                }
-                                                else
-                                                {
-                                                    <span>Processed</span>
-                                                }
+                                                <span class="badge @(application.Status == "Accepted" ? "bg-success" : application.Status == "Declined" ? "bg-danger" : "bg-secondary")">
+                                                    @application.Status
+                                                </span>
+                                            </td>
+                                            <td>@application.Reason</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-light" type="button" id="dropdownMenuButton_@application.LeaveId" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton_@application.LeaveId">
+                                                        <li>
+                                                            <button class="dropdown-item text-success" @onclick="() => AcceptLeave(application)">
+                                                                <i class="bi bi-check-circle"></i> Accept
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button class="dropdown-item text-danger" @onclick="() => DeclineLeave(application)">
+                                                                <i class="bi bi-x-circle"></i> Decline
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </td>
                                         </tr>
                                     }
@@ -125,6 +137,7 @@
                     </div>
                 </div>
             </div>
+
          <!-- Employee List -->
           <div class="row mt-4">
             <div class="col-12">

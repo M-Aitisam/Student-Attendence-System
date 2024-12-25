@@ -30,7 +30,7 @@ window.initializeCharts = () => {
         data: {
             labels: ['January', 'February', 'March', 'April'],
             datasets: [{
-                label: 'Recruitments',
+                label: 'Performance',
                 data: [4, 7, 3, 8],
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',

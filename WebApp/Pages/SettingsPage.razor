@@ -71,27 +71,47 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Settings = await SettingsService.GetSettingsAsync();
-        await SetTheme(Settings.Theme);
+        try
+        {
+            Settings = await SettingsService.GetSettingsAsync();
+            await SetTheme(Settings.Theme);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error initializing settings: {ex.Message}");
+        }
     }
 
     private async Task SetTheme(string theme)
     {
-        Console.WriteLine($"Setting theme to: {theme}"); // Log the selected theme
-        await JSRuntime.InvokeVoidAsync("changeTheme", theme);
+        try
+        {
+            Console.WriteLine($"Setting theme to: {theme}"); // Log the selected theme
+            await JSRuntime.InvokeVoidAsync("changeTheme", theme);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error setting theme: {ex.Message}");
+        }
     }
 
     private async Task SaveSettings()
     {
-        await SettingsService.SaveSettingsAsync(Settings);
-        await SetTheme(Settings.Theme); // Apply the new theme
-                                        // Optionally, show a confirmation message
-        Console.WriteLine("Settings saved.");
+        try
+        {
+            await SettingsService.SaveSettingsAsync(Settings);
+            await SetTheme(Settings.Theme); // Apply the new theme
+            Console.WriteLine("Settings saved.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving settings: {ex.Message}");
+        }
     }
 
-    private void ResetSettings()
+    private async void ResetSettings()
     {
         Settings = new SettingsModel(); // Resets to default
-        SetTheme(Settings.Theme); // Reset theme to default
+        await SetTheme(Settings.Theme); // Reset theme to default
     }
 }
