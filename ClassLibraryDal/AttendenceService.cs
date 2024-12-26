@@ -109,8 +109,8 @@ namespace ClassLibraryDal
         {
             var employees = new List<Employee>
         {
-            new Employee { Id = "1", Name = "John Doe", Status = "Active", DOB = new DateTime(1990, 5, 15), JoinDate = new DateTime(2020, 1, 1) },
-            new Employee { Id = "2", Name = "Jane Smith", Status = "Inactive", DOB = new DateTime(1988, 3, 22), JoinDate = new DateTime(2019, 6, 10) }
+            new Employee { Id = "1", Name = "Aitisam", Status = "Active", DOB = new DateTime(1990, 5, 15), JoinDate = new DateTime(2020, 1, 1) },
+            new Employee { Id = "2", Name = "Ahmed", Status = "Inactive", DOB = new DateTime(1988, 3, 22), JoinDate = new DateTime(2019, 6, 10) }
             // Add more employees as needed
         };
 

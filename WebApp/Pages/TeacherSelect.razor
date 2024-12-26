@@ -43,7 +43,15 @@
                         {
                             <option value="@teacher">@teacher</option>
                         }
+                    
                     </select>
+                </div>
+
+                <!-- Display Selection -->
+                <div class="mb-4">
+                    <p><strong>Instructor Name:</strong> @SelectedTeacher</p>
+                    <p><strong>Subject:</strong> @SelectedSubject</p>
+                    <p><strong>Class:</strong> @SelectedClass</p>
                 </div>
 
                 <!-- Confirmation Button -->
@@ -110,7 +118,6 @@
     {
         if (firstRender)
         {
-            // Call the JavaScript function to start the tour
             JSRuntime.InvokeVoidAsync("startTourOnTeacherSelection");
         }
     }
