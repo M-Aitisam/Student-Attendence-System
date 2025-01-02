@@ -4,8 +4,12 @@
 
 <div class="container mt-5">
     <!-- Header Section -->
-    <div class="text-center mb-4">
+    <div class="text-center mb-4 d-flex justify-content-between p-2" style="background-color:lavenderblush">
         <h1 class="text-primary"> Online Attendance System (FALL 2024)</h1>
+        <button class="btn ">
+            <i class="bi bi-box-arrow-right me-1"></i> <i @onclick="index" style="color:red">Logout</i>
+        </button>
+
     </div>
 
     <!-- Subject and Instructor Info -->
@@ -114,65 +118,11 @@
     </div>
 
     <!-- Footer -->
+</div>
     <footer class="text-center mt-5">
-        <p>&copy; Copyright All Rights Reserved 2024</p>
-        <p>Web Administration || Automation Department</p>
+       <BrandFooterBar></BrandFooterBar>
     </footer>
-</div>
 
-<!-- Instructor Details Section -->
-<div>
-    <h4>Instructor Details</h4>
-    @if (InstructorDetails != null)
-    {
-        <p>Name: @InstructorDetails.Name</p>
-        <p>Designation: @InstructorDetails.Designation</p>
-        <p>Department: @InstructorDetails.Department</p>
-    }
-    else
-    {
-        <p>No instructor details available</p>
-    }
-</div>
-
-<!-- Attendance Records Section -->
-<div>
-    <h4>Attendance Records</h4>
-    @if (AttendanceRecords != null && AttendanceRecords.Any())
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Sr No</th>
-                    <th>Schedule ID</th>
-                    <th>Subject Name</th>
-                    <th>Schedule Date</th>
-                    <th>Class Time</th>
-                    <th>Class Name</th>
-                    <th>Duration</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var record in AttendanceRecords)
-                {
-                    <tr>
-                        <td>@record.SrNo</td>
-                        <td>@record.ScheduleID</td>
-                        <td>@record.SubjectName</td>
-                        <td>@record.ScheduleDate?.ToShortDateString()</td>
-                        <td>@record.ClassTime</td>
-                        <td>@record.ClassName</td>
-                        <td>@record.Duration</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No attendance records available</p>
-    }
-</div>
 
 @code {
     [Parameter] public string? Class { get; set; }
@@ -183,7 +133,7 @@
     private List<AttendanceRecord>? AttendanceRecords;
 
     protected override async Task OnInitializedAsync()
-    {
+    {   
         try
         {
             // Parse query parameters
@@ -215,5 +165,9 @@
     private void attendence()
     {
         NavigationManager.NavigateTo("/attendance");
+    }
+    private void index()
+    {
+        NavigationManager.NavigateTo("/");
     }
 }
