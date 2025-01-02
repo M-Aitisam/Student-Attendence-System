@@ -140,80 +140,76 @@
                 </div>
             </div>
 
-         <!-- Employee List -->
-          <div class="row mt-4">
-            <div class="col-12">
-                <div class="card shadow-sm rounded">
-                    <div class="card-header bg-dark text-white d-flex justify-content-between">
-                        <span>Employee List</span>
-                        <button class="btn btn-success btn-sm" @onclick="ShowAddEmployeeModal">Add New Employee</button>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>ID</th>
-                                    <th>Email</th>
-                                    <th>Date of Birth</th>
-                                    <th>Join Date</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Employees.Any())
-                                {
-                                    @foreach (var employee in Employees)
+            <!-- Employee List -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card shadow-sm rounded">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between">
+                            <span>Employee List</span>
+                            <button class="btn btn-success btn-sm" @onclick="ShowAddEmployeeModal">Add New Employee</button>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>ID</th>
+                                        <th>Email</th>
+                                        <th>Date of Birth</th>
+                                        <th>Join Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Employees.Any())
+                                    {
+                                        @foreach (var employee in Employees)
+                                        {
+                                            <tr>
+                                                <td>@employee.Name</td>
+                                                <td>@employee.Id</td>
+                                                <td>@employee.Email</td>
+                                                <td>@employee.DOB.ToShortDateString()</td>
+                                                <td>@employee.JoinDate.ToShortDateString()</td>
+                                                <td>@employee.Status</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm" type="button" id="dropdownMenuButton_@employee.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="bi bi-three-dots"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton_@employee.Id">
+                                                            <li>
+                                                                <button class="dropdown-item" @onclick="() => ShowEditModalHandler(employee)">
+                                                                    <i class="bi bi-pencil"></i> Update
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button class="dropdown-item text-danger" @onclick="() => ConfirmDelete(employee)">
+                                                                    <i class="bi bi-trash"></i> Delete
+                                                                </button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
                                     {
                                         <tr>
-                                            <td>@employee.Name</td>
-                                            <td>@employee.Id</td>
-                                            <td>@employee.Email</td>
-                                            <td>@employee.DOB.ToShortDateString()</td>
-                                            <td>@employee.JoinDate.ToShortDateString()</td>
-                                            <td>@employee.Status</td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm" type="button" id="dropdownMenuButton_@employee.Id" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton_@employee.Id">
-                                                        <li>
-                                                            <button class="dropdown-item" @onclick="() => ShowEditModalHandler(employee)">
-                                                                <i class="bi bi-pencil"></i> Update
-                                                            </button>
-                                                        </li>
-                                                        <li>
-                                                            <button class="dropdown-item text-danger" @onclick="() => ConfirmDelete(employee)">
-                                                                <i class="bi bi-trash"></i> Delete
-                                                            </button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-
+                                            <td colspan="7" class="text-center">No employees found.</td>
                                         </tr>
                                     }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td colspan="7" class="text-center">No employees found.</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            </div>
-        </div>
-
     </div>
-        </div>
-
+    </div>
+    </div>
         @if (ShowDeleteConfirmation)
         {
             <div class="modal" style="display: block; background-color: rgba(0,0,0,0.5);">
@@ -348,7 +344,7 @@
 
 
 @code {
-    private List<Employee> Employees = new();
+   
     private bool ShowEmployeeModal = false;
     private bool ShowEditModal = false;
     private bool ShowAddEmployeeModalState = false;
@@ -368,6 +364,20 @@
 
     }
 
+    private List<Employee> Employees = new List<Employee>
+    {
+        new Employee { Name = " Jehanzeb khan", Id = "1", Email = "jehanzeb.khan@gmail.com", DOB = new DateTime(1985, 5, 10), JoinDate = new DateTime(2015, 1, 12), Status = "Active" },
+        new Employee { Name = " Asim Ali Fayyaz", Id = "2", Email = "AsimAli@gmail.com", DOB = new DateTime(1990, 8, 15), JoinDate = new DateTime(2018, 6, 5), Status = "Inactive" },
+        new Employee { Name = " Bilal khan", Id = "3", Email = "bilal.khan@gmail.com", DOB = new DateTime(1982, 12, 20), JoinDate = new DateTime(2012, 3, 30), Status = "Active" },
+        new Employee { Name = " Dr. Nazia", Id = "4", Email = "NaziaAsif@gmail.com", DOB = new DateTime(1960, 8, 15), JoinDate = new DateTime(2020, 6, 27), Status = "Inactive" },
+        new Employee { Name = " Khawaja Tahir", Id = "5", Email = "khawaja@gmail.com", DOB = new DateTime(1970, 4, 12), JoinDate = new DateTime(2021, 4, 17), Status = "Inactive" },
+        new Employee { Name = " Sagheer Ahmed", Id = "6", Email = "sageer12@gmail.com", DOB = new DateTime(1967, 5, 10), JoinDate = new DateTime(2022, 6 ,19 ), Status = "Inactive" },
+        new Employee { Name = " Shakeel Ahmed", Id = "7", Email = "shakeel75@gmatahiril.com", DOB = new DateTime(1989, 6, 3), JoinDate = new DateTime(2023, 3, 15), Status = "Inactive" },
+        new Employee { Name = " Kaleem Ullah", Id = "8", Email = "kaleem64@gmail.com", DOB = new DateTime(1998, 7, 21), JoinDate = new DateTime(2021, 3, 25), Status = "Inactive" },
+        new Employee { Name = " Mr. Azhar", Id = "9", Email = "azhar12@gmail.com", DOB = new DateTime(1998, 8, 15), JoinDate = new DateTime(2020, 2, 13), Status = "Inactive" },
+
+
+    };
     private void AddNewEmployee()
     {
         var newEmployee = new Employee

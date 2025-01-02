@@ -105,42 +105,38 @@ namespace ClassLibraryDal
             _attendanceRecords.AddRange(records);
         }
 
+        // Fetch employees (used in the example)
         public Task<List<Employee>> GetEmployees()
         {
             var employees = new List<Employee>
-        {
-            new Employee { Id = "1", Name = "Aitisam", Status = "Active", DOB = new DateTime(1990, 5, 15), JoinDate = new DateTime(2020, 1, 1) },
-            new Employee { Id = "2", Name = "Ahmed", Status = "Inactive", DOB = new DateTime(1988, 3, 22), JoinDate = new DateTime(2019, 6, 10) }
-            // Add more employees as needed
-        };
+            {
+                new Employee { Id = "1", Name = "Aitisam", Status = "Active", DOB = new DateTime(1990, 5, 15), JoinDate = new DateTime(2020, 1, 1) },
+                new Employee { Id = "2", Name = "Ahmed", Status = "Inactive", DOB = new DateTime(1988, 3, 22), JoinDate = new DateTime(2019, 6, 10) }
+            };
 
             return Task.FromResult(employees);
         }
 
-        // Example: Get a list of leave applications (replace with actual data fetching logic)
+        // Fetch leave applications (used in the example)
         public Task<List<LeaveApplication>> GetLeaveApplications()
         {
             var leaveApplications = new List<LeaveApplication>
-        {
-            new LeaveApplication { EmployeeName = "John Doe", Date = new DateTime(2024, 12, 15), Status = "Approved" },
-            new LeaveApplication { EmployeeName = "Jane Smith", Date = new DateTime(2024, 12, 18), Status = "Pending" }
-            // Add more leave applications as needed
-        };
+            {
+                new LeaveApplication { EmployeeName = "John Doe", Date = new DateTime(2024, 12, 15), Status = "Approved" },
+                new LeaveApplication { EmployeeName = "Jane Smith", Date = new DateTime(2024, 12, 18), Status = "Pending" }
+            };
 
             return Task.FromResult(leaveApplications);
         }
-       
-            public List<Subject> GetSubjects()
-            {
-                // Fetch attendance data from the database or in-memory
-                return new List<Subject>
+
+        // Fetch subjects (used in the example)
+        public List<Subject> GetSubjects()
         {
-            new Subject { SrNo = 1, SubjectName = "Mathematics", Total = 50, Atts = 45, Abs = 5, Percent = 90.0 },
-            new Subject { SrNo = 2, SubjectName = "Physics", Total = 50, Atts = 40, Abs = 10, Percent = 80.0 }
-        };
-            }
-        
-
-
+            return new List<Subject>
+            {
+                new Subject { SrNo = 1, SubjectName = "Mathematics", Total = 50, Atts = 45, Abs = 5, Percent = 90.0 },
+                new Subject { SrNo = 2, SubjectName = "Physics", Total = 50, Atts = 40, Abs = 10, Percent = 80.0 }
+            };
+        }
     }
 }
