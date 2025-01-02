@@ -2,10 +2,12 @@
 @inject LeaveService LeaveService
 @inject NavigationManager nm
 @using ClassLibraryModel
+@inject EmployeeService EmployeeService
+
 @inject IJSRuntime JSRuntime
 
 <!-- Page Wrapper -->
-<div class="wrapper" style="font-family: Calibri; ">
+<div class="wrapper mt-5" style="font-family: Calibri; ">
     <!-- Main Content -->
     <div class="container-fluid ">
         <!-- Metrics Section -->
@@ -16,7 +18,7 @@
                         <div class="card shadow-sm rounded text-center">
                             <div class="card-body">
                                 <h5 class="text-secondary">Total Employees</h5>
-                                <h2 class="fw-bold text-dark">@Employees.Count()</h2>
+                                <h2 class="fw-bold text-dark">12</h2>
                                 <span class="badge bg-success">+15%</span>
                             </div>
                         </div>
@@ -25,7 +27,7 @@
                         <div class="card shadow-sm rounded text-center">
                             <div class="card-body">
                                 <h5 class="text-secondary">Active Employees</h5>
-                                <h2 class="fw-bold text-dark">@Employees.Count(e => e.Status == "Active")</h2>
+                                <h2 class="fw-bold text-dark">11</h2>
                                 <span class="badge bg-info">Stable</span>
                             </div>
                         </div>
@@ -36,7 +38,7 @@
                         <div class="card shadow-sm rounded text-center">
                             <div class="card-body">
                                 <h5 class="text-secondary">Inactive Employees</h5>
-                                <h2 class="fw-bold text-dark">@Employees.Count(e => e.Status == "Inactive")</h2>
+                                <h2 class="fw-bold text-dark">1</h2>
                                 <span class="badge bg-warning">-10%</span>
                             </div>
                         </div>
@@ -45,7 +47,7 @@
                         <div class="card shadow-sm rounded text-center">
                             <div class="card-body">
                                 <h5 class="text-secondary">New Recruits</h5>
-                                <h2 class="fw-bold text-dark">@Employees.Count(e => e.IsNewRecruit)</h2>
+                                <h2 class="fw-bold text-dark">3</h2>
                                 <span class="badge bg-primary">+20%</span>
                             </div>
                         </div>
@@ -365,6 +367,34 @@
 
 
     }
+
+    private void AddNewEmployee()
+    {
+        var newEmployee = new Employee
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "John Doe",
+            Email = "johndoe@example.com",
+            DOB = new DateTime(1990, 1, 1),
+            JoinDate = DateTime.Now,
+            Status = "Active"
+        };
+        EmployeeService.AddEmployee(newEmployee);
+        Employees = EmployeeService.GetEmployees().ToList();
+    }
+
+    private void RemoveEmployee(Employee employee)
+    {
+        EmployeeService.RemoveEmployee(employee);
+        Employees = EmployeeService.GetEmployees().ToList();
+    }
+
+    private void UpdateEmployee(Employee employee)
+    {
+        EmployeeService.UpdateEmployee(employee);
+        Employees = EmployeeService.GetEmployees().ToList();
+    }
+
     private void ShowEmployeeDetails(Employee employee)
     {
         SelectedEmployee = employee;
@@ -421,15 +451,7 @@
         SelectedEmployee = employee;
     }
 
-    private void RemoveEmployee(Employee? employee)
-    {
-        if (employee != null)
-        {
-            Employees.Remove(employee);
-        }
-        ShowDeleteConfirmation = false;
-    }
-
+  
     private void CancelDelete()
     {
         ShowDeleteConfirmation = false;
@@ -449,14 +471,14 @@
             {
                 new LeaveApplication
                 {
-                    StudentName = "Aitisam Ahmed",
+                    StudentName = "Aitisam",
                     Date = DateTime.Now,
                     Status = "Pending",
                     Reason = "Medical"
                 },
                 new LeaveApplication
                 {
-                    StudentName = "Talha Shabbir",
+                    StudentName = "Talha",
                     Date = DateTime.Now.AddDays(-1),
                     Status = "Approved",
                     Reason = "Personal"

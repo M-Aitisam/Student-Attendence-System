@@ -11,7 +11,7 @@ namespace ClassLibraryDal
     {
         public static SqlConnection GetConnection()
         {
-            SqlConnection con = new SqlConnection("Data Source=.;Initial Catalog=AttendanceDB;Integrated Security=True;TrustServerCertificate=True");
+            SqlConnection con = new SqlConnection("Data Source=.;Initial Catalog=AttendanceDB;Integrated Security=True;Encrypt=True;TrustServerCertificate=True");
             return con;
         }
     }

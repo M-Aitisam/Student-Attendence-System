@@ -1,143 +1,143 @@
-﻿@page "/attendance"
-@using System.Data.SqlClient
-@inject IWebHostEnvironment WebHostEnvironment
-@using System.Text.Json
+﻿    @page "/attendance"
+    @using System.Data.SqlClient
+    @inject IWebHostEnvironment WebHostEnvironment
+    @using System.Text.Json
 
-<PageTitle>Attendance</PageTitle>
+    <PageTitle>Attendance</PageTitle>
 
-<div class="container">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white text-center">
-            <h1 class="mb-0">📋 Attendance Sheet</h1>
-            <p class="mb-0">Mark attendance for the students by selecting the checkboxes below.</p>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Serial No</th>
-                            <th>Roll ID</th>
-                            <th>Name</th>
-                            <th>Present</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Students != null && Students.Any())
-                        {
-                            @foreach (var student in Students)
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h1 class="mb-0">📋 Attendance Sheet</h1>
+                <p class="mb-0">Mark attendance for the students by selecting the checkboxes below.</p>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Serial No</th>
+                                <th>Roll ID</th>
+                                <th>Name</th>
+                                <th>Present</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Students != null && Students.Any())
+                            {
+                                @foreach (var student in Students)
+                                {
+                                    <tr>
+                                        <td>@student.SerialNo</td>
+                                        <td>@student.RollId</td>
+                                        <td>@student.Name</td>
+                                        <td class="text-center">
+                                            <input type="checkbox" @bind="student.IsPresent" class="form-check-input" />
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
                             {
                                 <tr>
-                                    <td>@student.SerialNo</td>
-                                    <td>@student.RollId</td>
-                                    <td>@student.Name</td>
-                                    <td class="text-center">
-                                        <input type="checkbox" @bind="student.IsPresent" class="form-check-input" />
-                                    </td>
+                                    <td colspan="4" class="text-center">No data available or loading...</td>
                                 </tr>
                             }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="4" class="text-center">No data available or loading...</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div class="d-flex justify-content-between">
-                <div>
-                    <input type="checkbox" class="form-check-input" /> Are you sure you want to save?
+                        </tbody>
+                    </table>
                 </div>
-                <div class="text-center mt-4">
-                    <button class="btn btn-success btn-lg" @onclick="SubmitAttendance">✓ Submit</button>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <input type="checkbox" class="form-check-input" /> Are you sure you want to save?
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-success btn-lg" @onclick="SubmitAttendance">✓ Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Toast Notification -->
-@if (IsToastVisible)
-{
-    <div class="toast show">
-        @ToastMessage
-    </div>
-}
-
-@code {
-    private List<Student> Students = new();
-    private bool IsToastVisible { get; set; }
-    private string ToastMessage { get; set; } = string.Empty;
-
-    protected override async Task OnInitializedAsync()
+    <!-- Toast Notification -->
+    @if (IsToastVisible)
     {
-        try
-        {
-            var filePath = Path.Combine(WebHostEnvironment.WebRootPath, "students.json"); // Use WebRootPath for wwwroot
-            Console.WriteLine($"Attempting to read file from: {filePath}");
-
-            if (File.Exists(filePath))
-            {
-                var json = await File.ReadAllTextAsync(filePath);  // Asynchronously read the file
-                Students = JsonSerializer.Deserialize<List<Student>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Student>();
-                Console.WriteLine($"File read successfully. Total students loaded: {Students.Count}");
-            }
-            else
-            {
-                Console.WriteLine($"File not found at path: {filePath}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading students: {ex.Message}");
-        }
+        <div class="toast show">
+            @ToastMessage
+        </div>
     }
 
-    private async Task SubmitAttendance()
-    {
-        try
+    @code {
+        private List<Student> Students = new();
+        private bool IsToastVisible { get; set; }
+        private string ToastMessage { get; set; } = string.Empty;
+
+        protected override async Task OnInitializedAsync()
         {
-            // Filter the students who are marked as present
-            var studentsToSave = Students.Where(student => student.IsPresent).ToList();
-
-            if (studentsToSave.Any())
+            try
             {
-                using (SqlConnection con = DBHelper.GetConnection())
+                var filePath = Path.Combine(WebHostEnvironment.WebRootPath, "students.json"); // Use WebRootPath for wwwroot
+                Console.WriteLine($"Attempting to read file from: {filePath}");
+
+                if (File.Exists(filePath))
                 {
-                    await con.OpenAsync();
-
-                    foreach (var student in studentsToSave)
-                    {
-                        string query = "INSERT INTO Students (SerialNo, RollId, Name, IsPresent, AttendanceDate) VALUES (@SerialNo, @RollId, @Name, @IsPresent, @AttendanceDate)";
-
-                        using (SqlCommand cmd = new SqlCommand(query, con))
-                        {
-                            cmd.Parameters.AddWithValue("@SerialNo", student.SerialNo);
-                            cmd.Parameters.AddWithValue("@RollId", student.RollId);
-                            cmd.Parameters.AddWithValue("@Name", student.Name);
-                            cmd.Parameters.AddWithValue("@IsPresent", student.IsPresent);
-                            cmd.Parameters.AddWithValue("@AttendanceDate", DateTime.Now);
-
-                            await cmd.ExecuteNonQueryAsync();
-                        }
-                    }
-
-                    // Show success message
-                    ShowToastMessage("Attendance saved successfully!");
+                    var json = await File.ReadAllTextAsync(filePath);  // Asynchronously read the file
+                    Students = JsonSerializer.Deserialize<List<Student>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Student>();
+                    Console.WriteLine($"File read successfully. Total students loaded: {Students.Count}");
+                }
+                else
+                {
+                    Console.WriteLine($"File not found at path: {filePath}");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("No students were marked as present.");
+                Console.WriteLine($"Error loading students: {ex.Message}");
             }
         }
-        catch (Exception ex)
+
+        private async Task SubmitAttendance()
         {
-            Console.WriteLine($"Error saving attendance: {ex.Message}");
+            try
+            {
+                // Filter the students who are marked as present
+                var studentsToSave = Students.Where(student => student.IsPresent).ToList();
+
+                if (studentsToSave.Any())
+                {
+                    using (SqlConnection con = DBHelper.GetConnection())
+                    {
+                        await con.OpenAsync();
+
+                        foreach (var student in studentsToSave)
+                        {
+                            string query = "INSERT INTO Students (SerialNo, RollId, Name, IsPresent, AttendanceDate) VALUES (@SerialNo, @RollId, @Name, @IsPresent, @AttendanceDate)";
+
+                            using (SqlCommand cmd = new SqlCommand(query, con))
+                            {
+                                cmd.Parameters.AddWithValue("@SerialNo", student.SerialNo);
+                                cmd.Parameters.AddWithValue("@RollId", student.RollId);
+                                cmd.Parameters.AddWithValue("@Name", student.Name);
+                                cmd.Parameters.AddWithValue("@IsPresent", student.IsPresent);
+                                cmd.Parameters.AddWithValue("@AttendanceDate", DateTime.Now);
+
+                                await cmd.ExecuteNonQueryAsync();
+                            }
+                        }
+
+                        // Show success message
+                        ShowToastMessage("Attendance saved successfully!");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No students were marked as present.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving attendance: {ex.Message}");
+            }
         }
-    }
 
     private void ShowToastMessage(string message)
     {
@@ -145,18 +145,23 @@
         IsToastVisible = true;
 
         // Hide the toast after 3 seconds
-        Task.Delay(3000).ContinueWith(_ =>
+        _ = Task.Run(async () =>
         {
-            IsToastVisible = false;
-            StateHasChanged(); // Force re-render
+            await Task.Delay(3000);
+            await InvokeAsync(() =>
+            {
+                IsToastVisible = false;
+                StateHasChanged(); // Force re-render on the UI thread
+            });
         });
     }
 
-    private class Student
-    {
-        public int SerialNo { get; set; }
-        public string? RollId { get; set; }
-        public string? Name { get; set; }
-        public bool IsPresent { get; set; }
+
+        private class Student
+        {
+            public int SerialNo { get; set; }
+            public string? RollId { get; set; }
+            public string? Name { get; set; }
+            public bool IsPresent { get; set; }
+        }
     }
-}

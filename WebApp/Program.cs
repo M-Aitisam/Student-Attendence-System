@@ -40,6 +40,7 @@ builder.Services.AddSingleton<AttendanceService>();
 builder.Services.AddScoped<LeaveService>();
 builder.Services.AddScoped<SettingsService>();
 builder.Services.AddScoped<SubjectService>(); // Register SubjectService
+builder.Services.AddSingleton<EmployeeService>();
 
 
 var app = builder.Build();
