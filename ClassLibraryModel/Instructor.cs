@@ -12,10 +12,8 @@ namespace ClassLibraryModel
         public string? ClassName { get; set; }
         public string? SubjectName { get; set; }
 
-        public string? Designation { get; set; }
-        public string? Department { get; set; }
-        public string? FacultyType { get; set; }
-        public int TotalRegularClasses { get; set; }
-        public int TotalMakeupClasses { get; set; }
+        public string? Designation = " Lecturer";
+        public string? Department = "Computer Science";  
+      
     }
 }
